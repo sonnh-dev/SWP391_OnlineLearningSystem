@@ -1,51 +1,51 @@
 <%@ page pageEncoding="UTF-8" %>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid" style="background-color: white"> 
-        <a href="index.jsp" style="align-content: center">
-            <img style="width: 110px; height: 60px" 
-                 src="images/logo.png"  alt="Logo">
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-white">
+    <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center" href="index.jsp">
+            <img src="images/logo.png" alt="Logo" style="height: 50px">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="index.jsp"><i class="fa fa-home"></i> Trang chủ</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="pagination">Các khóa học</a>
+        <!-- Menu items -->
+        <div>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/Online_Learning_System/home">
+                        <i class="bi bi-house-door-fill me-1"></i>Trang chủ
+                    </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="pagination">
+                        <i class="bi bi-journal-code me-1"></i>Khóa học
+                    </a>
+                </li>
+                <li class="nav-item position-relative" style="margin-right: 10px">
                     <a class="nav-link" href="cart.jsp">
-                        <i class="bi bi-cart"></i>
-                        <span class="badge badge-danger">
-                            ${(cart_list.size()>0)?cart_list.size():0}
+                        <i class="bi bi-cart fs-5" ></i>
+                        <c:set var="cartSize" value="${fn:length(cart_list)}" />
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2"
+                              style="font-size: 0.65rem; padding: 4px 6px;">
+                            <c:choose>
+                                <c:when test="${cartSize > 0}">
+                                    ${cartSize}
+                                </c:when>
+                                <c:otherwise>
+                                    0
+                                </c:otherwise>
+                            </c:choose>
                         </span>
                     </a>
                 </li>
-                <%
-                    if (auth!=null) {
-                %>
-                <li class="nav-item">
-                    <a class="nav-link" href="orders.jsp">Đơn hàng</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="logout">Đăng xuất</a>
-                </li>
-                <%
-                    } else {
-                %>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.jsp"> <i class="fa fa-user"></i> Tài khoản</a>
-                </li>
 
-                <%
-                    }
-                %>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.jsp">
+                        <i class="bi bi-person-circle me-1"></i>Tài khoản
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

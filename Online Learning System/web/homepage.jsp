@@ -10,7 +10,7 @@
     </head>
     <body>
         <!-- Header -->
-
+        <%@include file="includes/navbar.jsp" %>
         <!-- Content -->
         <div class="container row mb-5 mx-auto">
             <!-- Left side -->
@@ -247,5 +247,6 @@
             </div>
             <!-- End of all-->
         </div>
+        <%@include file="includes/foot.jsp" %>
     </body>
 </html>
