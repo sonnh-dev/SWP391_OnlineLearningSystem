@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import model.Account;
 
 
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
+@WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
     // Map lưu số lần đăng nhập sai theo email
     private Map<String, Integer> failedAttempts = new HashMap<>();
