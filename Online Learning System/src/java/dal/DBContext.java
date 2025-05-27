@@ -18,6 +18,11 @@ public class DBContext {
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println(ex);
         }
+        
+    }
+      private static DBContext instance = new DBContext();
+     public static DBContext getInstance() {
+        return instance;
     }
 
     public Connection getConnection() {
