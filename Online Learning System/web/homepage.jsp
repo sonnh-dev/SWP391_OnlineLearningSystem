@@ -1,17 +1,12 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>homePage</title>
-        <!-- Thêm bootstrap ở đây -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
-              integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
-              crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js"
-                integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+        <%@include file="includes/head.jsp" %>
     </head>
     <body>
         <!-- Header -->
@@ -31,30 +26,30 @@
                         <!-- slider item 1 -->
                         <div class="carousel-item active">
                             <a href="khoa-hoc-1.jsp">
-                                <img src="images/slider1.jpg" class="d-block w-100" alt="First slide">
-                                <div class="carousel-caption d-none d-md-block text-lg-left">
-                                    <h5>Data Science</h5>
-                                    <p>Master data analysis and machine learning.</p>
+                                <img src="images/slider1.png" class="d-block w-100" style="height: 475px; object-fit: cover;" alt="First slide">
+                                <div class="carousel-caption bg-dark bg-opacity-50 rounded-3">
+                                    <h5 class="text-white">Giới thiệu về HTML</h5>
+                                    <p class="text-white-80">Học cách thiết kế web của riêng bạn.</p>
                                 </div>
                             </a>
                         </div>
                         <!-- slider item 2 -->
                         <div class="carousel-item" href="khoa-hoc-1.jsp">
                             <a href="khoa-hoc-1.jsp">
-                                <img src="images/slider2.jpg" class="d-block w-100" alt="Second slide">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>Web Development</h5>
-                                    <p>Build modern and responsive websites.</p>
+                                <img src="images/slider2.png" class="d-block w-100" style="height: 475px; object-fit: cover;" alt="Second slide">
+                                <div class="carousel-caption bg-dark bg-opacity-50 rounded-3">
+                                    <h5 class="text-white">Giới thiệu về SQL</h5>
+                                    <p class="text-white-80">Thiết kế SQL chính xác thật dễ dàng.</p>
                                 </div>
                             </a>
                         </div>
                         <!-- slider item 3 -->
                         <div class="carousel-item" href="khoa-hoc-1.jsp">
                             <a href="khoa-hoc-1.jsp">
-                                <img src="images/slider3.jpg" class="d-block w-100" alt="Third slide">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>Mobile Development</h5>
-                                    <p>Create powerful mobile applications.</p>
+                                <img src="images/slider3.png" class="d-block w-100" style="height: 475px; object-fit: cover;" alt="Third slide">
+                                <div class="carousel-caption bg-dark bg-opacity-50 rounded-3">
+                                    <h5 class="text-white">Lập trình web-css</h5>
+                                    <p class="text-white-80">Học cách thiết kế web chuyên nghiệp.</p>
                                 </div>
                             </a>
                         </div>
@@ -76,60 +71,26 @@
                         <!-- Link to blog list page --------------------------------------------------------------------------------------------------------------------------------------------->
                     </div>
                     <div class="row row-cols-md-3 g-4">
-                        <div class="col">
-                            <a href="#" class="text-decoration-none text-dark">
-                                <!--link........................................................................................-->
-                                <div class="card shadow h-100">
-                                    <img src="images/1.jpg" class="img-fluid p-3" style="height: 200px; object-fit: cover;"
-                                         alt="Example image">
-                                    <div class="card-body">
-                                        <h5 class=" card-title">How to Start a Career in Data Science</h5>
-                                        <p class="text-muted small mb-2">
-                                            <i class="far fa-calendar-alt me-1"></i> June 10, 2023
-                                        </p>
-                                        <p class="card-text text-muted">A comprehensive guide to launching your
-                                            career
-                                            in the exciting field of data science.</p>
+                        <c:forEach var="blog" items="${hotBlogs}">
+                            <div class="col">
+                                <a href="blog-detail?id=${blog.id}" class="text-decoration-none text-dark">
+                                    <!--link........................................................................................-->
+                                    <div class="card shadow h-100">
+                                        <img src="${blog.imageUrl}" class="img-fluid p-3" style="height: 200px; object-fit: cover;"
+                                             alt="Blog images">
+                                        <div class="card-body">
+                                            <h5 class=" card-title">${blog.title}</h5>
+                                            <p class="text-muted small mb-2">
+                                                <i class="far fa-calendar-alt me-1"></i>  ${blog.date}
+                                            </p>
+                                            <p class="card-text text-muted">
+                                                <c:out value="${fn:length(blog.summary) > 100 ? blog.summary.substring(0, 100).concat('...') : blog.summary}" />
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col">
-                            <a href="#" class="text-decoration-none text-dark">
-                                <!--link........................................................................................-->
-                                <div class="card shadow h-100">
-                                    <img src="images/1.jpg" class="img-fluid p-3" style="height: 200px; object-fit: cover;"
-                                         alt="Example image">
-                                    <div class="card-body">
-                                        <h5 class=" card-title">How to Start a Career in Data Science</h5>
-                                        <p class="text-muted small mb-2">
-                                            <i class="far fa-calendar-alt me-1"></i> June 10, 2023
-                                        </p>
-                                        <p class="card-text text-muted">A comprehensive guide to launching your
-                                            career
-                                            in the exciting field of data science.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col">
-                            <a href="#" class="text-decoration-none text-dark">
-                                <!--link........................................................................................-->
-                                <div class="card shadow h-100">
-                                    <img src="images/1.jpg" class="img-fluid p-3" style="height: 200px; object-fit: cover;"
-                                         alt="Example image">
-                                    <div class="card-body">
-                                        <h5 class=" card-title">How to Start a Career in Data Science</h5>
-                                        <p class="text-muted small mb-2">
-                                            <i class="far fa-calendar-alt me-1"></i> June 10, 2023
-                                        </p>
-                                        <p class="card-text text-muted">A comprehensive guide to launching your
-                                            career
-                                            in the exciting field of data science.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                                </a>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
                 <!-- Featured subjects -->
@@ -144,7 +105,7 @@
                                 <div class="card shadow">
                                     <!--image-->
                                     <div class="p-3">
-                                        <img src="images/image1.jpg" class="img-fluid w-100"
+                                        <img src="images/demo1.png" class="img-fluid w-100"
                                              style="height: 200px; object-fit: cover; border-radius: 15px;"
                                              alt="Featured subject image">
                                         <!-- tagline -->
@@ -170,7 +131,7 @@
                                 <div class="card shadow">
                                     <!--image-->
                                     <div class="p-3">
-                                        <img src="images/image1.jpg" class="img-fluid w-100"
+                                        <img src="images/demo2.png" class="img-fluid w-100"
                                              style="height: 200px; object-fit: cover; border-radius: 15px;"
                                              alt="Featured subject image">
                                         <!-- tagline -->
@@ -196,7 +157,7 @@
                                 <div class="card shadow">
                                     <!--image-->
                                     <div class="p-3">
-                                        <img src="images/image1.jpg" class="img-fluid w-100"
+                                        <img src="images/demo3.png" class="img-fluid w-100"
                                              style="height: 200px; object-fit: cover; border-radius: 15px;"
                                              alt="Featured subject image">
                                         <!-- tagline -->
@@ -230,81 +191,23 @@
                             <!-- Link to latest posts page .........................................................-->
                         </div>
                         <div class="latest-posts">
-                            <a href="#" class="text-decoration-none text-dark">
-                                <!--link........................................................................................-->
-                                <div class="d-flex mb-5">
-                                    <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
-                                        <img src="images/image1.jpg" alt="JavaScript" class="w-100 h-100 latest-post-img">
+                            <c:forEach var="blog" items="${latestBlogs}">
+                                <a href="blog-detail.jsp?id=${blog.id}" class="text-decoration-none text-dark">
+                                    <!--link........................................................................................-->
+                                    <div class="d-flex mb-5">
+                                        <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
+                                            <img src="${blog.imageUrl}" alt="${blog.title}" class="w-100 h-100 latest-post-img">
+                                        </div>
+                                        <!-- Nội dung bài viết -->
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">${blog.title}</h6>
+                                            <p class="text-muted small mb-0">
+                                                <i class="far fa-calendar-alt me-1"></i>  ${blog.date}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <!-- Nội dung bài viết -->
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1">JavaScript Fundamentals Every Developer Should Know</h6>
-                                        <p class="text-muted small mb-0">
-                                            <i class="far fa-calendar-alt me-1"></i> June 18, 2023
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#" class="text-decoration-none text-dark">
-                                <!--link........................................................................................-->
-                                <div class="d-flex mb-5">
-                                    <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
-                                        <img src="images/image1.jpg" alt="JavaScript" class="w-100 h-100 latest-post-img">
-                                    </div>
-                                    <!-- Nội dung bài viết -->
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1">JavaScript Fundamentals Every Developer Should Know</h6>
-                                        <p class="text-muted small mb-0">
-                                            <i class="far fa-calendar-alt me-1"></i> June 18, 2023
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#" class="text-decoration-none text-dark">
-                                <!--link........................................................................................-->
-                                <div class="d-flex mb-5">
-                                    <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
-                                        <img src="images/image1.jpg" alt="JavaScript" class="w-100 h-100 latest-post-img">
-                                    </div>
-                                    <!-- Nội dung bài viết -->
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1">JavaScript Fundamentals Every Developer Should Know</h6>
-                                        <p class="text-muted small mb-0">
-                                            <i class="far fa-calendar-alt me-1"></i> June 18, 2023
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#" class="text-decoration-none text-dark">
-                                <!--link........................................................................................-->
-                                <div class="d-flex mb-5">
-                                    <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
-                                        <img src="images/image1.jpg" alt="JavaScript" class="w-100 h-100 latest-post-img">
-                                    </div>
-                                    <!-- Nội dung bài viết -->
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1">JavaScript Fundamentals Every Developer Should Know</h6>
-                                        <p class="text-muted small mb-0">
-                                            <i class="far fa-calendar-alt me-1"></i> June 18, 2023
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#" class="text-decoration-none text-dark">
-                                <!--link........................................................................................-->
-                                <div class="d-flex mb-5">
-                                    <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
-                                        <img src="images/image1.jpg" alt="JavaScript" class="w-100 h-100 latest-post-img">
-                                    </div>
-                                    <!-- Nội dung bài viết -->
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1">JavaScript Fundamentals Every Developer Should Know</h6>
-                                        <p class="text-muted small mb-0">
-                                            <i class="far fa-calendar-alt me-1"></i> June 18, 2023
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
+                                </a>
+                            </c:forEach>
                             <!-- button see all-->
                             <div class="text-center mb-2">
                                 <button class="btn mt-3 px-3" style="background-color: #e0e0e0; color: #000;"
