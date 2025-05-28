@@ -8,30 +8,28 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Blog;
 
-public class BlogDAO extends DBContext {
+public class BlogDao extends DBContext {
 
     public List<Blog> getAllBlog() {
         List<Blog> list = new ArrayList<>();
-        String sql = "select * from Blog order by date desc";
+        String sql = "SELECT * FROM Blog ORDER BY date DESC";
         try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Blog o = new Blog();
-                BlogDAO udao = new BlogDAO();
-                o.setId(rs.getInt("id"));
-                o.setTitle(rs.getString("title"));
-                o.setSummary(rs.getString("summary"));
-                o.setContent(rs.getString("content"));
-                o.setAuthorID(rs.getInt("authorID"));
-                o.setDate(rs.getString("date"));
-                o.setTags(rs.getString("tags"));
-                o.setImageUrl(rs.getString("imageUrl"));
-                o.setTotalView(rs.getInt("totalView"));
-                list.add(o);
+                Blog b = new Blog();
+                b.setBlogID(rs.getInt("blogID"));
+                b.setUserID(rs.getInt("userID"));
+                b.setTitle(rs.getString("title"));
+                b.setDate(rs.getString("date"));
+                b.setCategory(rs.getString("category"));
+                b.setImageUrl(rs.getString("imageUrl"));
+                b.setTotalView(rs.getInt("totalView"));
+                b.setSummary(rs.getString("summary"));
+                list.add(b);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return list;
     }
@@ -40,23 +38,22 @@ public class BlogDAO extends DBContext {
         List<Blog> list = new ArrayList<>();
         String sql = "SELECT TOP 3 * FROM Blog ORDER BY totalView DESC";
         try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Blog o = new Blog();
-                o.setId(rs.getInt("id"));
-                o.setTitle(rs.getString("title"));
-                o.setSummary(rs.getString("summary"));
-                o.setContent(rs.getString("content"));
-                o.setAuthorID(rs.getInt("authorID"));
-                o.setDate(rs.getString("date"));
-                o.setTags(rs.getString("tags"));
-                o.setImageUrl(rs.getString("imageUrl"));
-                o.setTotalView(rs.getInt("totalView"));
-                list.add(o);
+                Blog b = new Blog();
+                b.setBlogID(rs.getInt("blogID"));
+                b.setUserID(rs.getInt("userID"));
+                b.setTitle(rs.getString("title"));
+                b.setDate(rs.getString("date"));
+                b.setCategory(rs.getString("category"));
+                b.setImageUrl(rs.getString("imageUrl"));
+                b.setTotalView(rs.getInt("totalView"));
+                b.setSummary(rs.getString("summary"));
+                list.add(b);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return list;
     }
@@ -65,23 +62,22 @@ public class BlogDAO extends DBContext {
         List<Blog> list = new ArrayList<>();
         String sql = "SELECT TOP 5 * FROM Blog ORDER BY date DESC";
         try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Blog o = new Blog();
-                o.setId(rs.getInt("id"));
-                o.setTitle(rs.getString("title"));
-                o.setSummary(rs.getString("summary"));
-                o.setContent(rs.getString("content"));
-                o.setAuthorID(rs.getInt("authorID"));
-                o.setDate(rs.getString("date"));
-                o.setTags(rs.getString("tags"));
-                o.setImageUrl(rs.getString("imageUrl"));
-                o.setTotalView(rs.getInt("totalView"));
-                list.add(o);
+                Blog b = new Blog();
+                b.setBlogID(rs.getInt("blogID"));
+                b.setUserID(rs.getInt("userID"));
+                b.setTitle(rs.getString("title"));
+                b.setDate(rs.getString("date"));
+                b.setCategory(rs.getString("category"));
+                b.setImageUrl(rs.getString("imageUrl"));
+                b.setTotalView(rs.getInt("totalView"));
+                b.setSummary(rs.getString("summary"));
+                list.add(b);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return list;
     }

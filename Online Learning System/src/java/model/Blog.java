@@ -2,37 +2,43 @@
 package model;
 
 public class Blog {
-    private int id;
+    private int blogID;
+    private int userID;
     private String title;
-    private String summary;
-    private String content;
-    private int authorID;
     private String date;
-    private String tags;
+    private String category;
     private String imageUrl;
     private int totalView;
+    private String summary;
 
     public Blog() {
     }
 
-    public Blog(int id, String title, String summary, String content, int authorID, String date, String tags, String imageUrl, int totalView) {
-        this.id = id;
+    public Blog(int blogID, int userID, String title, String date, String category, String imageUrl, int totalView, String summary) {
+        this.blogID = blogID;
+        this.userID = userID;
         this.title = title;
-        this.summary = summary;
-        this.content = content;
-        this.authorID = authorID;
         this.date = date;
-        this.tags = tags;
+        this.category = category;
         this.imageUrl = imageUrl;
         this.totalView = totalView;
+        this.summary = summary;
     }
 
-    public int getId() {
-        return id;
+    public int getBlogID() {
+        return blogID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBlogID(int blogID) {
+        this.blogID = blogID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getTitle() {
@@ -43,30 +49,6 @@ public class Blog {
         this.title = title;
     }
 
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public int getAuthorID() {
-        return authorID;
-    }
-
-    public void setAuthorID(int authorID) {
-        this.authorID = authorID;
-    }
-
     public String getDate() {
         return date;
     }
@@ -75,12 +57,12 @@ public class Blog {
         this.date = date;
     }
 
-    public String getTags() {
-        return tags;
+    public String getCategory() {
+        return category;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getImageUrl() {
@@ -99,5 +81,12 @@ public class Blog {
         this.totalView = totalView;
     }
 
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
 }

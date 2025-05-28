@@ -1,6 +1,8 @@
 package controller;
 
-import dao.BlogDAO;
+import dao.BlogDao;
+import dao.CourseDao;
+import dao.SliderDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Blog;
+import model.Course;
+import model.Slider;
 
 @WebServlet(name = "HomeServlet", urlPatterns = {"/home"})
 public class HomeServlet extends HttpServlet {
@@ -16,50 +20,32 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        /* TODO output your page here. You may use following sample code. */
-        BlogDAO blogDAO = new BlogDAO();
-        List<Blog> latestBlogs = blogDAO.get5LatestPost();
-        List<Blog> hotBlogs = blogDAO.get3HotBlog();
+        BlogDao blogDao = new BlogDao();
+        SliderDao sliderDao = new SliderDao();
+        CourseDao courseDao = new CourseDao();
+        List<Blog> latestBlogs = blogDao.get5LatestPost();
+        List<Blog> hotBlogs = blogDao.get3HotBlog();
+        List<Slider> slider = sliderDao.getAllSlider();
+        List<Course> featuredCourse = courseDao.get3HotestCoursesofDifferentCategories();
         request.setAttribute("latestBlogs", latestBlogs);
         request.setAttribute("hotBlogs", hotBlogs);
+        request.setAttribute("slider", slider);
+        request.setAttribute("featuredCourse", featuredCourse);
         request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

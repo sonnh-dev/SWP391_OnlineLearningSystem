@@ -15,51 +15,41 @@
         <div class="container row mb-5 mx-auto">
             <!-- Left side -->
             <div class="col-md-9">
-                <!-- Slider -->
+                <!-- Slider --> 
                 <div id="slider" class="carousel slide mt-3" data-bs-ride="carousel">
                     <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#slider" data-bs-slide-to="0" class="active"></button>
-                        <button type="button" data-bs-target="#slider" data-bs-slide-to="1"></button>
-                        <button type="button" data-bs-target="#slider" data-bs-slide-to="2"></button>
+                        <c:forEach var="slider" items="${slider}" varStatus="status">
+                            <c:choose>
+                                <c:when test="${status.first}">
+                                    <button type="button" data-bs-target="#slider" data-bs-slide-to="${status.index}" class="active" ></button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button type="button" data-bs-target="#slider" data-bs-slide-to="${status.index}" ></button>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
                     </div>
                     <div class="carousel-inner">
-                        <!-- slider item 1 -->
-                        <div class="carousel-item active">
-                            <a href="khoa-hoc-1.jsp">
-                                <img src="images/slider1.png" class="d-block w-100" style="height: 475px; object-fit: cover;" alt="First slide">
-                                <div class="carousel-caption bg-dark bg-opacity-50 rounded-3">
-                                    <h5 class="text-white">Giới thiệu về HTML</h5>
-                                    <p class="text-white-80">Học cách thiết kế web của riêng bạn.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <!-- slider item 2 -->
-                        <div class="carousel-item" href="khoa-hoc-1.jsp">
-                            <a href="khoa-hoc-1.jsp">
-                                <img src="images/slider2.png" class="d-block w-100" style="height: 475px; object-fit: cover;" alt="Second slide">
-                                <div class="carousel-caption bg-dark bg-opacity-50 rounded-3">
-                                    <h5 class="text-white">Giới thiệu về SQL</h5>
-                                    <p class="text-white-80">Thiết kế SQL chính xác thật dễ dàng.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <!-- slider item 3 -->
-                        <div class="carousel-item" href="khoa-hoc-1.jsp">
-                            <a href="khoa-hoc-1.jsp">
-                                <img src="images/slider3.png" class="d-block w-100" style="height: 475px; object-fit: cover;" alt="Third slide">
-                                <div class="carousel-caption bg-dark bg-opacity-50 rounded-3">
-                                    <h5 class="text-white">Lập trình web-css</h5>
-                                    <p class="text-white-80">Học cách thiết kế web chuyên nghiệp.</p>
-                                </div>
-                            </a>
-                        </div>
+                        <c:forEach var="slider" items="${slider}" varStatus="status">
+                            <div class="carousel-item ${status.first ? 'active' : ''}"  >
+                                <a href="courseDetail.jsp?id=${slider.courseID}">
+                                    <img src="${slider.sliderURL}" class="d-block w-100" style="height: 475px; object-fit: cover;" alt="First slide">
+                                    <div class="carousel-caption bg-dark bg-opacity-50 rounded-3">
+                                        <h5 class="text-white">${slider.sliderTitle}</h5>
+                                        <p class="text-white-80">${slider.sliderContent}.</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </c:forEach>
                         <!-- Slider controls -->
-                        <a class="carousel-control-prev" type="button" data-bs-target="#slider" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        </a>
-                        <a class="carousel-control-next" type="button" data-bs-target="#slider" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        </a>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#slider" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#slider" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                     <!-- End of slider-->
                 </div>
@@ -73,11 +63,11 @@
                     <div class="row row-cols-md-3 g-4">
                         <c:forEach var="blog" items="${hotBlogs}">
                             <div class="col">
-                                <a href="blog-detail?id=${blog.id}" class="text-decoration-none text-dark">
+                                <a href="blog-detail?id=${blog.blogID}" class="text-decoration-none text-dark">
                                     <!--link........................................................................................-->
                                     <div class="card shadow h-100">
                                         <img src="${blog.imageUrl}" class="img-fluid p-3" style="height: 200px; object-fit: cover;"
-                                             alt="Blog images">
+                                             alt="${blog.title}">
                                         <div class="card-body">
                                             <h5 class=" card-title">${blog.title}</h5>
                                             <p class="text-muted small mb-2">
@@ -100,84 +90,34 @@
                         <a href="#" class="text-decoration-none text-primary">View All</a>
                     </div>
                     <div class="row row-cols-md-3 g-4">
-                        <div class="col">
-                            <a href="#" class="text-decoration-none text-dark">
-                                <div class="card shadow">
-                                    <!--image-->
-                                    <div class="p-3">
-                                        <img src="images/demo1.png" class="img-fluid w-100"
-                                             style="height: 200px; object-fit: cover; border-radius: 15px;"
-                                             alt="Featured subject image">
-                                        <!-- tagline -->
-                                        <span class="badge bg-info text-white position-absolute top-0 start-0 m-2">
-                                            Người mới bắt đầu
-                                        </span>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-3">How to Start a Career in Data Science</h5>
-                                        <!-- xem khóa học và số bài học -->
-                                        <div class="d-flex align-items-center">
-                                            <a href="#" class="btn btn-outline-info me-2">View Course</a>
-                                            <div class="ms-auto text-end d-flex align-items-center">
-                                                <i class="fas fa-file-alt me-1"></i>1 Lectures
+                        <c:forEach var="course" items="${featuredCourse}">
+                            <div class="col">
+                                <a href="courseDetail.jsp?id=${course.courseID}" class="text-decoration-none text-dark">
+                                    <div class="card shadow">
+                                        <!--image-->
+                                        <div class="p-3">
+                                            <img src="${course.imageURL}" class="img-fluid w-100"
+                                                 style="height: 200px; object-fit: cover; border-radius: 15px;"
+                                                 alt="${course.title}">
+                                            <!-- tagline -->
+                                            <span class="badge bg-info text-white position-absolute top-0 start-0 m-2">
+                                                ${course.category}
+                                            </span>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-3">${course.title}</h5>
+                                            <!-- xem khóa học và số bài học -->
+                                            <div class="d-flex align-items-center">
+                                                <a href="courseDetail.jsp?id=${course.courseID}" class="btn btn-outline-info me-2">View Course</a>
+                                                <div class="ms-auto text-end d-flex align-items-center">
+                                                    <i class="fas fa-file-alt me-1"></i>${course.lectures} lectures
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col">
-                            <a href="#" class="text-decoration-none text-dark">
-                                <div class="card shadow">
-                                    <!--image-->
-                                    <div class="p-3">
-                                        <img src="images/demo2.png" class="img-fluid w-100"
-                                             style="height: 200px; object-fit: cover; border-radius: 15px;"
-                                             alt="Featured subject image">
-                                        <!-- tagline -->
-                                        <span class="badge bg-info text-white position-absolute top-0 start-0 m-2">
-                                            Người mới bắt đầu
-                                        </span>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-3">How to Start a Career in Data Science</h5>
-                                        <!-- xem khóa học và số bài học -->
-                                        <div class="d-flex align-items-center">
-                                            <a href="#" class="btn btn-outline-info me-2">View Course</a>
-                                            <div class="ms-auto text-end d-flex align-items-center">
-                                                <i class="fas fa-file-alt me-1"></i>1 Lectures
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col">
-                            <a href="#" class="text-decoration-none text-dark">
-                                <div class="card shadow">
-                                    <!--image-->
-                                    <div class="p-3">
-                                        <img src="images/demo3.png" class="img-fluid w-100"
-                                             style="height: 200px; object-fit: cover; border-radius: 15px;"
-                                             alt="Featured subject image">
-                                        <!-- tagline -->
-                                        <span class="badge bg-info text-white position-absolute top-0 start-0 m-2">
-                                            Người mới bắt đầu
-                                        </span>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-3">How to Start a Career in Data Science</h5>
-                                        <!-- xem khóa học và số bài học -->
-                                        <div class="d-flex align-items-center">
-                                            <a href="#" class="btn btn-outline-info me-2">View Course</a>
-                                            <div class="ms-auto text-end d-flex align-items-center">
-                                                <i class="fas fa-file-alt me-1"></i>1 Lectures
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                                </a>
+                            </div>
+                        </c:forEach>
                         <!-- Featured subjects end -->
                     </div>
                 </div>
@@ -192,7 +132,7 @@
                         </div>
                         <div class="latest-posts">
                             <c:forEach var="blog" items="${latestBlogs}">
-                                <a href="blog-detail.jsp?id=${blog.id}" class="text-decoration-none text-dark">
+                                <a href="blog-detail.jsp?id=${blog.blogID}" class="text-decoration-none text-dark">
                                     <!--link........................................................................................-->
                                     <div class="d-flex mb-5">
                                         <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
