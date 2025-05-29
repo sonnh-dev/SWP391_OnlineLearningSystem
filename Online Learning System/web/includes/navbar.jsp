@@ -7,7 +7,7 @@
 <nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-white">
     <div class="container">
         <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center" href="index.jsp">
+        <a class="navbar-brand d-flex align-items-center" href="/Online_Learning_System/home">
             <img src="images/logo.png" alt="Logo" style="height: 50px">
         </a>
         <!-- Menu items -->

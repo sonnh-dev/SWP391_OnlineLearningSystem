@@ -103,6 +103,17 @@ public class BlogDao extends DBContext {
         return b;
     }
 
+    public void increaseView(int blogID) {
+        String sql = "UPDATE Blog SET totalView = totalView + 1 WHERE blogID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, blogID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public String getContentByBlogID(int blogID) {
         String content = "";
         String sql = "SELECT content FROM BlogContent WHERE blogID = ?";
@@ -133,12 +144,5 @@ public class BlogDao extends DBContext {
             e.printStackTrace();
         }
         return map;
-    }
-
-    public static void main(String[] args) {
-        BlogDao dao = new BlogDao();
-        //(Blog i : dao.getBlogByID(5)) {
-            System.out.println(dao.getBlogByID(5).getTitle());
-       // }
     }
 }

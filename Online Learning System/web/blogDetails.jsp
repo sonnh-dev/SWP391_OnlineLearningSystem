@@ -46,7 +46,7 @@
 
                         <!-- Blog Content -->
                         <div class="blog-content">
-                            <p>${content}</p>
+                            <p> <c:out value="${content}" escapeXml="false" /></p>
                         </div>
                     </div>
                 </div>
