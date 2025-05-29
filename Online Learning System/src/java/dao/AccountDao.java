@@ -22,7 +22,7 @@ public class AccountDao {
         ArrayList<Account> accounts = new ArrayList<>(); // Danh sách để lưu kết quả tài khoản
 
         // Câu truy vấn SQL để tìm người dùng với email và mật khẩu khớp
-        String sql = "SELECT * FROM [User] WHERE email = ? AND password = ?";
+        String sql = "SELECT * FROM Users WHERE email = ? AND password = ?";
 
         // Sử dụng try-with-resources để tự động đóng kết nối
         try (Connection conn = dbConnect.getConnection();         // Mở kết nối tới CSDL
