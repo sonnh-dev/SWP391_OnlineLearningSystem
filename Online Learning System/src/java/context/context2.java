@@ -25,7 +25,7 @@ public class context2 {
     // Thông tin đăng nhập và đường dẫn đến cơ sở dữ liệu
     private String user = "sa"; // Tên đăng nhập SQL Server
     private String password = "sa"; // Mật khẩu
-    private String url = "jdbc:sqlserver://N2S\\MSSQLSERVER01:1433;databaseName=SWP391DB;TrustServerCertificate=true;";
+    private String url = "jdbc:sqlserver://localhost:1433;databaseName=SWP391DB;encrypt=false;characterEncoding=UTF-8;useUnicode=true";
     // Ghi chú: N2S\\MSSQLSERVER01 là tên máy chủ SQL Server và instance,
     // abc là tên cơ sở dữ liệu. TrustServerCertificate=true cho phép kết nối không cần chứng chỉ SSL.
 
