@@ -128,14 +128,15 @@ INSERT INTO Blog (UserID, Title, Date, Category, ImageURL, TotalView, Summary)
 VALUES
 (1, 'Mastering Communication Skills', '2025-05-01', 'Communication', 'images/blog/image1.png', 120, 'Learn how to effectively communicate in both personal and professional settings.'),
 (2, 'Time Management Hacks', '2025-05-02', 'Time Management', 'images/blog/image2.png', 98, 'Tips and tricks to manage your time efficiently.'),
-(1, 'Building Confidence at Work', '2025-05-03', 'Self Development', 'images/blog/image3.png', 145, 'Boost your confidence with these practical techniques.'),
-(3, 'Effective Teamwork Strategies', '2025-05-04', 'Teamwork', 'images/blog/image4.png', 75, 'Collaborate effectively and build strong teams.'),
-(2, 'Problem Solving in the Workplace', '2025-05-05', 'Problem Solving', 'images/blog/image5.png', 60, 'Approaches and tools to solve problems efficiently.'),
+(1, 'Emotional Intelligence in Daily Life', '2025-05-03', 'Emotional Intelligence', 'images/blog/image3.png', 145, 'Manage emotions and improve personal relationships.'),
+(4, 'Effective Leadership Habits', '2025-05-04', 'Leadership', 'images/blog/image4.png', 160, 'Daily habits of successful leaders.'),
+(3, 'Problem Solving in the Workplace', '2025-05-05', 'Problem Solving', 'images/blog/image5.png', 60, 'Approaches and tools to solve problems efficiently.'),
 (4, 'Public Speaking for Beginners', '2025-05-06', 'Communication', 'images/blog/image6.png', 130, 'Overcome fear and deliver impactful speeches.'),
-(3, 'How to Handle Criticism Gracefully', '2025-05-07', 'Personal Growth', 'images/blog/image7.png', 90, 'Turn criticism into an opportunity for growth.'),
-(1, 'Emotional Intelligence in Leadership', '2025-05-08', 'Leadership', 'images/blog/image8.png', 180, 'Develop emotional intelligence to lead better.'),
-(2, 'Negotiation Tactics You Should Know', '2025-05-09', 'Negotiation', 'images/blog/image9.png', 110, 'Win-win strategies for successful negotiations.'),
-(4, 'Adaptability in the Modern Workplace', '2025-05-10', 'Adaptability', 'images/blog/image10.png', 70, 'Thrive in a constantly changing work environment.');
+(2, 'Time Blocking Method Explained', '2025-05-07', 'Time Management', 'images/blog/image7.png', 90, 'Use time blocking to stay focused and productive.'),
+(6, 'Empathy in Leadership', '2025-05-08', 'Leadership', 'images/blog/image8.png', 180, 'How empathetic leadership drives team success.'),
+(8, 'Boost Your Emotional Intelligence', '2025-05-09', 'Emotional Intelligence', 'images/blog/image9.png', 110, 'Recognize and manage emotional triggers effectively.'),
+(9, 'Critical Thinking Techniques', '2025-05-10', 'Problem Solving', 'images/blog/image10.png', 70, 'Sharpen your analytical skills for better decisions.');
+
 
 INSERT INTO Course (Title, Category, Lectures, ImageURL, Description, Price, TotalEnrollment)
 VALUES
@@ -157,7 +158,5 @@ VALUES
 (2, 'Master Time Management Today', 'Prioritize what matters and reclaim your hours with proven time strategies.', 'images/sliders/image2.png'),
 (6, 'Enhance Your EQ for Workplace Success', 'Emotional intelligence improves teamwork, communication, and leadership.', 'images/sliders/image3.png'),
 (7, 'Become a Pro at Problem Solving', 'Tackle complex problems with confidence using structured problem-solving tools.', 'images/sliders/image4.png');
-
-
 
 

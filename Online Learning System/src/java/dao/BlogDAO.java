@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.Blog;
 
 public class BlogDao extends DBContext {
@@ -29,7 +31,6 @@ public class BlogDao extends DBContext {
                 list.add(b);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return list;
     }
@@ -53,7 +54,6 @@ public class BlogDao extends DBContext {
                 list.add(b);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return list;
     }
@@ -77,8 +77,68 @@ public class BlogDao extends DBContext {
                 list.add(b);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return list;
+    }
+
+    public Blog getBlogByID(int blogID) {
+        Blog b = new Blog();
+        String sql = "SELECT * FROM Blog WHERE blogID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, blogID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                b.setBlogID(rs.getInt("blogID"));
+                b.setUserID(rs.getInt("userID"));
+                b.setTitle(rs.getString("title"));
+                b.setDate(rs.getString("date"));
+                b.setCategory(rs.getString("category"));
+                b.setImageUrl(rs.getString("imageUrl"));
+                b.setTotalView(rs.getInt("totalView"));
+                b.setSummary(rs.getString("summary"));
+            }
+        } catch (SQLException e) {
+        }
+        return b;
+    }
+
+    public String getContentByBlogID(int blogID) {
+        String content = "";
+        String sql = "SELECT content FROM BlogContent WHERE blogID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, blogID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                content = rs.getString("content");
+            }
+        } catch (SQLException e) {
+        }
+        return content;
+    }
+
+    public Map<String, Integer> getCategory() {
+        Map<String, Integer> map = new HashMap<>();
+        String sql = "SELECT category, COUNT(*) as total FROM Blog GROUP BY category";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String category = rs.getString("category");
+                int count = rs.getInt("total");
+                map.put(category, count);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+    public static void main(String[] args) {
+        BlogDao dao = new BlogDao();
+        //(Blog i : dao.getBlogByID(5)) {
+            System.out.println(dao.getBlogByID(5).getTitle());
+       // }
     }
 }

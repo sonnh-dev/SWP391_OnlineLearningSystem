@@ -26,7 +26,6 @@ public class SliderDao extends DBContext {
                 list.add(slider);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return list;
     }
@@ -42,7 +41,6 @@ public class SliderDao extends DBContext {
             ps.setInt(5, slider.getSliderID());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }
