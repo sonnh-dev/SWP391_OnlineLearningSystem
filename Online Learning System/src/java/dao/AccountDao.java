@@ -8,50 +8,99 @@ import java.util.ArrayList;
 import model.Account;
 
 public class AccountDao {
-    private context2 dbConnect; // Biến lưu kết nối CSDL
-
+    private context2 dbConnect;
 
     public AccountDao() {
         this.dbConnect = context2.getInstance();
     }
 
-  
+    // ✅ Đăng nhập
+// Đăng nhập
     public static Account getAccountByEmailAndPassword(String email, String password) {
-        context2 dbConnect = context2.getInstance(); // Lấy thể hiện DBConnect (singleton)
+        context2 dbConnect = context2.getInstance();
+        ArrayList<Account> accounts = new ArrayList<>();
 
-        ArrayList<Account> accounts = new ArrayList<>(); // Danh sách để lưu kết quả tài khoản
-
-        // Câu truy vấn SQL để tìm người dùng với email và mật khẩu khớp
         String sql = "SELECT * FROM Users WHERE email = ? AND password = ?";
 
-        // Sử dụng try-with-resources để tự động đóng kết nối
-        try (Connection conn = dbConnect.getConnection();         // Mở kết nối tới CSDL
-             PreparedStatement stmt = conn.prepareStatement(sql)) { // Chuẩn bị câu lệnh SQL
+        try (Connection conn = dbConnect.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Gán giá trị tham số cho câu lệnh SQL
-            stmt.setString(1, email);      // Gán email vào dấu ?
-            stmt.setString(2, password);   // Gán mật khẩu vào dấu ?
+            stmt.setString(1, email);
+            stmt.setString(2, password);
 
-            // Thực thi truy vấn và nhận kết quả
             ResultSet rs = stmt.executeQuery();
 
-            // Duyệt qua kết quả trả về
             while (rs.next()) {
-                // Tạo đối tượng Account từ dữ liệu trong CSDL
                 Account account = new Account(
                     rs.getString("email"),
                     rs.getString("password")
                 );
-                accounts.add(account); // Thêm vào danh sách kết quả
+                accounts.add(account);
             }
 
         } catch (Exception e) {
-            // In lỗi nếu có vấn đề xảy ra
             e.printStackTrace();
-            return null; // Trả về null nếu xảy ra lỗi
+            return null;
         }
 
-        // Nếu không có kết quả nào, trả về null, ngược lại trả về tài khoản đầu tiên
         return accounts.isEmpty() ? null : accounts.get(0);
     }
+
+    // ✅ Thêm tài khoản mới
+    public boolean insertUser(String fullName, String gender, String email, String phoneNumber, String password) {
+        String sql = "INSERT INTO Users (firstName, gender, email, phoneNumber, password, role) "
+                   + "VALUES (?, ?, ?, ?, ?, 'Students')";
+        try (Connection conn = dbConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, fullName);  // Lưu vào firstName
+            ps.setString(2, gender);
+            ps.setString(3, email);
+            ps.setString(4, phoneNumber);
+            ps.setString(5, password);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // ✅ Kiểm tra email tồn tại
+    public boolean emailExists(String email) {
+        String sql = "SELECT COUNT(*) FROM Users WHERE email = ?";
+        try (Connection conn = dbConnect.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // ✅ Cập nhật mật khẩu
+    public boolean updatePassword(String email, String newPassword) {
+        String sql = "UPDATE Users SET password = ? WHERE email = ?";
+        try (Connection conn = dbConnect.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, newPassword);
+            stmt.setString(2, email);
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
+
