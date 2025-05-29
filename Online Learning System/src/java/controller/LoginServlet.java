@@ -112,7 +112,7 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("userEmail", email);
 
                 // Chuyển hướng đến trang chủ sau đăng nhập
-                response.sendRedirect("home.jsp");
+                response.sendRedirect("homepage.jsp");
             }
 
         } catch (Exception e) {
