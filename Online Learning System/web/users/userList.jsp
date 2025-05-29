@@ -1,5 +1,5 @@
 <%-- File: web/users/usersList.jsp --%>
-<%@page import="models.User"%>
+<%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 
