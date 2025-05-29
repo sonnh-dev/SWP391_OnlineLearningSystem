@@ -1,6 +1,6 @@
 package dao;
 
-import dal.DBContext;
+import context.context2;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,21 +8,21 @@ import java.util.ArrayList;
 import model.Account;
 
 public class AccountDao {
-    private DBContext dbConnect; // Biến lưu kết nối CSDL
+    private context2 dbConnect; // Biến lưu kết nối CSDL
 
 
     public AccountDao() {
-        this.dbConnect = DBContext.getInstance();
+        this.dbConnect = context2.getInstance();
     }
 
   
     public static Account getAccountByEmailAndPassword(String email, String password) {
-        DBContext dbConnect = DBContext.getInstance(); // Lấy thể hiện DBConnect (singleton)
+        context2 dbConnect = context2.getInstance(); // Lấy thể hiện DBConnect (singleton)
 
         ArrayList<Account> accounts = new ArrayList<>(); // Danh sách để lưu kết quả tài khoản
 
         // Câu truy vấn SQL để tìm người dùng với email và mật khẩu khớp
-        String sql = "SELECT * FROM Users WHERE email = ? AND password = ?";
+        String sql = "SELECT * FROM [User] WHERE email = ? AND password = ?";
 
         // Sử dụng try-with-resources để tự động đóng kết nối
         try (Connection conn = dbConnect.getConnection();         // Mở kết nối tới CSDL
