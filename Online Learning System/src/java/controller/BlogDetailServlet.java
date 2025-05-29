@@ -35,7 +35,7 @@ public class BlogDetailServlet extends HttpServlet {
         Blog blog = blogDao.getBlogByID(blogID);
         Map<String, Integer> map = blogDao.getCategory();
         String content = blogDao.getContentByBlogID(blogID);
-
+        blogDao.increaseView(blogID);
         request.setAttribute("blogDetail", blog);
         request.setAttribute("categoryMap", map);
         request.setAttribute("content", content);

@@ -1,4 +1,4 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -63,7 +63,7 @@
                     <div class="row row-cols-md-3 g-4">
                         <c:forEach var="blog" items="${hotBlogs}">
                             <div class="col">
-                                <a href="blog-detail?id=${blog.blogID}" class="text-decoration-none text-dark">
+                                <a href="BlogDetail?blogID=${blog.blogID}" class="text-decoration-none text-dark">
                                     <!--link........................................................................................-->
                                     <div class="card shadow h-100">
                                         <img src="${blog.imageUrl}" class="img-fluid p-3" style="height: 200px; object-fit: cover;"
@@ -132,7 +132,7 @@
                         </div>
                         <div class="latest-posts">
                             <c:forEach var="blog" items="${latestBlogs}">
-                                <a href="blog-detail.jsp?id=${blog.blogID}" class="text-decoration-none text-dark">
+                                <a href="BlogDetail?blogID=${blog.blogID}" class="text-decoration-none text-dark">
                                     <!--link........................................................................................-->
                                     <div class="d-flex mb-5">
                                         <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
