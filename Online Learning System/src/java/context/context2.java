@@ -52,7 +52,7 @@ public class context2 {
     }
 
     // Constructor riêng tư để ngăn việc tạo đối tượng từ bên ngoài (đảm bảo Singleton)
-    private context2() {
+    public context2() {
         try {
             // Nạp trước driver JDBC nếu cần (tùy môi trường)
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
