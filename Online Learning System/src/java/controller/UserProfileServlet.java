@@ -31,29 +31,44 @@ public class UserProfileServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false); // Lấy session hiện có, không tạo mới
 
-        if (session == null || session.getAttribute("loggedInUser") == null) {
-            // Người dùng chưa đăng nhập, chuyển hướng về trang đăng nhập
-            response.sendRedirect(request.getContextPath() + "/login.jsp"); // Thay bằng URL trang login của bạn
-            return;
-        }
-
-        // Lấy thông tin người dùng từ session
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
+//        if (session == null || session.getAttribute("loggedInUser") == null) {
+//            // Người dùng chưa đăng nhập, chuyển hướng về trang đăng nhập
+//            response.sendRedirect(request.getContextPath() + "/login.jsp"); // Thay bằng URL trang login của bạn
+//            return;
+//        }
+//
+//        // Lấy thông tin người dùng từ session
+        ////        User loggedInUser = (User) session.getAttribute("loggedInUser");
+//
+//        try {
+//            // Lấy thông tin người dùng đầy đủ từ DB (đảm bảo là thông tin mới nhất)
+//            User user = userDAO.getUserById(loggedInUser.getUserId());
+//            if (user != null) {
+//                request.setAttribute("user", user);
+//                request.getRequestDispatcher("/users/userProfile.jsp").forward(request, response);
+//            } else {
+//                // Không tìm thấy user trong DB (có thể do lỗi dữ liệu)
+//                LOGGER.log(Level.WARNING, "Logged in user with ID {0} not found in DB.", loggedInUser.getUserId());
+//                response.sendRedirect(request.getContextPath() + "/error.jsp"); // Chuyển hướng về trang lỗi
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            Logger.getLogger(UserProfileServlet.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+         int userId = 30;
 
         try {
-            // Lấy thông tin người dùng đầy đủ từ DB (đảm bảo là thông tin mới nhất)
-            User user = userDAO.getUserById(loggedInUser.getUserId());
+            User user = userDAO.getUserById(userId); // Lấy thông tin user dựa vào ID tạm thời
             if (user != null) {
                 request.setAttribute("user", user);
                 request.getRequestDispatcher("/users/userProfile.jsp").forward(request, response);
             } else {
-                // Không tìm thấy user trong DB (có thể do lỗi dữ liệu)
-                LOGGER.log(Level.WARNING, "Logged in user with ID {0} not found in DB.", loggedInUser.getUserId());
-                response.sendRedirect(request.getContextPath() + "/error.jsp"); // Chuyển hướng về trang lỗi
+                LOGGER.log(Level.WARNING, "Temporary user with ID {0} not found in DB.", userId);
+                response.sendRedirect(request.getContextPath() + "/error.jsp");
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(UserProfileServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     @Override
@@ -63,15 +78,14 @@ public class UserProfileServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8"); // Đảm bảo đọc tiếng Việt
 
         HttpSession session = request.getSession(false);
-
-        if (session == null || session.getAttribute("loggedInUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
-            return;
-        }
-
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-        int userId = loggedInUser.getUserId(); // Lấy ID của người dùng đang đăng nhập
-
+//
+//        if (session == null || session.getAttribute("loggedInUser") == null) {
+//            response.sendRedirect(request.getContextPath() + "/login.jsp");
+//            return;
+//        }
+//
+//        User loggedInUser = (User) session.getAttribute("loggedInUser");
+//        int userId = loggedInUser.getUserId(); // Lấy ID của người dùng đang đăng nhập
         // Lấy dữ liệu từ form
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
@@ -83,7 +97,18 @@ public class UserProfileServlet extends HttpServlet {
         // Email và Role KHÔNG được phép thay đổi từ form, nhưng có thể đọc từ session/DB
         // String email = loggedInUser.getEmail(); 
         // String role = loggedInUser.getRole();
-
+        int userId = 30; // Cùng ID với doGet để bạn có thể test update
+        User loggedInUser = new User(); // Tạo một đối tượng user tạm thời để có email, role, status
+        try {
+            loggedInUser = userDAO.getUserById(userId);
+            if (loggedInUser == null) {
+                // Xử lý nếu user tạm thời không tồn tại
+                response.sendRedirect(request.getContextPath() + "/error.jsp");
+                return;
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserProfileServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
         // Tạo đối tượng User để cập nhật
         User userToUpdate = new User();
         userToUpdate.setUserId(userId);
@@ -91,7 +116,7 @@ public class UserProfileServlet extends HttpServlet {
         userToUpdate.setLastName(lastName);
         userToUpdate.setGender(gender);
         userToUpdate.setPhoneNumber(phoneNumber);
-        userToUpdate.setAvatarURL(avatarURL);
+        userToUpdate.setAvatarUrl(avatarURL);
         userToUpdate.setAddress(address);
         userToUpdate.setEmail(loggedInUser.getEmail()); // Giữ nguyên email
         userToUpdate.setRole(loggedInUser.getRole()); // Giữ nguyên role
