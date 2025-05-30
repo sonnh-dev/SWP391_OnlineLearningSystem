@@ -104,9 +104,11 @@ CREATE TABLE AnswerQuiz (
 -- Bảng slider
 CREATE TABLE SliderImage (
     SliderID INT PRIMARY KEY IDENTITY(1,1),
+	CourseID INT,
     SliderTitle NVARCHAR(255) NOT NULL,
     SliderContent TEXT,
     SliderURL NVARCHAR(2083)
+	FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 
 INSERT INTO [Users] (firstName, lastName, gender, email, phoneNumber, role, status, avatarURL, password, address, dateOfBirth)
