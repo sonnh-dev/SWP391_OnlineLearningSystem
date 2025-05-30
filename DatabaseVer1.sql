@@ -4,7 +4,7 @@ USE SWP391DB;
 
 -- Bảng người dùng
 CREATE TABLE Users (
-  userID INT PRIMARY KEY  IDENTITY(1,1),
+  userID INT PRIMARY KEY IDENTITY(1,1),
   firstName NVARCHAR(255),
   lastName NVARCHAR(255),
   gender NVARCHAR(50),
@@ -28,7 +28,7 @@ CREATE TABLE Blog (
     ImageURL NVARCHAR(255),
     TotalView INT DEFAULT 0,
     Summary TEXT,
-    FOREIGN KEY (UserID) REFERENCES [Users](UserID)
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
 -- Nội dung bài blog
@@ -58,7 +58,7 @@ CREATE TABLE UserCourse (
     EnrollDate DATE,
     Progress DECIMAL(5,2),
     PRIMARY KEY (UserID, CourseID),
-    FOREIGN KEY (UserID) REFERENCES [Users](UserID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 
@@ -104,11 +104,9 @@ CREATE TABLE AnswerQuiz (
 -- Bảng slider
 CREATE TABLE SliderImage (
     SliderID INT PRIMARY KEY IDENTITY(1,1),
-	CourseID INT,
     SliderTitle NVARCHAR(255) NOT NULL,
     SliderContent TEXT,
-    SliderURL NVARCHAR(2083),
-	FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+    SliderURL NVARCHAR(2083)
 );
 
 INSERT INTO [Users] (firstName, lastName, gender, email, phoneNumber, role, status, avatarURL, password, address, dateOfBirth)
