@@ -3,7 +3,7 @@
 USE SWP391DB;
 
 -- Bảng người dùng
-CREATE TABLE [Users] (
+CREATE TABLE Users (
   userID INT PRIMARY KEY  IDENTITY(1,1),
   firstName NVARCHAR(255),
   lastName NVARCHAR(255),
@@ -15,7 +15,7 @@ CREATE TABLE [Users] (
   avatarURL NVARCHAR(255),
   password NVARCHAR(255),
   address NVARCHAR(255),
- dateOfBirth DATE
+  dateOfBirth DATE
 );
 
 -- Bảng blog
@@ -113,16 +113,16 @@ CREATE TABLE SliderImage (
 
 INSERT INTO [Users] (firstName, lastName, gender, email, phoneNumber, role, status, avatarURL, password, address, dateOfBirth)
 VALUES
-('John', 'Doe', 'Male', 'john.doe@example.com', '1234567890', 'Student', 1, 'avatars/john.jpg', 'hashed_password1', '123 Main St, NY', '1995-04-10'),
-('Jane', 'Smith', 'Female', 'jane.smith@example.com', '2345678901', 'Instructor', 1, 'avatars/jane.jpg', 'hashed_password2', '456 Park Ave, LA', '1988-09-23'),
-('Michael', 'Brown', 'Male', 'michael.brown@example.com', '3456789012', 'Student', 1, 'avatars/michael.jpg', 'hashed_password3', '789 Sunset Blvd, CA', '1992-12-02'),
-('Emily', 'Johnson', 'Female', 'emily.j@example.com', '4567890123', 'Student', 1, 'avatars/emily.jpg', 'hashed_password4', '321 Ocean Dr, FL', '1999-06-15'),
-('David', 'Wilson', 'Male', 'david.w@example.com', '5678901234', 'Instructor', 1, 'avatars/david.jpg', 'hashed_password5', '111 River Rd, TX', '1985-01-07'),
-('Sarah', 'Lee', 'Female', 'sarah.lee@example.com', '6789012345', 'Student', 1, 'avatars/sarah.jpg', 'hashed_password6', '222 Lakeview St, WA', '2000-03-19'),
-('Chris', 'Kim', 'Male', 'chris.kim@example.com', '7890123456', 'Student', 1, 'avatars/chris.jpg', 'hashed_password7', '555 Mountain Rd, CO', '1997-07-29'),
-('Anna', 'Garcia', 'Female', 'anna.g@example.com', '8901234567', 'Instructor', 1, 'avatars/anna.jpg', 'hashed_password8', '777 Valley Rd, IL', '1990-11-11'),
-('Daniel', 'Martinez', 'Male', 'daniel.m@example.com', '9012345678', 'Student', 1, 'avatars/daniel.jpg', 'hashed_password9', '999 Canyon Dr, AZ', '1996-08-05'),
-('Laura', 'Nguyen', 'Female', 'laura.nguyen@example.com', '0123456789', 'Student', 1, 'avatars/laura.jpg', 'hashed_password10', '888 Forest Ave, OR', '1994-05-30');
+('John', 'Doe', 'Male', 'john.doe@example.com', '1234567890', 'User', 1, 'avatars/john.jpg', 'hashed_password1', '123 Main St, NY', '1995-04-10'),
+('Jane', 'Smith', 'Female', 'jane.smith@example.com', '2345678901', 'User', 1, 'avatars/jane.jpg', 'hashed_password2', '456 Park Ave, LA', '1988-09-23'),
+('Michael', 'Brown', 'Male', 'michael.brown@example.com', '3456789012', 'User', 1, 'avatars/michael.jpg', 'hashed_password3', '789 Sunset Blvd, CA', '1992-12-02'),
+('Emily', 'Johnson', 'Female', 'emily.j@example.com', '4567890123', 'User', 1, 'avatars/emily.jpg', 'hashed_password4', '321 Ocean Dr, FL', '1999-06-15'),
+('David', 'Wilson', 'Male', 'david.w@example.com', '5678901234', 'User', 1, 'avatars/david.jpg', 'hashed_password5', '111 River Rd, TX', '1985-01-07'),
+('Sarah', 'Lee', 'Female', 'sarah.lee@example.com', '6789012345', 'User', 1, 'avatars/sarah.jpg', 'hashed_password6', '222 Lakeview St, WA', '2000-03-19'),
+('Chris', 'Kim', 'Male', 'chris.kim@example.com', '7890123456', 'User', 1, 'avatars/chris.jpg', 'hashed_password7', '555 Mountain Rd, CO', '1997-07-29'),
+('Anna', 'Garcia', 'Female', 'anna.g@example.com', '8901234567', 'User', 1, 'avatars/anna.jpg', 'hashed_password8', '777 Valley Rd, IL', '1990-11-11'),
+('Daniel', 'Martinez', 'Male', 'daniel.m@example.com', '9012345678', 'User', 1, 'avatars/daniel.jpg', 'hashed_password9', '999 Canyon Dr, AZ', '1996-08-05'),
+('Laura', 'Nguyen', 'Female', 'laura.nguyen@example.com', '0123456789', 'User', 1, 'avatars/laura.jpg', 'hashed_password10', '888 Forest Ave, OR', '1994-05-30');
 
 INSERT INTO Blog (UserID, Title, Date, Category, ImageURL, TotalView, Summary)
 VALUES
