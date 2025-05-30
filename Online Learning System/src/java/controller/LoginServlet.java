@@ -87,7 +87,7 @@ public class LoginServlet extends HttpServlet {
             if (account == null) {
                 // Nếu sai tài khoản/mật khẩu → tăng số lần sai
                 int attempts = failedAttempts.getOrDefault(email, 0) + 1;
-                failedAttempts.put(email, attempts);
+                failedAttempts.put(email, attempts);    
 
                 // Áp dụng hình phạt tương ứng
                 if (attempts == 5) {
@@ -112,7 +112,7 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("userEmail", email);
 
                 // Chuyển hướng đến trang chủ sau đăng nhập
-                response.sendRedirect("homepage.jsp");
+                response.sendRedirect("/Online_Learning_System/home");
             }
 
         } catch (Exception e) {

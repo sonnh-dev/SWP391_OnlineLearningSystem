@@ -113,7 +113,7 @@ public class BlogDao extends DBContext {
             e.printStackTrace();
         }
     }
-    
+        
     public String getContentByBlogID(int blogID) {
         String content = "";
         String sql = "SELECT content FROM BlogContent WHERE blogID = ?";
