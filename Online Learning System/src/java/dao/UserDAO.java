@@ -7,10 +7,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
 
 public class UserDAO {
 
@@ -152,7 +154,7 @@ public class UserDAO {
     }
 
     public int getTotalUsers(String genderFilter, String roleFilter, String statusFilter,
-            String searchKeyword, String searchBy) throws ClassNotFoundException {
+                             String searchKeyword, String searchBy) throws ClassNotFoundException {
         DBContext db = new DBContext();
         Connection con = null;
         PreparedStatement ps = null;
@@ -176,18 +178,34 @@ public class UserDAO {
 
             // Searching
             if (searchKeyword != null && !searchKeyword.isEmpty()) {
+                // Chuyển searchKeyword thành chữ thường một lần duy nhất và thêm ký tự wildcard
+                String likeKeyword = "%" + searchKeyword.toLowerCase() + "%";
+
                 switch (searchBy) {
                     case "fullName":
-                        sql.append(" AND (firstName LIKE ? OR lastName LIKE ?) ");
+                        // Tìm kiếm theo tên đầy đủ (firstName + lastName HOẶC lastName + firstName)
+                        // Sử dụng LOWER và COLLATE Vietnamese_CI_AI để tìm kiếm không phân biệt hoa/thường, không dấu
+                        sql.append(" AND (LOWER(CONCAT(firstName, ' ', lastName)) COLLATE Vietnamese_CI_AI LIKE ? ");
+                        sql.append(" OR LOWER(CONCAT(lastName, ' ', firstName)) COLLATE Vietnamese_CI_AI LIKE ?) ");
+                        break;
+                    case "firstName":
+                        sql.append(" AND LOWER(firstName) COLLATE Vietnamese_CI_AI LIKE ? ");
+                        break;
+                    case "lastName":
+                        sql.append(" AND LOWER(lastName) COLLATE Vietnamese_CI_AI LIKE ? ");
                         break;
                     case "email":
-                        sql.append(" AND email LIKE ? ");
+                        sql.append(" AND LOWER(email) LIKE ? "); // Email thường không có dấu
                         break;
                     case "mobile":
-                        sql.append(" AND phoneNumber LIKE ? ");
+                        sql.append(" AND phoneNumber LIKE ? "); // Số điện thoại không có dấu
                         break;
                     default:
-                        sql.append(" AND (firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ?) ");
+                        // Tìm kiếm trên tất cả các trường có thể, áp dụng cho các trường tên và email
+                        sql.append(" AND (LOWER(firstName) COLLATE Vietnamese_CI_AI LIKE ? ");
+                        sql.append(" OR LOWER(lastName) COLLATE Vietnamese_CI_AI LIKE ? ");
+                        sql.append(" OR LOWER(email) LIKE ? ");
+                        sql.append(" OR phoneNumber LIKE ?) "); // Phone number không cần LOWER hoặc COLLATE
                         break;
                 }
             }
@@ -203,28 +221,32 @@ public class UserDAO {
                 ps.setString(paramIndex++, roleFilter);
             }
             if (statusFilter != null && !statusFilter.isEmpty() && !statusFilter.equals("all")) {
+                // Giả sử status được lưu dưới dạng boolean (true/false) trong DB
+                // Nếu là int (0/1), bạn cần parse thành int
                 ps.setBoolean(paramIndex++, Boolean.parseBoolean(statusFilter));
             }
 
             // Set search parameters
             if (searchKeyword != null && !searchKeyword.isEmpty()) {
-                String likeKeyword = "%" + searchKeyword + "%";
+                // Chuyển searchKeyword thành chữ thường một lần duy nhất và thêm ký tự wildcard
+                String likeKeyword = "%" + searchKeyword.toLowerCase() + "%";
+
                 switch (searchBy) {
                     case "fullName":
-                        ps.setString(paramIndex++, likeKeyword);
-                        ps.setString(paramIndex++, likeKeyword);
+                        ps.setString(paramIndex++, likeKeyword); // Cho CONCAT(firstName, ' ', lastName)
+                        ps.setString(paramIndex++, likeKeyword); // Cho CONCAT(lastName, ' ', firstName)
                         break;
+                    case "firstName":
+                    case "lastName":
                     case "email":
-                        ps.setString(paramIndex++, likeKeyword);
-                        break;
                     case "mobile":
                         ps.setString(paramIndex++, likeKeyword);
                         break;
                     default:
-                        ps.setString(paramIndex++, likeKeyword);
-                        ps.setString(paramIndex++, likeKeyword);
-                        ps.setString(paramIndex++, likeKeyword);
-                        ps.setString(paramIndex++, likeKeyword);
+                        ps.setString(paramIndex++, likeKeyword); // firstName
+                        ps.setString(paramIndex++, likeKeyword); // lastName
+                        ps.setString(paramIndex++, likeKeyword); // email
+                        ps.setString(paramIndex++, likeKeyword); // phoneNumber
                         break;
                 }
             }
@@ -236,6 +258,7 @@ public class UserDAO {
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            // Đóng ResultSet, PreparedStatement và Connection để giải phóng tài nguyên
             try {
                 if (rs != null) {
                     rs.close();
@@ -252,7 +275,6 @@ public class UserDAO {
         }
         return totalUsers;
     }
-
     public User getUserById(int userId) throws ClassNotFoundException {
         DBContext db = new DBContext();
         Connection con = null;
@@ -436,7 +458,7 @@ public class UserDAO {
             stm.setString(i++, user.getLastName());
             stm.setString(i++, user.getGender());
             stm.setString(i++, user.getPhoneNumber());
-            stm.setString(i++, user.getAvatarURL()); // Set AvatarURL
+            stm.setString(i++, user.getAvatarUrl()); // Set AvatarURL
             stm.setString(i++, user.getAddress());    // Set Address
 
             // Xử lý DateOfBirth: chuyển java.util.Date sang java.sql.Date
