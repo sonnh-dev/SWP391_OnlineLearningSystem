@@ -240,7 +240,7 @@ public class EditUserProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int userIdToEdit = 20; 
+        int userIdToEdit = 10; 
         UserDAO userDAO = new UserDAO();
         User user = null;
         try {
@@ -269,7 +269,7 @@ public class EditUserProfileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int userIdToUpdate = 20; // Cố định ID user sẽ được cập nhật
+        int userIdToUpdate = 10; // Cố định ID user sẽ được cập nhật
         UserDAO userDAO = new UserDAO();
         User userFromDb = null; // Đây sẽ là đối tượng user lấy từ DB có ID = 20
 
