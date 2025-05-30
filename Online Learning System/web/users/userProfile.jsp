@@ -1,5 +1,5 @@
 <%-- File: web/users/userProfile.jsp --%>
-<%@page import="model.User"%>
+<%@page import="models.User"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.time.ZoneId"%>
