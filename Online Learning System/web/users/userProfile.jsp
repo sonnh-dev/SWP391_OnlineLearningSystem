@@ -1,175 +1,236 @@
 <%-- File: web/users/userProfile.jsp --%>
-<%@page import="com.yourcompany.yourproject.model.User"%>
+<%@page import="model.User"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.time.ZoneId"%>
 <%@page import="java.util.Date"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>User Profile</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f7f6; }
-        .profile-container {
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 25px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 { color: #333; text-align: center; margin-bottom: 25px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-        .form-group input[type="text"],
-        .form-group input[type="date"],
-        .form-group input[type="url"],
-        .form-group select {
-            width: calc(100% - 12px);
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-        .form-group input[readonly] {
-            background-color: #e9ecef;
-            cursor: not-allowed;
-        }
-        .gender-options label {
-            display: inline-block;
-            margin-right: 15px;
-            font-weight: normal;
-        }
-        .gender-options input[type="radio"] {
-            margin-right: 5px;
-        }
-        .profile-actions {
-            text-align: center;
-            margin-top: 25px;
-        }
-        .profile-actions button {
-            padding: 10px 25px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-        .profile-actions button:hover {
-            background-color: #0056b3;
-        }
-        .avatar-preview {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .avatar-preview img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #eee;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-        .message.success { color: green; text-align: center; margin-bottom: 15px; }
-        .message.error { color: red; text-align: center; margin-bottom: 15px; }
-    </style>
-</head>
-<body>
-    <div class="profile-container">
-        <h1>User Profile</h1>
+    <head>
+        <meta charset="UTF-8">
+        <title>User Profile</title>
+        <style>
+            /* CSS cho overlay và container pop-up */
+            body {
+                font-family: Arial, sans-serif;
+                background: #f2f2f2; /* Màu nền cho body nếu trang này là một trang độc lập */
+                margin: 0;
+                padding: 0;
+            }
 
-        <%-- Hiển thị thông báo thành công/lỗi --%>
-        <% String successMessage = (String) request.getAttribute("successMessage"); %>
-        <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
-        <% if (successMessage != null && !successMessage.isEmpty()) { %>
-            <p class="message success"><%= successMessage %></p>
-        <% } %>
-        <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
-            <p class="message error"><%= errorMessage %></p>
-        <% } %>
+            /* Dùng cho trường hợp này là một trang con được nhúng hoặc iframe */
+            .popup-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5); /* Nền mờ */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000; /* Đảm bảo nó nằm trên cùng */
+            }
 
-        <% 
+            .container {
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                padding: 30px;
+                width: 700px; /* Tăng chiều rộng để phù hợp với cả hai section */
+                display: flex;
+                gap: 40px;
+                position: relative; /* Cho nút đóng */
+            }
+
+            .close-button {
+                position: absolute;
+                top: 15px;
+                right: 20px;
+                font-size: 24px;
+                cursor: pointer;
+                color: #888;
+            }
+            .close-button:hover {
+                color: #333;
+            }
+
+            .left-section {
+                flex: 0 0 160px; /* Giữ cố định chiều rộng cho left-section */
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-right: 20px;
+                border-right: 1px solid #eee;
+            }
+            .left-section img {
+                width: 140px;
+                height: 140px;
+                border-radius: 50%;
+                border: 2px solid #ccc;
+                object-fit: cover;
+                margin-bottom: 10px;
+            }
+            .left-section .name {
+                margin-top: 15px;
+                font-weight: bold;
+                font-size: 1.2em;
+                color: #333;
+            }
+            .left-section .email-display {
+                font-size: 0.9em;
+                color: #777;
+                margin-top: 5px;
+            }
+
+            /* Nút chỉnh sửa avatar được di chuyển sang trang edit */
+            .left-section .edit-avatar {
+                display: none; /* Ẩn nút này trên trang hiển thị */
+            }
+
+            .right-section {
+                flex-grow: 1; /* Cho phép right-section mở rộng */
+                padding-left: 20px;
+            }
+            .right-section h2 {
+                margin-top: 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+                color: #007bff;
+                font-size: 1.5em;
+            }
+            .right-section h2 button {
+                padding: 8px 18px;
+                border: 1px solid #007bff;
+                background: #007bff;
+                color: #fff;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 0.9em;
+                transition: background-color 0.3s ease;
+            }
+            .right-section h2 button:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+            .info-item {
+                margin-bottom: 15px;
+                display: flex; /* Dùng flexbox cho từng dòng thông tin */
+                align-items: baseline;
+            }
+            .info-item span {
+                font-weight: bold;
+                color: #555;
+                flex: 0 0 120px; /* Đặt chiều rộng cố định cho label */
+                text-align: right;
+                margin-right: 15px;
+            }
+            .info-item div {
+                flex-grow: 1;
+                color: #333;
+            }
+
+            .change-password {
+                margin-top: 25px;
+                text-align: right; /* Căn phải nút đổi mật khẩu */
+                padding-top: 15px;
+                border-top: 1px solid #eee;
+            }
+            .change-password a {
+                text-decoration: none;
+                color: #007bff;
+                font-size: 1em;
+                font-weight: bold;
+                transition: color 0.3s ease;
+            }
+            .change-password a:hover {
+                color: #0056b3;
+            }
+            .error-message {
+                color: red;
+                text-align: center;
+                margin-top: 20px;
+            }
+        </style>
+        <script>
+            // Hàm để đóng pop-up (nếu nó được mở trong iframe/modal)
+            function closePopup() {
+                console.log("Closing popup...");
+                if (window.opener) {
+                    window.close();
+                } else {
+                    const overlay = document.querySelector('.popup-overlay');
+                    if (overlay) {
+                        overlay.style.display = 'none'; // Hoặc remove nó khỏi DOM
+                    }
+                }
+            }
+
+            // Hàm mở trang chỉnh sửa trong một pop-up mới
+            function openEditProfilePopup() {
+                // URL của trang chỉnh sửa profile
+                const editUrl = '${pageContext.request.contextPath}/profile/edit'; 
+
+                const popupOptions = 'width=800,height=650,top=100,left=300,resizable=yes,scrollbars=yes';
+
+                window.open(editUrl, '_blank', popupOptions);
+            }
+        </script>
+    </head>
+    <body>
+
+        <%
             User user = (User) request.getAttribute("user");
-            // Định dạng ngày sinh để hiển thị trong input type="date"
             String dobFormatted = "";
             if (user != null && user.getDateOfBirth() != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                dobFormatted = sdf.format(user.getDateOfBirth());
+                // Chuyển đổi LocalDate sang java.util.Date rồi định dạng
+                Date utilDate = Date.from(user.getDateOfBirth().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                dobFormatted = sdf.format(utilDate);
             }
         %>
 
         <% if (user != null) { %>
-            <form action="${pageContext.request.contextPath}/user/profile" method="post">
-                <div class="avatar-preview">
-                    <img src="<%= user.getAvatarURL() != null && !user.getAvatarURL().isEmpty() ? user.getAvatarURL() : "https://via.placeholder.com/120?text=No+Avatar" %>" alt="Avatar">
+        <div class="popup-overlay">
+            <div class="container">
+                <span class="close-button" onclick="closePopup()">&times;</span> <%-- Nút đóng pop-up --%>
+                <div class="left-section">
+                    <%-- Kiểm tra nếu avatarUrl null/rỗng thì dùng ảnh mặc định --%>
+                    <% if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty()) {%>
+                    <img src="${pageContext.request.contextPath}/<%= user.getAvatarUrl()%>" alt="Avatar">
+                    <% } else { %>
+                    <img src="https://via.placeholder.com/80" alt="Default Avatar">
+                    <% }%> 
+                    <div class="name"><%= user.getFullName() != null ? user.getFullName() : (user.getFirstName() + " " + user.getLastName())%></div>
+                    <div class="email-display"><%= user.getEmail() != null ? user.getEmail() : ""%></div>
                 </div>
+                <div class="right-section">
+                    <h2>
+                        My Profile
+                        <button onclick="openEditProfilePopup()">Edit</button>
+                    </h2>
+                    <div class="info-item"><span>User ID</span> : <div><%= user.getUserId()%></div></div>
+                    <div class="info-item"><span>Gender</span> : <div><%= user.getGender() != null ? user.getGender() : ""%></div></div>
+                    <div class="info-item"><span>Phone number</span> : <div><%= user.getPhoneNumber() != null ? user.getPhoneNumber() : ""%></div></div>
+                    <div class="info-item"><span>Date of birth</span> : <div><%= dobFormatted%></div></div>
+                    <div class="info-item"><span>Address</span> : <div><%= user.getAddress() != null ? user.getAddress() : ""%></div></div>
+                    <div class="info-item"><span>Role</span> : <div><%= user.getRole() != null ? user.getRole() : ""%></div></div>
+                    <div class="info-item"><span>Status</span> : <div><%= user.isStatus() ? "Active" : "Inactive"%></div></div>
 
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="text" id="email" name="email" value="<%= user.getEmail() %>" readonly>
-                    <small>Email cannot be changed.</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="firstName">First Name:</label>
-                    <input type="text" id="firstName" name="firstName" value="<%= user.getFirstName() %>" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="lastName">Last Name:</label>
-                    <input type="text" id="lastName" name="lastName" value="<%= user.getLastName() %>" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Gender:</label>
-                    <div class="gender-options">
-                        <label>
-                            <input type="radio" name="gender" value="Male" <%= "Male".equals(user.getGender()) ? "checked" : "" %>> Male
-                        </label>
-                        <label>
-                            <input type="radio" name="gender" value="Female" <%= "Female".equals(user.getGender()) ? "checked" : "" %>> Female
-                        </label>
-                        <label>
-                            <input type="radio" name="gender" value="Other" <%= "Other".equals(user.getGender()) ? "checked" : "" %>> Other
-                        </label>
+                    <div class="change-password">
+                        <a href="${pageContext.request.contextPath}/changePassword">Change password</a>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="phoneNumber">Phone Number:</label>
-                    <input type="text" id="phoneNumber" name="phoneNumber" value="<%= user.getPhoneNumber() %>">
-                </div>
-
-                <div class="form-group">
-                    <label for="address">Address:</label>
-                    <input type="text" id="address" name="address" value="<%= user.getAddress() %>">
-                </div>
-
-                <div class="form-group">
-                    <label for="dateOfBirth">Date of Birth:</label>
-                    <input type="date" id="dateOfBirth" name="dateOfBirth" value="<%= dobFormatted %>">
-                </div>
-                
-                <div class="form-group">
-                    <label for="avatarURL">Avatar URL:</label>
-                    <input type="url" id="avatarURL" name="avatarURL" value="<%= user.getAvatarURL() != null ? user.getAvatarURL() : "" %>" placeholder="Enter URL for your avatar image">
-                </div>
-
-                <div class="profile-actions">
-                    <button type="submit">Update Profile</button>
-                </div>
-            </form>
+            </div>
+        </div>
         <% } else { %>
-            <p style="text-align: center; color: red;">User profile could not be loaded.</p>
-        <% } %>
-    </div>
-</body>
+        <p class="error-message">User profile could not be loaded. Please ensure you are logged in.</p>
+        <% }%>
+    </body>
 </html>
