@@ -54,7 +54,7 @@ public class UserProfileServlet extends HttpServlet {
 //        } catch (ClassNotFoundException ex) {
 //            Logger.getLogger(UserProfileServlet.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-         int userId = 30;
+         int userId = 10;
 
         try {
             User user = userDAO.getUserById(userId); // Lấy thông tin user dựa vào ID tạm thời
@@ -97,7 +97,7 @@ public class UserProfileServlet extends HttpServlet {
         // Email và Role KHÔNG được phép thay đổi từ form, nhưng có thể đọc từ session/DB
         // String email = loggedInUser.getEmail(); 
         // String role = loggedInUser.getRole();
-        int userId = 30; // Cùng ID với doGet để bạn có thể test update
+        int userId = 10; // Cùng ID với doGet để bạn có thể test update
         User loggedInUser = new User(); // Tạo một đối tượng user tạm thời để có email, role, status
         try {
             loggedInUser = userDAO.getUserById(userId);
