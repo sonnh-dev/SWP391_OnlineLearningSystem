@@ -6,11 +6,29 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Add New User - Admin Panel</title>
         <style>
-            body { font-family: Arial, sans-serif; margin: 20px; }
-            h1 { color: #333; }
-            form { border: 1px solid #ccc; padding: 20px; border-radius: 5px; background-color: #f9f9f9; max-width: 600px; margin: 20px auto; }
-            form div { margin-bottom: 15px; }
-            form label { display: block; margin-bottom: 5px; font-weight: bold; }
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+            h1 {
+                color: #333;
+            }
+            form {
+                border: 1px solid #ccc;
+                padding: 20px;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+                max-width: 600px;
+                margin: 20px auto;
+            }
+            form div {
+                margin-bottom: 15px;
+            }
+            form label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
             form input[type="text"],
             form input[type="email"],
             form input[type="tel"],
@@ -34,20 +52,30 @@
             form input[type="submit"]:hover {
                 background-color: #0056b3;
             }
-            .error-message { color: red; margin-bottom: 10px; }
-            .success-message { color: green; margin-bottom: 10px; }
-            .back-link { display: block; margin-top: 15px; text-align: center; }
+            .error-message {
+                color: red;
+                margin-bottom: 10px;
+            }
+            .success-message {
+                color: green;
+                margin-bottom: 10px;
+            }
+            .back-link {
+                display: block;
+                margin-top: 15px;
+                text-align: center;
+            }
         </style>
     </head>
     <body>
         <h1>Add New User</h1>
 
         <% if (request.getAttribute("errorMessage") != null) { %>
-            <p class="error-message">${requestScope.errorMessage}</p>
+        <p class="error-message">${requestScope.errorMessage}</p>
         <% } %>
         <% if (request.getAttribute("successMessage") != null) { %>
-            <p class="success-message">${requestScope.successMessage}</p>
-        <% } %>
+        <p class="success-message">${requestScope.successMessage}</p>
+        <% }%>
 
         <form action="${pageContext.request.contextPath}/admin/addUsers" method="post">
             <div>
@@ -88,9 +116,9 @@
                     <option value="false">Inactive</option>
                 </select>
             </div>
-            <div>
-                <label for="avatarUrl">Avatar URL:</label>
-                <input type="text" id="avatarUrl" name="avatarUrl">
+            <div class="form-group">
+                <label>Image: </label>
+                <input type="file" class="form-control" name="image" value="${c.image}" required/>
             </div>
             <div>
                 <label for="address">Address:</label>
@@ -100,7 +128,7 @@
                 <label for="dateOfBirth">Date of Birth:</label>
                 <input type="date" id="dateOfBirth" name="dateOfBirth">
             </div>
-            
+
             <div>
                 <input type="submit" value="Add User">
             </div>
