@@ -5,12 +5,7 @@
 <%@page import="dal.*" %>
 <%@page import="java.util.List" %>
 <%@page import="java.util.ArrayList" %>
-<%
-    User auth = (User) request.getSession().getAttribute("auth");
-    if (auth!=null) {
-        request.setAttribute("auth", auth);
-    }
-%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,7 +17,7 @@
         <!-- Header -->
         <%@include file="includes/navbar.jsp" %>
         <!-- Content -->
-        <div class="container row mb-5 mx-auto">
+        <div class="container row mb-5 mx-auto mt-3">
             <!-- Left side -->
             <div class="col-md-9">
                 <!-- Slider --> 
@@ -67,7 +62,7 @@
                 <div class="mb-5 mt-5" id="hot-posts">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2 class="section-title h3 fw-bold">Hot Posts</h2>
-                        <a href="blogList.jsp" class="text-decoration-none text-primary mb-1">View All</a>
+                        <a href="blogList" class="text-decoration-none text-primary mb-1">View All</a>
                         <!-- Link to blog list page --------------------------------------------------------------------------------------------------------------------------------------------->
                     </div>
                     <div class="row row-cols-md-3 g-4">
@@ -102,21 +97,26 @@
                     <div class="row row-cols-md-3 g-4">
                         <c:forEach var="course" items="${featuredCourse}">
                             <div class="col">
-                                <a href="courseDetail.jsp?id=${course.courseID}" class="text-decoration-none text-dark">
+                                <a href="courseDetails.jsp?id=${course.courseID}" class="text-decoration-none text-dark">
                                     <div class="card shadow">
-                                        <!--image-->
                                         <div class="p-3">
                                             <img src="${course.imageURL}" class="img-fluid w-100"
                                                  style="height: 200px; object-fit: cover; border-radius: 15px;"
                                                  alt="${course.title}">
-                                            <!-- tagline -->
                                             <span class="badge bg-info text-white position-absolute top-0 start-0 m-2">
                                                 ${course.category}
                                             </span>
                                         </div>
                                         <div class="card-body">
-                                            <h5 class="card-title mb-3">${course.title}</h5>
-                                            <!-- xem khóa học và số bài học -->
+                                            <h5 class="card-title mb-1">${course.title}</h5>
+                                            <p class="card-text mb-2">
+                                                <span class="text-muted text-decoration-line-through me-2">
+                                                    $<fmt:formatNumber value="${course.price + 10}" type="number" maxFractionDigits="2" />
+                                                </span>
+                                                <span class="text-success fw-bold">
+                                                    $<fmt:formatNumber value="${course.price}" type="number" maxFractionDigits="2" />
+                                                </span>
+                                            </p>
                                             <div class="d-flex align-items-center">
                                                 <a href="courseDetail.jsp?id=${course.courseID}" class="btn btn-outline-info me-2">View Course</a>
                                                 <div class="ms-auto text-end d-flex align-items-center">
@@ -128,7 +128,6 @@
                                 </a>
                             </div>
                         </c:forEach>
-                        <!-- Featured subjects end -->
                     </div>
                 </div>
             </div>
@@ -161,7 +160,7 @@
                             <!-- button see all-->
                             <div class="text-center mb-2">
                                 <button class="btn mt-3 px-3" style="background-color: #e0e0e0; color: #000;"
-                                        onclick="window.location.href = 'blogList.jsp'">
+                                        onclick="window.location.href = 'blogList'">
                                     See All
                                 </button>
                             </div>
@@ -198,5 +197,25 @@
             <!-- End of all-->
         </div>
         <%@include file="includes/foot.jsp" %>
+
+        <c:if test="${param.logout eq 'success'}">
+            <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+                <div id="logoutToast" class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            Logout successfully!
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                // Tự động ẩn sau 3 giây
+                setTimeout(() => {
+                    const toast = bootstrap.Toast.getOrCreateInstance(document.getElementById('logoutToast'));
+                    toast.hide();
+                }, 3000);
+            </script>
+        </c:if>
     </body>
 </html>

@@ -19,17 +19,11 @@
                     <div class="card-body p-4 p-md-5">
                         <!-- Author and Date -->
                         <div class="d-flex align-items-center justify-content-between mb-3">
-                            <div class="d-flex align-items-center">
-                                <img src="https://via.placeholder.com/50/6366F1/FFFFFF?text=JS" class="rounded-circle me-3"
-                                     alt="Author">
-                                <div>
-                                    <h6 class="mb-0 fw-bold">John Smith</h6>
-                                </div>
-                            </div>
+                            <h1 class="fw-bold mb-3">${blogDetail.title}</h1>
                             <p class="text-muted small mb-0">Updated: ${blogDetail.date}</p>
                         </div>
                         <!-- Blog Title -->
-                        <h1 class="fw-bold mb-3">${blogDetail.title}</h1>
+
 
                         <!-- Category -->
                         <div class="mb-4">
@@ -83,30 +77,38 @@
                 </div>
 
                 <!-- Latest Posts -->
-                <div class="latest-posts">
-                    <c:forEach var="blog" items="${latestBlogs}">
-                        <a href="blog-detail.jsp?id=${blog.blogID}" class="text-decoration-none text-dark">
-                            <!--link........................................................................................-->
-                            <div class="d-flex mb-5">
-                                <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
-                                    <img src="${blog.imageUrl}" alt="${blog.title}" class="w-100 h-100 latest-post-img">
-                                </div>
-                                <!-- Nội dung bài viết -->
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1">${blog.title}</h6>
-                                    <p class="text-muted small mb-0">
-                                        <i class="far fa-calendar-alt me-1"></i> ${blog.date}
-                                    </p>
-                                </div>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="card-title h4 fw-bold mb-3">Latest Posts</h3>
+                            <!-- Link to latest posts page .........................................................-->
+                        </div>
+                        <div class="latest-posts">
+                            <c:forEach var="blog" items="${latestBlogs}">
+                                <a href="BlogDetail?blogID=${blog.blogID}" class="text-decoration-none text-dark">
+                                    <!--link........................................................................................-->
+                                    <div class="d-flex mb-5">
+                                        <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
+                                            <img src="${blog.imageUrl}" alt="${blog.title}" class="w-100 h-100 latest-post-img">
+                                        </div>
+                                        <!-- Nội dung bài viết -->
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">${blog.title}</h6>
+                                            <p class="text-muted small mb-0">
+                                                <i class="far fa-calendar-alt me-1"></i>  ${blog.date}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </c:forEach>
+                            <!-- button see all-->
+                            <div class="text-center mb-2">
+                                <button class="btn mt-3 px-3" style="background-color: #e0e0e0; color: #000;"
+                                        onclick="window.location.href = 'blogList.jsp'">
+                                    See All
+                                </button>
                             </div>
-                        </a>
-                    </c:forEach>
-                    <!-- button see all-->
-                    <div class="text-center mb-2">
-                        <button class="btn mt-3 px-3" style="background-color: #e0e0e0; color: #000;"
-                                onclick="window.location.href = 'blogList.jsp'">
-                            See All
-                        </button>
+                        </div>
                     </div>
                 </div>
                 <!-- Contact Info -->

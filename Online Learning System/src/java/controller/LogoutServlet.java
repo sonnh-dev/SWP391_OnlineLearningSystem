@@ -1,22 +1,57 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package controller;
 
-import dao.BlogDao;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Map;
-import model.Blog;
 
-@WebServlet(name = "BlogDetail", urlPatterns = {"/BlogDetail"})
-public class BlogDetailServlet extends HttpServlet {
+/**
+ *
+ * @author Admin
+ */
+@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
+public class LogoutServlet extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+//        try (PrintWriter out = response.getWriter()) {
+//            /* TODO output your page here. You may use following sample code. */
+//            out.println("<!DOCTYPE html>");
+//            out.println("<html>");
+//            out.println("<head>");
+//            out.println("<title>Servlet LogoutServlet</title>");
+//            out.println("</head>");
+//            out.println("<body>");
+//            out.println("<h1>Servlet LogoutServlet at " + request.getContextPath() + "</h1>");
+//            out.println("</body>");
+//            out.println("</html>");
+//        }
+        try {
+            if (request.getSession().getAttribute("auth") != null) {
+                request.getSession().removeAttribute("auth");
+                response.sendRedirect("home?logout=success");
+            } else {
+                request.getRequestDispatcher("homepage.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -31,18 +66,7 @@ public class BlogDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int blogID = Integer.parseInt(request.getParameter("blogID"));
-        BlogDao blogDao = new BlogDao();
-        Blog blog = blogDao.getBlogByID(blogID);
-        List<Blog> latestBlogs = blogDao.get5LatestPost();
-        Map<String, Integer> map = blogDao.getCategory();
-        String content = blogDao.getContentByBlogID(blogID);
-        blogDao.increaseView(blogID);
-        request.setAttribute("blogDetail", blog);
-        request.setAttribute("categoryMap", map);
-        request.setAttribute("content", content);
-        request.setAttribute("latestBlogs", latestBlogs);
-        request.getRequestDispatcher("blogDetails.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**

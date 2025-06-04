@@ -27,19 +27,4 @@ public class DBContext {
             throw new SQLException("Cannot find JDBC driver. Please ensure the SQL Server JDBC driver is in your classpath.", ex);
         }
     }
-
-
-
-    public static void main(String[] args) {
-        try {
-            Connection connection = DBContext.getConnection(); // Gọi method đã sửa
-            if (connection != null) {
-                System.out.println("Kết nối đến cơ sở dữ liệu thành công!");
-                connection.close(); // Luôn đóng kết nối sau khi sử dụng
-            }
-        } catch (SQLException e) { // Chỉ cần bắt SQLException
-            System.out.println("Lỗi kết nối cơ sở dữ liệu: " + e.getMessage());
-            e.printStackTrace(); // In ra stack trace để debug
-        }
-    }
 }

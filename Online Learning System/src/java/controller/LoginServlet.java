@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet {
 
         // Kiểm tra định dạng email
         if (!isValidEmail(email)) {
-            request.setAttribute("error", "Vui lòng nhập đúng định dạng email!");
+            request.setAttribute("error", "Please enter the correct ");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
@@ -108,11 +108,11 @@ public class LoginServlet extends HttpServlet {
 
                 // Tạo session cho người dùng đăng nhập
                 HttpSession session = request.getSession();
-                session.setAttribute("user", account);
+                session.setAttribute("auth", account);
                 session.setAttribute("userEmail", email);
 
                 // Chuyển hướng đến trang chủ sau đăng nhập
-                response.sendRedirect("/Online_Learning_System/home");
+                response.sendRedirect("home");
             }
 
         } catch (Exception e) {
