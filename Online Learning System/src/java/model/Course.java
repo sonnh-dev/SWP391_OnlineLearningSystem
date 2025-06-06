@@ -8,20 +8,18 @@ public class Course {
     private int lectures;
     private String imageURL;
     private String description;
-    private double price;
     private int totalEnrollment;
 
     public Course() {
     }
 
-    public Course(int courseID, String title, String category, int lectures, String imageURL, String description, double price, int totalEnrollment) {
+    public Course(int courseID, String title, String category, int lectures, String imageURL, String description, int totalEnrollment) {
         this.courseID = courseID;
         this.title = title;
         this.category = category;
         this.lectures = lectures;
         this.imageURL = imageURL;
         this.description = description;
-        this.price = price;
         this.totalEnrollment = totalEnrollment;
     }
 
@@ -73,14 +71,6 @@ public class Course {
         this.description = description;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public int getTotalEnrollment() {
         return totalEnrollment;
     }
@@ -89,5 +79,4 @@ public class Course {
         this.totalEnrollment = totalEnrollment;
     }
 
-    
 }

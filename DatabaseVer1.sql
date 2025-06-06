@@ -46,10 +46,18 @@ CREATE TABLE Course (
     Lectures INT,
     ImageURL NVARCHAR(255),
     Description TEXT,
-    Price DECIMAL(10,2),
     TotalEnrollment INT DEFAULT 0
 );
-
+-- Bảng giá theo gói.
+CREATE TABLE CoursePackage (
+  PackageID INT PRIMARY KEY IDENTITY(1,1),
+  CourseID INT,
+  PackageName NVARCHAR(255),
+  OriginalPrice DECIMAL(10,2),
+  SaleRate INT, -- (%) giảm giá
+  Description VARCHAR(200),
+  FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+);
 -- Bảng người dùng và khóa học
 CREATE TABLE UserCourse (
     UserID INT,
@@ -113,7 +121,7 @@ CREATE TABLE SliderImage (
 
 INSERT INTO [Users] (firstName, lastName, gender, email, phoneNumber, role, status, avatarURL, password, address, dateOfBirth)
 VALUES
-('John', 'Doe', 'Male', 'john.doe@example.com', '1234567890', 'User', 1, 'avatars/john.jpg', 'hashed_password1', '123 Main St, NY', '1995-04-10'),
+('John', 'Doe', 'Male', 'sonnhhe189023@fpt.edu.vn', '1234567890', 'User', 1, 'avatars/john.jpg', '123', '123 Main St, NY', '1995-04-10'),
 ('Jane', 'Smith', 'Female', 'jane.smith@example.com', '2345678901', 'User', 1, 'avatars/jane.jpg', 'hashed_password2', '456 Park Ave, LA', '1988-09-23'),
 ('Michael', 'Brown', 'Male', 'michael.brown@example.com', '3456789012', 'User', 1, 'avatars/michael.jpg', 'hashed_password3', '789 Sunset Blvd, CA', '1992-12-02'),
 ('Emily', 'Johnson', 'Female', 'emily.j@example.com', '4567890123', 'User', 1, 'avatars/emily.jpg', 'hashed_password4', '321 Ocean Dr, FL', '1999-06-15'),
@@ -138,18 +146,51 @@ VALUES
 (9, 'Critical Thinking Techniques', '2025-05-10', 'Problem Solving', 'images/blog/image10.png', 70, 'Sharpen your analytical skills for better decisions.');
 
 
-INSERT INTO Course (Title, Category, Lectures, ImageURL, Description, Price, TotalEnrollment)
+INSERT INTO Course (Title, Category, Lectures	, ImageURL, Description, TotalEnrollment)
 VALUES
-('Strategic Leadership', 'Leadership', 10, 'images/courses/image1.png', 'Lead with vision and strategy in dynamic environments.', 32.00, 240),
-('Time Management Mastery', 'Time Management', 10, 'images/courses/image2.png', 'Organize your schedule and manage priorities efficiently.', 24.99, 250),
-('Mastering Self-Awareness', 'Emotional Intelligence', 7, 'images/courses/image3.png', 'Understand and manage your emotions effectively.', 25.50, 190),
-('Public Speaking Essentials', 'Communication', 8, 'images/courses/image4.png', 'Become a confident public speaker with real-world tips.', 19.99, 320),
-('Leadership Fundamentals', 'Leadership', 15, 'images/courses/image5.png', 'Gain essential leadership skills to inspire and guide teams.', 34.99, 270),
-('Emotional Intelligence at Work', 'Emotional Intelligence', 9, 'images/courses/image6.png', 'Improve emotional awareness and interpersonal skills.', 28.99, 210),
-('Problem Solving Techniques', 'Problem Solving', 11, 'images/courses/image7.png', 'Approach and resolve complex issues logically.', 26.99, 180),
-('Critical Thinking Skills', 'Problem Solving', 9, 'images/courses/image8.png', 'Learn to analyze situations and make sound decisions.', 23.50, 200),
-('Effective Communication Skills', 'Communication', 12, 'images/courses/image9.png', 'Master verbal and non-verbal communication in all contexts.', 29.99, 300),
-('Productivity & Planning Bootcamp', 'Time Management', 11, 'images/courses/image10.png', 'Get more done in less time with practical techniques.', 27.99, 230);
+('Strategic Leadership', 'Leadership', 10, 'images/courses/image1.png', 'Lead with vision and strategy in dynamic environments.', 240),
+('Time Management Mastery', 'Time Management', 10, 'images/courses/image2.png', 'Organize your schedule and manage priorities efficiently.', 250),
+('Mastering Self-Awareness', 'Emotional Intelligence', 7, 'images/courses/image3.png', 'Understand and manage your emotions effectively.', 190),
+('Public Speaking Essentials', 'Communication', 8, 'images/courses/image4.png', 'Become a confident public speaker with real-world tips.', 320),
+('Leadership Fundamentals', 'Leadership', 15, 'images/courses/image5.png', 'Gain essential leadership skills to inspire and guide teams.', 270),
+('Emotional Intelligence at Work', 'Emotional Intelligence', 9, 'images/courses/image6.png', 'Improve emotional awareness and interpersonal skills.', 210),
+('Problem Solving Techniques', 'Problem Solving', 11, 'images/courses/image7.png', 'Approach and resolve complex issues logically.', 180),
+('Critical Thinking Skills', 'Problem Solving', 9, 'images/courses/image8.png', 'Learn to analyze situations and make sound decisions.', 200),
+('Effective Communication Skills', 'Communication', 12, 'images/courses/image9.png', 'Master verbal and non-verbal communication in all contexts.', 300),
+('Productivity & Planning Bootcamp', 'Time Management', 11, 'images/courses/image10.png', 'Get more done in less time with practical techniques.', 230);
+
+INSERT INTO CoursePackage (CourseID, PackageName, OriginalPrice, SaleRate, Description)
+VALUES
+(1, 'Basic', 1200000, 50, 'Course materials, No extra resources, No certificate'),
+(1, 'Standard', 1600000, 38, 'Course materials, Extra resources, No certificate'),
+(1, 'Premium', 2000000, 30, 'Course materials, Extra resources, Certificate included'),
+(2, 'Basic', 1000000, 50, 'Core lessons, No worksheets, No certificate'),
+(2, 'Standard', 1400000, 43, 'Lessons + worksheets, No certificate'),
+(2, 'Premium', 1800000, 33, 'Full program, Worksheets, Certificate included'),
+(3, 'Basic', 800000, 50, 'Core access, No journaling, No certificate'),
+(3, 'Standard', 1200000, 42, 'Journaling tools, No certificate'),
+(3, 'Premium', 1600000, 31, 'Full tools, Journaling, Certificate included'),
+(4, 'Basic', 900000, 49, 'Basic tips, No interaction, No certificate'),
+(4, 'Standard', 1300000, 38, 'Interactive exercises, No certificate'),
+(4, 'Premium', 1700000, 29, 'Advanced content, Certificate included'),
+(5, 'Basic', 1100000, 49, 'Essential lessons, No team tools, No certificate'),
+(5, 'Standard', 1500000, 40, 'Includes team tools, No certificate'),
+(5, 'Premium', 1900000, 32, 'Mentorship + tools, Certificate included'),
+(6, 'Basic', 850000, 49, 'Basic EI, No coaching, No certificate'),
+(6, 'Standard', 1250000, 41, 'Coaching included, No certificate'),
+(6, 'Premium', 1650000, 29, 'Coaching + tools, Certificate included'),
+(7, 'Basic', 800000, 50, 'Toolkit access, No case studies, No certificate'),
+(7, 'Standard', 1200000, 43, 'Includes case studies, No certificate'),
+(7, 'Premium', 1600000, 33, 'Case studies + 1:1 help, Certificate included'),
+(8, 'Basic', 850000, 50, 'Quick access, No practice tests, No certificate'),
+(8, 'Standard', 1250000, 42, 'Practice tests included, No certificate'),
+(8, 'Premium', 1650000, 32, 'Tests + coaching, Certificate included'),
+(9, 'Basic', 970000, 50, 'Starter pack, No tasks, No certificate'),
+(9, 'Standard', 1370000, 41, 'Includes dialogues, No certificate'),
+(9, 'Premium', 1770000, 32, 'Live demo + tasks, Certificate included'),
+(10, 'Basic', 880000, 50, 'Basic planner, No tools, No certificate'),
+(10, 'Standard', 1280000, 39, 'Includes tools, No certificate'),
+(10, 'Premium', 1680000, 31, 'Full tools + support, Certificate included');
 
 
 INSERT INTO SliderImage (CourseID, SliderTitle, SliderContent, SliderURL)

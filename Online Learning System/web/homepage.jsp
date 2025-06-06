@@ -1,11 +1,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.*" %>
-<%@page import="dal.*" %>
+<%@page import="dao.*" %>
 <%@page import="java.util.List" %>
 <%@page import="java.util.ArrayList" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -97,9 +97,9 @@
                     <div class="row row-cols-md-3 g-4">
                         <c:forEach var="course" items="${featuredCourse}">
                             <div class="col">
-                                <a href="courseDetails.jsp?id=${course.courseID}" class="text-decoration-none text-dark">
+                                <a href="courseDetail.jsp?id=${course.courseID}" class="text-decoration-none text-dark">
                                     <div class="card shadow">
-                                        <div class="p-3">
+                                        <div class="p-3 position-relative">
                                             <img src="${course.imageURL}" class="img-fluid w-100"
                                                  style="height: 200px; object-fit: cover; border-radius: 15px;"
                                                  alt="${course.title}">
@@ -109,12 +109,14 @@
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title mb-1">${course.title}</h5>
+                                            <c:set var="p" value="${minPackage[course.courseID]}" />
+                                            <c:set var="sale" value="${p.originalPrice * (1 - p.saleRate / 100.0)}" />
                                             <p class="card-text mb-2">
                                                 <span class="text-muted text-decoration-line-through me-2">
-                                                    $<fmt:formatNumber value="${course.price + 10}" type="number" maxFractionDigits="2" />
+                                                    $<fmt:formatNumber value="${p.originalPrice}" type="number" maxFractionDigits="2" />
                                                 </span>
-                                                <span class="text-success fw-bold">
-                                                    $<fmt:formatNumber value="${course.price}" type="number" maxFractionDigits="2" />
+                                                <span class="text-success fw-bold ms-2 fs-5">
+                                                    $<fmt:formatNumber value="${sale}" type="number" maxFractionDigits="2" />
                                                 </span>
                                             </p>
                                             <div class="d-flex align-items-center">

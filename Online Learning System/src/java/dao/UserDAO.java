@@ -7,14 +7,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Date;
+import model.Account;
 
-public class UserDAO {
+public class UserDAO extends DBContext {
 
     public List<User> getPaginatedUsers(
             String genderFilter, String roleFilter, String statusFilter,
@@ -154,7 +153,7 @@ public class UserDAO {
     }
 
     public int getTotalUsers(String genderFilter, String roleFilter, String statusFilter,
-                             String searchKeyword, String searchBy) throws ClassNotFoundException {
+            String searchKeyword, String searchBy) throws ClassNotFoundException {
         DBContext db = new DBContext();
         Connection con = null;
         PreparedStatement ps = null;
@@ -275,6 +274,7 @@ public class UserDAO {
         }
         return totalUsers;
     }
+
     public User getUserById(int userId) throws ClassNotFoundException {
         DBContext db = new DBContext();
         Connection con = null;
@@ -485,6 +485,7 @@ public class UserDAO {
         }
         return success;
     }
+
     // Giả định bạn có một bảng Users trong database của mình
     // SQL DDL cho bảng Users (ví dụ cho SQL Server)
     /*
@@ -503,4 +504,23 @@ public class UserDAO {
         dateOfBirth DATE
     );
      */
+    public User getLoginUser(Account account) {
+        String sql = "SELECT FirstName, LastName, Email, PhoneNumber, AvatarUrl FROM Users WHERE email = ? AND password = ?";
+        try (Connection con = DBContext.getConnection(); PreparedStatement stm = con.prepareStatement(sql)) {
+            stm.setString(1, account.getEmail());
+            stm.setString(2, account.getPassword());
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                User user = new User();
+                user.setFirstName(rs.getString("FirstName"));
+                user.setLastName(rs.getString("LastName"));
+                user.setEmail(rs.getString("Email"));
+                user.setPhoneNumber(rs.getString("PhoneNumber"));
+                user.setAvatarUrl(rs.getString("AvatarUrl"));
+                return user;
+            }
+        } catch (SQLException e) {
+        }
+        return null;
+    }
 }
