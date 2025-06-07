@@ -1,24 +1,27 @@
 ﻿CREATE database SWP391DB;
 
 USE SWP391DB;
+-- Assuming you have already executed:
+-- CREATE DATABASE SWP391DB;
+-- USE SWP391DB;
 
--- Bảng người dùng
+-- Bảng người dùng (Users) - KHÔNG ĐỔI
 CREATE TABLE Users (
-  userID INT PRIMARY KEY IDENTITY(1,1),
-  firstName NVARCHAR(255),
-  lastName NVARCHAR(255),
-  gender NVARCHAR(50),
-  email NVARCHAR(255),
-  phoneNumber NVARCHAR(50),
-  role NVARCHAR(100),
-  status BIT,
-  avatarURL NVARCHAR(255),
-  password NVARCHAR(255),
-  address NVARCHAR(255),
-  dateOfBirth DATE
+    userID INT PRIMARY KEY IDENTITY(1,1),
+    firstName NVARCHAR(255),
+    lastName NVARCHAR(255),
+    gender NVARCHAR(50),
+    email NVARCHAR(255),
+    phoneNumber NVARCHAR(50),
+    role NVARCHAR(100),
+    status BIT,
+    avatarURL NVARCHAR(255),
+    password NVARCHAR(255),
+    address NVARCHAR(255),
+    dateOfBirth DATE
 );
 
--- Bảng blog
+-- Bảng blog (Blog) - KHÔNG ĐỔI
 CREATE TABLE Blog (
     BlogID INT PRIMARY KEY IDENTITY(1,1),
     UserID INT,
@@ -31,14 +34,14 @@ CREATE TABLE Blog (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
--- Nội dung bài blog
+-- Nội dung bài blog (BlogContent) - KHÔNG ĐỔI
 CREATE TABLE BlogContent (
     BlogID INT PRIMARY KEY,
     Content TEXT,
     FOREIGN KEY (BlogID) REFERENCES Blog(BlogID)
 );
 
--- Bảng khóa học
+-- Bảng khóa học (Course) - KHÔNG ĐỔI
 CREATE TABLE Course (
     CourseID INT PRIMARY KEY IDENTITY(1,1),
     Title NVARCHAR(255),
@@ -48,17 +51,19 @@ CREATE TABLE Course (
     Description TEXT,
     TotalEnrollment INT DEFAULT 0
 );
--- Bảng giá theo gói.
+
+-- Bảng giá theo gói (CoursePackage) - KHÔNG ĐỔI
 CREATE TABLE CoursePackage (
-  PackageID INT PRIMARY KEY IDENTITY(1,1),
-  CourseID INT,
-  PackageName NVARCHAR(255),
-  OriginalPrice DECIMAL(10,2),
-  SaleRate INT, -- (%) giảm giá
-  Description VARCHAR(200),
-  FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+    PackageID INT PRIMARY KEY IDENTITY(1,1),
+    CourseID INT,
+    PackageName NVARCHAR(255),
+    OriginalPrice DECIMAL(10,2),
+    SaleRate INT, -- (%) giảm giá
+    Description VARCHAR(200),
+    FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
--- Bảng người dùng và khóa học
+
+-- Bảng người dùng và khóa học (UserCourse) - KHÔNG ĐỔI
 CREATE TABLE UserCourse (
     UserID INT,
     CourseID INT,
@@ -70,7 +75,7 @@ CREATE TABLE UserCourse (
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 
--- Bảng bài học
+-- Bảng bài học (Lesson) - KHÔNG ĐỔI
 CREATE TABLE Lesson (
     LessonID INT PRIMARY KEY IDENTITY(1,1),
     CourseID INT,
@@ -80,7 +85,7 @@ CREATE TABLE Lesson (
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 
--- Nội dung bài học
+-- Nội dung bài học (LessonContent) - KHÔNG ĐỔI
 CREATE TABLE LessonContent (
     LessonID INT PRIMARY KEY,
     DocContent TEXT,
@@ -88,35 +93,71 @@ CREATE TABLE LessonContent (
     FOREIGN KEY (LessonID) REFERENCES Lesson(LessonID)
 );
 
--- Bảng câu hỏi
-CREATE TABLE LessonQuiz (
+--- BẢNG QUẢN LÝ QUIZ VÀ CÂU HỎI ---
+
+-- Bảng Quizzes (thay thế LessonQuiz, được cải tiến)
+-- Bảng này chứa thông tin chi tiết về từng bài quiz, có thể là quiz của một Lesson hoặc một quiz độc lập.
+CREATE TABLE Quizzes (
     QuizID INT PRIMARY KEY IDENTITY(1,1),
-    LessonID INT,
-    CourseID INT,
-    QuizContent TEXT,
-    QuestionOrder INT,
+    LessonID INT, -- Có thể NULL nếu là quiz độc lập không gắn với Lesson nào
+    CourseID INT, -- Có thể NULL nếu là quiz độc lập không gắn với Course nào
+    QuizName NVARCHAR(255) NOT NULL, -- Tên bài quiz (thay thế QuizContent cũ để rõ ràng hơn)
+    Subject NVARCHAR(100), -- Chủ đề của quiz (ví dụ: "Toán", "Lịch sử")
+    Level NVARCHAR(50), -- Mức độ khó (ví dụ: "Dễ", "Trung bình", "Khó")
+    NumQuestions INT, -- Tổng số câu hỏi trong quiz
+    DurationMinutes INT, -- Thời lượng làm bài quiz (phút)
+    PassRate DECIMAL(5,2), -- Tỷ lệ phần trăm để qua quiz
+    QuizType NVARCHAR(50), -- Loại quiz (ví dụ: "Luyện tập", "Kiểm tra", "Thi cuối khóa")
+    QuestionOrder INT, -- Thứ tự của quiz trong bài học (nếu có)
+    CreatedAt DATETIME DEFAULT GETDATE(), -- Thời điểm tạo quiz
+    UpdatedAt DATETIME DEFAULT GETDATE(), -- Thời điểm cập nhật cuối cùng
     FOREIGN KEY (LessonID) REFERENCES Lesson(LessonID),
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 
--- Bảng câu trả lời
-CREATE TABLE AnswerQuiz (
-    AnswerID INT PRIMARY KEY IDENTITY(1,1),
-    QuizID INT,
-    AnswerContent TEXT,
-    IsCorrect BIT,
-    Mark DECIMAL(5,2),
-    FOREIGN KEY (QuizID) REFERENCES LessonQuiz(QuizID)
+-- Bảng Questions (tách riêng các câu hỏi của một Quiz)
+-- Bảng này chứa các câu hỏi cụ thể trong mỗi bài Quiz.
+CREATE TABLE Questions (
+    QuestionID INT PRIMARY KEY IDENTITY(1,1),
+    QuizID INT NOT NULL,
+    QuestionContent TEXT NOT NULL, -- Nội dung câu hỏi
+    QuestionType NVARCHAR(50), -- Ví dụ: 'Multiple Choice', 'True/False', 'Short Answer'
+    FOREIGN KEY (QuizID) REFERENCES Quizzes(QuizID)
 );
 
--- Bảng slider
+
+-- Bảng QuestionOptions (thay thế AnswerQuiz, chứa các lựa chọn/đáp án cho từng câu hỏi)
+CREATE TABLE QuestionOptions (
+    OptionID INT PRIMARY KEY IDENTITY(1,1),
+    QuestionID INT NOT NULL,
+    OptionContent TEXT NOT NULL, -- Nội dung của lựa chọn/đáp án
+    IsCorrect BIT NOT NULL DEFAULT 0, -- 1 nếu là đáp án đúng, 0 nếu không
+    -- Mark DECIMAL(5,2), -- Điểm cho lựa chọn này nếu câu hỏi có nhiều đáp án hoặc điểm khác nhau
+    FOREIGN KEY (QuestionID) REFERENCES Questions(QuestionID)
+);
+
+-- Bảng QuizAttempts (MỚI) - Để theo dõi lịch sử làm bài của người dùng
+-- Bảng này rất quan trọng để xác định liệu một Quiz đã được làm hay chưa (cho yêu cầu "quiz can be editted only when there is not any test taken yet").
+CREATE TABLE QuizAttempts (
+    AttemptID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT NOT NULL,
+    QuizID INT NOT NULL,
+    StartTime DATETIME DEFAULT GETDATE(), -- Thời gian bắt đầu làm bài
+    EndTime DATETIME, -- Thời gian kết thúc làm bài
+    Score DECIMAL(5,2), -- Điểm số đạt được trong lần làm bài này
+    IsPassed BIT, -- Liệu người dùng có vượt qua quiz này trong lần thử này
+    FOREIGN KEY (UserID) REFERENCES Users(userID),
+    FOREIGN KEY (QuizID) REFERENCES Quizzes(QuizID)
+);
+
+-- Bảng SliderImage - KHÔNG ĐỔI
 CREATE TABLE SliderImage (
     SliderID INT PRIMARY KEY IDENTITY(1,1),
-	CourseID INT,
+    CourseID INT,
     SliderTitle NVARCHAR(255) NOT NULL,
     SliderContent TEXT,
-    SliderURL NVARCHAR(2083)
-	FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+    SliderURL NVARCHAR(2083),
+    FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 
 INSERT INTO [Users] (firstName, lastName, gender, email, phoneNumber, role, status, avatarURL, password, address, dateOfBirth)
