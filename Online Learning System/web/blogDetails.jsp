@@ -35,7 +35,7 @@
 
                         <!-- Featured Image -->
                         <div class="ratio ratio-16x9 mb-4">
-                            <img src="${blogDetail.imageUrl}" class="img-fluid rounded object-fit-cover" alt="${blogDetail.title}">
+                            <img src="${blogDetail.imageURL}" class="img-fluid rounded object-fit-cover" alt="${blogDetail.title}">
                         </div>
 
                         <!-- Blog Content -->
@@ -89,7 +89,7 @@
                                     <!--link........................................................................................-->
                                     <div class="d-flex mb-5">
                                         <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
-                                            <img src="${blog.imageUrl}" alt="${blog.title}" class="w-100 h-100 latest-post-img">
+                                            <img src="${blog.imageURL}" alt="${blog.title}" class="w-100 h-100 latest-post-img">
                                         </div>
                                         <!-- Nội dung bài viết -->
                                         <div class="flex-grow-1">

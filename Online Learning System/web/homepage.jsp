@@ -2,10 +2,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="model.*" %>
-<%@page import="dao.*" %>
-<%@page import="java.util.List" %>
-<%@page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,7 +11,7 @@
     </head>
     <body>
         <!-- Header -->
-        <%@include file="includes/navbar.jsp" %>
+        <%@include file="includes/navbar.jsp" %>    
         <!-- Content -->
         <div class="container row mb-5 mx-auto mt-3">
             <!-- Left side -->
@@ -71,7 +67,7 @@
                                 <a href="BlogDetail?blogID=${blog.blogID}" class="text-decoration-none text-dark">
                                     <!--link........................................................................................-->
                                     <div class="card shadow h-100">
-                                        <img src="${blog.imageUrl}" class="img-fluid p-3" style="height: 200px; object-fit: cover;"
+                                        <img src="${blog.imageURL}" class="img-fluid p-3" style="height: 200px; object-fit: cover;"
                                              alt="${blog.title}">
                                         <div class="card-body">
                                             <h5 class=" card-title">${blog.title}</h5>
@@ -111,15 +107,13 @@
                                             <h5 class="card-title mb-1">${course.title}</h5>
                                             <c:set var="p" value="${minPackage[course.courseID]}" />
                                             <c:set var="sale" value="${p.originalPrice * (1 - p.saleRate / 100.0)}" />
-                                            <p class="card-text mb-2">
-                                                <span class="text-muted text-decoration-line-through me-2">
-                                                    $<fmt:formatNumber value="${p.originalPrice}" type="number" maxFractionDigits="2" />
-                                                </span>
-                                                <span class="text-success fw-bold ms-2 fs-5">
-                                                    $<fmt:formatNumber value="${sale}" type="number" maxFractionDigits="2" />
-                                                </span>
-                                            </p>
-                                            <div class="d-flex align-items-center">
+                                            <span class="fw-bold ms-2 fs-5" style="color: #0d6efd;">
+                                                $<fmt:formatNumber value="${sale}" type="number" maxFractionDigits="2" />
+                                            </span>
+                                            <span class="text-muted text-decoration-line-through me-2">
+                                                $<fmt:formatNumber value="${p.originalPrice}" type="number" maxFractionDigits="2" />
+                                            </span>
+                                            <div class="d-flex align-items-center mt-3">
                                                 <a href="courseDetail.jsp?id=${course.courseID}" class="btn btn-outline-info me-2">View Course</a>
                                                 <div class="ms-auto text-end d-flex align-items-center">
                                                     <i class="fas fa-file-alt me-1"></i>${course.lectures} lectures
@@ -147,7 +141,7 @@
                                     <!--link........................................................................................-->
                                     <div class="d-flex mb-5">
                                         <div class="w-25 rounded me-3 overflow-hidden flex-shrink-0">
-                                            <img src="${blog.imageUrl}" alt="${blog.title}" class="w-100 h-100 latest-post-img">
+                                            <img src="${blog.imageURL}" alt="${blog.title}" class="w-100 h-100 latest-post-img">
                                         </div>
                                         <!-- Nội dung bài viết -->
                                         <div class="flex-grow-1">

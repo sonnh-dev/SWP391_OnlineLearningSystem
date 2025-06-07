@@ -2,19 +2,19 @@
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>controller.LoginServlet</servlet-class>
+        <servlet-class>auth.controller.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
-        <servlet-class>controller.RegisterServlet</servlet-class>
+        <servlet-class>auth.controller.RegisterServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>VerifyEmailServlet</servlet-name>
-        <servlet-class>controller.VerifyEmailServlet</servlet-class>
+        <servlet-class>auth.controller.VerifyEmailServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PostServlet</servlet-name>
-        <servlet-class>controller.BlogListServlet</servlet-class>
+        <servlet-class>blog.controller.BlogListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
