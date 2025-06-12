@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package context; // Đảm bảo package này đúng với cấu trúc project của bạn
+package context; 
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level; // Import này để sử dụng Logger
-import java.util.logging.Logger; // Import này để sử dụng Logger
+import java.util.logging.Level; 
+import java.util.logging.Logger; 
 
 public class DBContext2 {
 
