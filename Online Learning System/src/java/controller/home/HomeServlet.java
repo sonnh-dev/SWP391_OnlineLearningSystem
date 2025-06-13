@@ -1,13 +1,13 @@
 package controller.home;
 
 import model.Blog;
-import model.Course;
-import model.CoursePackage;
+import model.course.Course;
+import model.course.CoursePackage;
 import model.Slider;
-import dal.BlogDao;
-import dal.CourseDao;
-import dal.CoursePackageDao;
-import dal.SliderDao;
+import dao.BlogDao;
+import dao.CourseDao;
+import dao.CoursePackageDao;
+import dao.SliderDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

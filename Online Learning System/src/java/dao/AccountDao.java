@@ -1,4 +1,4 @@
-    package dal;
+    package dao;
 
 import context.context2;
 import java.sql.Connection;

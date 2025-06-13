@@ -1,4 +1,4 @@
-package dal;
+package dao;
 
 import model.Blog;
 import context.context2;

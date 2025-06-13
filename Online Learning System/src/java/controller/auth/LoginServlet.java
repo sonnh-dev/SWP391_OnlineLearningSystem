@@ -2,7 +2,7 @@ package controller.auth;
 
 import java.util.HashMap;
 import java.util.Map;
-import dal.AccountDao;
+import dao.AccountDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

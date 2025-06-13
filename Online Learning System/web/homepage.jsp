@@ -33,7 +33,7 @@
                     <div class="carousel-inner">
                         <c:forEach var="slider" items="${slider}" varStatus="status">
                             <div class="carousel-item ${status.first ? 'active' : ''}"  >
-                                <a href="courseDetail.jsp?id=${slider.courseID}">
+                                <a href="CourseDetail?icourseID=${slider.courseID}">
                                     <img src="${slider.sliderURL}" class="d-block w-100" style="height: 475px; object-fit: cover;" alt="First slide">
                                     <div class="carousel-caption bg-dark bg-opacity-50 rounded-3">
                                         <h5 class="text-white">${slider.sliderTitle}</h5>
@@ -93,7 +93,7 @@
                     <div class="row row-cols-md-3 g-4">
                         <c:forEach var="course" items="${featuredCourse}">
                             <div class="col">
-                                <a href="courseDetail.jsp?id=${course.courseID}" class="text-decoration-none text-dark">
+                                <a href="CourseDetail?courseID=${course.courseID}" class="text-decoration-none text-dark">
                                     <div class="card shadow">
                                         <div class="p-3 position-relative">
                                             <img src="${course.imageURL}" class="img-fluid w-100"
@@ -108,13 +108,13 @@
                                             <c:set var="p" value="${minPackage[course.courseID]}" />
                                             <c:set var="sale" value="${p.originalPrice * (1 - p.saleRate / 100.0)}" />
                                             <span class="fw-bold ms-2 fs-5" style="color: #0d6efd;">
-                                                $<fmt:formatNumber value="${sale}" type="number" maxFractionDigits="2" />
+                                                <fmt:formatNumber value="${sale}" type="number" maxFractionDigits="2" />đ
                                             </span>
                                             <span class="text-muted text-decoration-line-through me-2">
-                                                $<fmt:formatNumber value="${p.originalPrice}" type="number" maxFractionDigits="2" />
+                                                <fmt:formatNumber value="${p.originalPrice}" type="number" maxFractionDigits="2" />đ
                                             </span>
                                             <div class="d-flex align-items-center mt-3">
-                                                <a href="courseDetail.jsp?id=${course.courseID}" class="btn btn-outline-info me-2">View Course</a>
+                                                <a href="CourseDetail?courseID=${course.courseID}" class="btn btn-outline-info me-2">View Course</a>
                                                 <div class="ms-auto text-end d-flex align-items-center">
                                                     <i class="fas fa-file-alt me-1"></i>${course.lectures} lectures
                                                 </div>

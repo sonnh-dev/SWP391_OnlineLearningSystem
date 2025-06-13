@@ -1,5 +1,5 @@
 // File: src/main/java/com/yourcompany/yourproject/dao/UserDAO.java
-package dal;
+package dao;
 
 import context.DBContext2;
 import model.User;

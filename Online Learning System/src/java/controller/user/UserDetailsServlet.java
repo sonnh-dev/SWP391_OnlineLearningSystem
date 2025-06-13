@@ -1,7 +1,7 @@
     // File: src/main/java/com/yourcompany/yourproject/controller/UserDetailsServlet.java
 package controller.user;
 
-import dal.UserDAO;
+import dao.UserDAO;
 import model.User;
 import java.io.IOException;
 import jakarta.servlet.ServletException;

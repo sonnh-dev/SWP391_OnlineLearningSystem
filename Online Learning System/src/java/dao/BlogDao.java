@@ -1,4 +1,4 @@
-package dal;
+package dao;
 
 import context.DBContext;
 import java.sql.PreparedStatement;

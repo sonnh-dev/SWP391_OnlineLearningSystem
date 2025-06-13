@@ -1,6 +1,6 @@
 package controller.auth;
 
-import dal.AccountDao;
+import dao.AccountDao;
 import config.EmailSender;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;

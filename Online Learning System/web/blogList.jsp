@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@page import="model.Post"%>
+<%@page import="model.Blog"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,9 +37,9 @@
             <h2>Latest Posts</h2>
             <%
                 // Lấy danh sách bài viết từ request (được truyền từ Servlet)
-                List<Post> posts = (List<Post>) request.getAttribute("posts");
+                List<Blog> posts = (List<Blog>) request.getAttribute("posts");
                 if (posts != null && !posts.isEmpty()) {
-                    for (Post p : posts) {
+                    for (Blog p : posts) {
             %>
                 <div class="post-box">
                     <div>
@@ -143,9 +143,9 @@
             <div class="latest-posts">
                 <h3>Latest Post</h3>
                 <%
-                    List<Post> latestPosts = (List<Post>) request.getAttribute("latestPosts");
+                    List<Blog> latestPosts = (List<Blog>) request.getAttribute("latestPosts");
                     if (latestPosts != null && !latestPosts.isEmpty()) {
-                        for (Post lp : latestPosts) {
+                        for (Blog lp : latestPosts) {
                 %>
                     <p><strong><%= lp.getTitle() %></strong><br/><em><%= lp.getDate() %></em></p>
                 <%

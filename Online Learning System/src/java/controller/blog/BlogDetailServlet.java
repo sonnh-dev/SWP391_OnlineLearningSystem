@@ -1,6 +1,6 @@
 package controller.blog;
 
-import dal.BlogDao;
+import dao.BlogDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

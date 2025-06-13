@@ -1,7 +1,7 @@
 // File: src/main/java/com/yourcompany/yourproject/controller/AddUserServlet.java
 package controller.user;
 
-import dal.UserDAO;
+import dao.UserDAO;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

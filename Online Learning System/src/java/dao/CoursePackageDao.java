@@ -1,4 +1,4 @@
-package dal;
+package dao;
 
 import context.DBContext;
 import java.sql.PreparedStatement;
@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.Course;
-import model.CoursePackage;
+import model.course.Course;
+import model.course.CoursePackage;
 
 public class CoursePackageDao extends DBContext {
 
