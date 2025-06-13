@@ -1,9 +1,11 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     const carouselEl = document.querySelector('#courseCarousel');
     const captionBox = document.getElementById('external-caption');
     const hint = document.getElementById('click-hint');
     const items = carouselEl.querySelectorAll('.carousel-item');
     const youtubeContainers = document.querySelectorAll('.youtube-container');
+    const carousel = bootstrap.Carousel.getOrCreateInstance(carouselEl);
     let players = [];
     // Load YouTube IFrame API
     const tag = document.createElement('script');
@@ -32,6 +34,13 @@ document.addEventListener('DOMContentLoaded', function () {
                             iframe.style.borderRadius = '1rem';
                             iframe.style.width = '100%';
                             iframe.style.height = '100%';
+                        }
+                    },
+                    onStateChange: function (event) {
+                        if (event.data === YT.PlayerState.PLAYING) {
+                            carousel.pause();
+                        } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                            setTimeout(() => carousel.next(), 5000);
                         }
                     }
                 }
