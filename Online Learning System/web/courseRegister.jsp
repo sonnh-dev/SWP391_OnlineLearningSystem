@@ -15,7 +15,8 @@
         <div class="bg-white rounded shadow p-4 p-md-5">
             <!-------------------------------------------------------->
             <!-- Registration Form -->
-            <form id="registrationForm">    
+            <form id="registrationForm" method="post" action="CourseRegister">    
+                <input type="hidden" name="courseID" value="${course.courseID}" />
                 <div class="mb-5">
                     <h3 class="fs-5 fw-semibold text-dark mb-4">Select Package</h3>
                     <div class="row">
@@ -60,22 +61,26 @@
                             <!-- First Name -->
                             <div class="col-sm-6">
                                 <label for="firstName" class="form-label">First Name</label>
-                                <input type="text" class="form-control" placeholder="First Name" name="firstName" required>
+                                <input type="text" class="form-control" placeholder="First Name" name="firstName" value="${firstName}" required>
+                                <small class="text-danger">${errors.firstName}</small>
                             </div>
                             <!-- Last Name -->
                             <div class="col-sm-6">
                                 <label for="lastName" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" placeholder="Last Name" name="lastName" required>
+                                <input type="text" class="form-control" placeholder="Last Name" name="lastName" value="${lastName}" required>
+                                <small class="text-danger">${errors.lastName}</small>
                             </div>
                             <!-- Email -->
                             <div class="col-sm-6">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" placeholder="Email" name="email" required>
+                                <input type="email" class="form-control" placeholder="Email" name="email" value="${email}" required>
+                                <small class="text-danger">${errors.email}</small>
                             </div>
                             <!-- Mobile Number -->
                             <div class="col-sm-6">
                                 <label for="mobile" class="form-label">Mobile Number</label>
-                                <input type="tel" class="form-control" placeholder="Mobile Number" name="mobile" required>
+                                <input type="tel" class="form-control" placeholder="Mobile Number" name="mobile" value="${mobile}" required>
+                                <small class="text-danger">${errors.mobile}</small>
                             </div>
                             <!-- Gender -->
                             <div class="col-12">

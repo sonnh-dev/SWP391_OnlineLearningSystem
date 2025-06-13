@@ -4,19 +4,20 @@
  */
 package controller.course;
 
-import dal.CoursePackageDao;
-import dal.UserDAO;
+import dao.CoursePackageDao;
+import dao.UserDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.Account;
-import model.CoursePackage;
+import model.course.CoursePackage;
 import model.User;
 
 /**
@@ -26,30 +27,19 @@ import model.User;
 @WebServlet(name = "CourseRegisterServlet", urlPatterns = {"/CourseRegister"})
 public class CourseRegisterServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CourseRegisterServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CourseRegisterServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        HttpSession session = request.getSession(false);
+        Account auth = (Account) session.getAttribute("auth");
+        int courseID = Integer.parseInt(request.getParameter("courseID"));
+        List<CoursePackage> coursePackage = new CoursePackageDao().getCoursePackagesByCourseID(courseID);
+        request.setAttribute("coursePackage", coursePackage);
+        if (auth != null) {
+            User user = new UserDAO().getLoginUser(auth);
+            request.setAttribute("user", user);
         }
+        request.getRequestDispatcher("courseRegister.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -64,16 +54,7 @@ public class CourseRegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        Account auth = (Account) session.getAttribute("auth");
-        int courseID = Integer.parseInt(request.getParameter("courseID"));
-        List<CoursePackage> coursePackage = new CoursePackageDao().getCoursePackagesByCourseID(courseID);
-        request.setAttribute("coursePackage", coursePackage);
-        if (auth != null) {
-            User user = new UserDAO().getLoginUser(auth);
-            request.setAttribute("user", user);
-        }
-        request.getRequestDispatcher("courseRegister.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -87,7 +68,43 @@ public class CourseRegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        String mobile = request.getParameter("mobile");
+        String gender = request.getParameter("gender");
+
+        Map<String, String> errors = new HashMap<>();
+
+        // Simple validations
+        if (firstName == null || firstName.trim().isEmpty()) {
+            errors.put("firstName", "First name is required.");
+        }
+
+        if (lastName == null || lastName.trim().isEmpty()) {
+            errors.put("lastName", "Last name is required.");
+        }
+
+        if (email == null || !email.matches("^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            errors.put("email", "Invalid email format.");
+        }
+
+        if (mobile == null || !mobile.matches("\\d{10,15}")) {
+            errors.put("mobile", "Invalid mobile number.");
+        }
+
+        if (!errors.isEmpty()) {
+            request.setAttribute("errors", errors);
+            request.setAttribute("firstName", firstName);
+            request.setAttribute("lastName", lastName);
+            request.setAttribute("email", email);
+            request.setAttribute("mobile", mobile);
+            request.setAttribute("gender", gender);
+            request.getRequestDispatcher("courseRegister.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("courseRegister.jsp").forward(request, response);
+        }
     }
 
     /**
