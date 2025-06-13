@@ -190,6 +190,14 @@ VALUES
 ('Daniel', 'Martinez', 'Male', 'daniel.m@example.com', '9012345678', 'User', 1, 'avatars/daniel.jpg', 'hashed_password9', '999 Canyon Dr, AZ', '1996-08-05'),
 ('Laura', 'Nguyen', 'Female', 'laura.nguyen@example.com', '0123456789', 'User', 1, 'avatars/laura.jpg', 'hashed_password10', '888 Forest Ave, OR', '1994-05-30');
 
+
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
+(NULL, NULL, N'Quiz Cơ bản về Lãnh đạo', N'Leadership', N'Dễ', 5, 10, 60.00, N'Luyện tập', NULL, GETDATE(), GETDATE()),
+(NULL, NULL, N'Bài kiểm tra Quản lý Thời gian', N'Time Management', N'Trung bình', 10, 20, 70.00, N'Kiểm tra', NULL, GETDATE(), GETDATE()),
+(NULL, NULL, N'Thực hành Giải quyết Vấn đề', N'Problem Solving', N'Khó', 8, 15, 65.00, N'Luyện tập', NULL, GETDATE(), GETDATE()),
+(NULL, NULL, N'Đánh giá Trí tuệ Cảm xúc', N'Emotional Intelligence', N'Trung bình', 12, 25, 75.00, N'Kiểm tra', NULL, GETDATE(), GETDATE()),
+(NULL, NULL, N'Kỹ năng Giao tiếp Hiệu quả', N'Communication', N'Dễ', 7, 10, 60.00, N'Luyện tập', NULL, GETDATE(), GETDATE());
+
 INSERT INTO Blog (UserID, Title, Date, Category, ImageURL, TotalView, Summary)
 VALUES
 (1, 'Mastering Communication Skills', '2025-05-01', 'Communication', 'images/blog/image1.png', 120, 'Learn how to effectively communicate in both personal and professional settings.'),
