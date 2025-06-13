@@ -190,7 +190,148 @@ VALUES
 ('Daniel', 'Martinez', 'Male', 'daniel.m@example.com', '9012345678', 'User', 1, 'avatars/daniel.jpg', 'hashed_password9', '999 Canyon Dr, AZ', '1996-08-05'),
 ('Laura', 'Nguyen', 'Female', 'laura.nguyen@example.com', '0123456789', 'User', 1, 'avatars/laura.jpg', 'hashed_password10', '888 Forest Ave, OR', '1994-05-30');
 
+-- USE YourDatabaseName; -- Bỏ comment dòng này và thay bằng tên DB của bạn nếu cần
 
+PRINT '--- Inserting Quizzes for Specific Subjects ---';
+
+-- ###########################################################
+-- 1. Quiz về Lãnh đạo (Leadership)
+PRINT 'Inserting Quiz: Leadership Principles...';
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
+(NULL, NULL, N'Nguyên tắc Lãnh đạo', N'Leadership', N'Trung bình', 2, 10, 70.00, N'Kiểm tra', NULL, GETDATE(), GETDATE());
+DECLARE @LeadershipQuizID INT = SCOPE_IDENTITY();
+
+-- Câu hỏi 1 (Leadership)
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
+(@LeadershipQuizID, N'Phong cách lãnh đạo nào khuyến khích nhân viên tham gia vào quá trình ra quyết định?', N'Multiple Choice');
+DECLARE @LeadershipQ1ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@LeadershipQ1ID, N'Độc đoán', 0),
+(@LeadershipQ1ID, N'Dân chủ', 1),
+(@LeadershipQ1ID, N'Laissez-faire', 0),
+(@LeadershipQ1ID, N'Chuyển đổi', 0);
+
+-- Câu hỏi 2 (Leadership)
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
+(@LeadershipQuizID, N'Người lãnh đạo giỏi cần có khả năng lắng nghe chủ động. (True/False)', N'True/False');
+DECLARE @LeadershipQ2ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@LeadershipQ2ID, 'True', 1),
+(@LeadershipQ2ID, 'False', 0);
+
+PRINT 'Leadership Quiz and Questions inserted.';
+
+
+-- ###########################################################
+-- 2. Quiz về Quản lý Thời gian (Time Management)
+PRINT 'Inserting Quiz: Effective Time Management...';
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
+(NULL, NULL, N'Quản lý Thời gian Hiệu quả', N'Time Management', N'Dễ', 2, 8, 65.00, N'Luyện tập', NULL, GETDATE(), GETDATE());
+DECLARE @TimeManagementQuizID INT = SCOPE_IDENTITY();
+
+-- Câu hỏi 1 (Time Management)
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
+(@TimeManagementQuizID, N'Phương pháp quản lý thời gian nào tập trung vào việc ưu tiên các nhiệm vụ theo mức độ khẩn cấp và quan trọng?', N'Multiple Choice');
+DECLARE @TimeManagementQ1ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@TimeManagementQ1ID, N'Phương pháp Pomodoro', 0),
+(@TimeManagementQ1ID, N'Ma trận Eisenhower', 1),
+(@TimeManagementQ1ID, N'Kỹ thuật Getting Things Done (GTD)', 0),
+(@TimeManagementQ1ID, N'Quy tắc Pareto (80/20)', 0);
+
+-- Câu hỏi 2 (Time Management)
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
+(@TimeManagementQuizID, N'Liệt kê ít nhất 2 lợi ích của việc lập kế hoạch hàng ngày.', N'Short Answer');
+DECLARE @TimeManagementQ2ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@TimeManagementQ2ID, N'Giúp xác định ưu tiên, giảm căng thẳng, tăng năng suất.', 1); -- Đáp án ngắn gọn, có thể cần logic kiểm tra linh hoạt hơn trong ứng dụng
+
+PRINT 'Time Management Quiz and Questions inserted.';
+
+
+-- ###########################################################
+-- 3. Quiz về Giải quyết Vấn đề (Problem Solving)
+PRINT 'Inserting Quiz: Problem Solving Techniques...';
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
+(NULL, NULL, N'Kỹ thuật Giải quyết Vấn đề', N'Problem Solving', N'Trung bình', 2, 12, 75.00, N'Kiểm tra', NULL, GETDATE(), GETDATE());
+DECLARE @ProblemSolvingQuizID INT = SCOPE_IDENTITY();
+
+-- Câu hỏi 1 (Problem Solving)
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
+(@ProblemSolvingQuizID, N'Bước đầu tiên trong quy trình giải quyết vấn đề hiệu quả là gì?', N'Multiple Choice');
+DECLARE @ProblemSolvingQ1ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@ProblemSolvingQ1ID, N'Đưa ra các giải pháp khả thi', 0),
+(@ProblemSolvingQ1ID, N'Xác định và phân tích vấn đề', 1),
+(@ProblemSolvingQ1ID, N'Thực hiện giải pháp', 0),
+(@ProblemSolvingQ1ID, N'Đánh giá kết quả', 0);
+
+-- Câu hỏi 2 (Problem Solving)
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
+(@ProblemSolvingQuizID, N'Brainstorming là một kỹ thuật hữu ích để tạo ra nhiều ý tưởng giải quyết vấn đề. (True/False)', N'True/False');
+DECLARE @ProblemSolvingQ2ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@ProblemSolvingQ2ID, 'True', 1),
+(@ProblemSolvingQ2ID, 'False', 0);
+
+PRINT 'Problem Solving Quiz and Questions inserted.';
+
+
+-- ###########################################################
+-- 4. Quiz về Trí tuệ Cảm xúc (Emotional Intelligence)
+PRINT 'Inserting Quiz: Emotional Intelligence Fundamentals...';
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
+(NULL, NULL, N'Cơ sở Trí tuệ Cảm xúc', N'Emotional Intelligence', N'Dễ', 2, 10, 60.00, N'Luyện tập', NULL, GETDATE(), GETDATE());
+DECLARE @EmotionalIntelligenceQuizID INT = SCOPE_IDENTITY();
+
+-- Câu hỏi 1 (Emotional Intelligence)
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
+(@EmotionalIntelligenceQuizID, N'Khả năng nhận biết và hiểu cảm xúc của chính mình được gọi là gì?', N'Multiple Choice');
+DECLARE @EmotionalIntelligenceQ1ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@EmotionalIntelligenceQ1ID, N'Đồng cảm', 0),
+(@EmotionalIntelligenceQ1ID, N'Tự nhận thức', 1),
+(@EmotionalIntelligenceQ1ID, N'Động lực', 0),
+(@EmotionalIntelligenceQ1ID, N'Kỹ năng xã hội', 0);
+
+-- Câu hỏi 2 (Emotional Intelligence)
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
+(@EmotionalIntelligenceQuizID, N'Người có trí tuệ cảm xúc cao thường dễ dàng kiểm soát cảm xúc tiêu cực. (True/False)', N'True/False');
+DECLARE @EmotionalIntelligenceQ2ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@EmotionalIntelligenceQ2ID, 'True', 1),
+(@EmotionalIntelligenceQ2ID, 'False', 0);
+
+PRINT 'Emotional Intelligence Quiz and Questions inserted.';
+
+
+-- ###########################################################
+-- 5. Quiz về Giao tiếp (Communication)
+PRINT 'Inserting Quiz: Effective Communication Skills...';
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
+(NULL, NULL, N'Kỹ năng Giao tiếp Hiệu quả', N'Communication', N'Khó', 2, 15, 70.00, N'Kiểm tra', NULL, GETDATE(), GETDATE());
+DECLARE @CommunicationQuizID INT = SCOPE_IDENTITY();
+
+-- Câu hỏi 1 (Communication)
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
+(@CommunicationQuizID, N'Đâu là yếu tố quan trọng nhất để giao tiếp phi ngôn ngữ hiệu quả?', N'Multiple Choice');
+DECLARE @CommunicationQ1ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@CommunicationQ1ID, N'Giọng điệu', 0),
+(@CommunicationQ1ID, N'Ngôn ngữ cơ thể', 1),
+(@CommunicationQ1ID, N'Tốc độ nói', 0),
+(@CommunicationQ1ID, N'Chọn từ ngữ', 0);
+
+-- Câu hỏi 2 (Communication)
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
+(@CommunicationQuizID, N'Nêu một ví dụ về rào cản trong giao tiếp.', N'Short Answer');
+DECLARE @CommunicationQ2ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@CommunicationQ2ID, N'Sự khác biệt về ngôn ngữ, văn hóa, hoặc tiếng ồn môi trường.', 1);
+
+PRINT 'Communication Quiz and Questions inserted.';
+
+PRINT '--- All specified Quizzes with Questions and Options inserted successfully! ---';
 INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
 (NULL, NULL, N'Quiz Cơ bản về Lãnh đạo', N'Leadership', N'Dễ', 5, 10, 60.00, N'Luyện tập', NULL, GETDATE(), GETDATE()),
 (NULL, NULL, N'Bài kiểm tra Quản lý Thời gian', N'Time Management', N'Trung bình', 10, 20, 70.00, N'Kiểm tra', NULL, GETDATE(), GETDATE()),
