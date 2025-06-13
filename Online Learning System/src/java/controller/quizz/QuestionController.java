@@ -13,6 +13,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet(name = "QuestionController", urlPatterns = {"/questionDetail", "/questions"})
 public class QuestionController extends HttpServlet {
@@ -48,8 +50,12 @@ public class QuestionController extends HttpServlet {
 
             Question question = null;
             if (questionIdStr != null && !questionIdStr.isEmpty()) {
-                int questionId = Integer.parseInt(questionIdStr);
-                question = questionDAO.getQuestionById(questionId);
+                try {
+                    int questionId = Integer.parseInt(questionIdStr);
+                    question = questionDAO.getQuestionById(questionId);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(QuestionController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
             request.setAttribute("question", question);
@@ -59,10 +65,14 @@ public class QuestionController extends HttpServlet {
            
             String quizIdStr = request.getParameter("quizId");
             if (quizIdStr != null && !quizIdStr.isEmpty()) {
-                int quizId = Integer.parseInt(quizIdStr);
-                List<Question> questions = questionDAO.getQuestionsByQuizId(quizId);
-                request.setAttribute("questions", questions);
-                request.getRequestDispatcher("views/questionsListPartial.jsp").forward(request, response); // Ví dụ: trả về một phần HTML
+                try {
+                    int quizId = Integer.parseInt(quizIdStr);
+                    List<Question> questions = questionDAO.getQuestionsByQuizId(quizId);
+                    request.setAttribute("questions", questions);
+                    request.getRequestDispatcher("views/questionsListPartial.jsp").forward(request, response); // Ví dụ: trả về một phần HTML
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(QuestionController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
                 response.sendRedirect(request.getContextPath() + "/quizzes");
             }
@@ -114,18 +124,26 @@ public class QuestionController extends HttpServlet {
 
             boolean success;
             if (question.getQuestionID() == 0) { 
-                success = (questionDAO.addQuestion(question) != -1);
-                if (success) {
-                    request.setAttribute("successMessage", "Câu hỏi đã được thêm mới thành công.");
-                } else {
-                    request.setAttribute("errorMessage", "Thêm câu hỏi thất bại.");
+                try {
+                    success = (questionDAO.addQuestion(question) != -1);
+                    if (success) {
+                        request.setAttribute("successMessage", "Câu hỏi đã được thêm mới thành công.");
+                    } else {
+                        request.setAttribute("errorMessage", "Thêm câu hỏi thất bại.");
+                    }
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(QuestionController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else { 
-                success = questionDAO.updateQuestion(question);
-                if (success) {
-                    request.setAttribute("successMessage", "Câu hỏi đã được cập nhật thành công.");
-                } else {
-                    request.setAttribute("errorMessage", "Cập nhật câu hỏi thất bại.");
+                try {
+                    success = questionDAO.updateQuestion(question);
+                    if (success) {
+                        request.setAttribute("successMessage", "Câu hỏi đã được cập nhật thành công.");
+                    } else {
+                        request.setAttribute("errorMessage", "Cập nhật câu hỏi thất bại.");
+                    }
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(QuestionController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             
@@ -139,8 +157,12 @@ public class QuestionController extends HttpServlet {
             if (quizDAO.hasAttempts(quizId)) { 
                 request.setAttribute("errorMessage", "Không thể xóa câu hỏi vì Quiz đã có lượt làm bài.");
             } else {
-                questionDAO.deleteQuestion(questionId);
-                request.setAttribute("successMessage", "Câu hỏi đã được xóa thành công.");
+                try {
+                    questionDAO.deleteQuestion(questionId);
+                    request.setAttribute("successMessage", "Câu hỏi đã được xóa thành công.");
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(QuestionController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             response.sendRedirect(request.getContextPath() + "/quizDetail?id=" + quizId);
         } else {

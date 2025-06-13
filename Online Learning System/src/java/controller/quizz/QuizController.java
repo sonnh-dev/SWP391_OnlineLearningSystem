@@ -13,6 +13,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet(name = "QuizController", urlPatterns = {"/quizzes", "/quizDetail"})
 public class QuizController extends HttpServlet {
@@ -28,7 +30,11 @@ public class QuizController extends HttpServlet {
         if ("/quizzes".equals(path)) {
             handleQuizList(request, response);
         } else if ("/quizDetail".equals(path)) {
-            handleQuizDetailView(request, response);
+            try {
+                handleQuizDetailView(request, response);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(QuizController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -81,7 +87,7 @@ public class QuizController extends HttpServlet {
     }
 
     private void handleQuizDetailView(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ClassNotFoundException {
         String quizIdStr = request.getParameter("id");
         QuizDAO quizDAO = new QuizDAO();
         QuestionDAO questionDAO = new QuestionDAO();
