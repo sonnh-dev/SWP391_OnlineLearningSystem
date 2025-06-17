@@ -69,6 +69,17 @@
                 visibility: visible;
                 opacity: 1;
             }
+
+            /* CSS cho tabs */
+            .tab-button.active {
+                @apply border-b-2 border-indigo-500 text-indigo-600;
+            }
+            .tab-content {
+                display: none; /* Mặc định ẩn tất cả nội dung tab */
+            }
+            .tab-content.active {
+                display: block; /* Hiển thị nội dung tab đang hoạt động */
+            }
         </style>
     </head>
     <body class="bg-gray-100 font-sans leading-normal tracking-normal">
@@ -99,8 +110,26 @@
                 </p>
                 <% }%>
 
+                <div class="mb-6">
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                            <button type="button" id="tab-details-btn"
+                                    class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 active"
+                                    data-tab="details">
+                                <i class="fas fa-info-circle mr-2"></i>Chi tiết Quiz
+                            </button>
+                            <% if (quiz != null && quiz.getQuizID() > 0) { %>
+                                <button type="button" id="tab-questions-btn"
+                                        class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                        data-tab="questions">
+                                    <i class="fas fa-question-circle mr-2"></i>Quản lý Câu hỏi
+                                </button>
+                            <% } %>
+                        </nav>
+                    </div>
+                </div>
 
-                <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <div id="tab-details" class="tab-content active bg-white rounded-lg shadow-sm p-6 mb-6">
                     <form action="${pageContext.request.contextPath}/quizzes" method="POST">
                         <input type="hidden" name="action" value="save">
                         <input type="hidden" name="quizID" value="<%= (quiz != null) ? quiz.getQuizID() : 0%>">
@@ -115,10 +144,16 @@
                             </div>
                             <div>
                                 <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject:</label>
-                                <input type="text" id="subject" name="subject"
-                                       class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2 <%= canEdit ? "" : "bg-gray-100 cursor-not-allowed"%>"
-                                       value="<%= (quiz != null && quiz.getSubject() != null) ? quiz.getSubject() : ""%>"
-                                       <%= canEdit ? "" : "readonly"%>>
+                                <select name="subject" id="subject" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 <%= canEdit ? "" : "bg-gray-100 cursor-not-allowed"%>"
+                                        <%= canEdit ? "" : "disabled"%>>
+                                    <option value="">All Subjects</option>
+                                    <option value="Leadership" <%= (quiz != null && "Leadership".equals(quiz.getSubject())) ? "selected" : ""%>>Leadership</option>
+                                    <option value="Time Management" <%= (quiz != null && "Time Management".equals(quiz.getSubject())) ? "selected" : ""%>>Time Management</option>
+                                    <option value="Problem Solving" <%= (quiz != null && "Problem Solving".equals(quiz.getSubject())) ? "selected" : ""%>>Problem Solving</option>
+                                    <option value="Emotional Intelligence" <%= (quiz != null && "Emotional Intelligence".equals(quiz.getSubject())) ? "selected" : ""%>>Emotional Intelligence</option>
+                                    <option value="Communication" <%= (quiz != null && "Communication".equals(quiz.getSubject())) ? "selected" : ""%>>Communication</option>
+                                    <%-- Thêm các Subject khác từ DB hoặc tĩnh --%>
+                                </select>
                             </div>
                             <div>
                                 <label for="level" class="block text-sm font-medium text-gray-700 mb-1">Level:</label>
@@ -161,20 +196,8 @@
                                     <option value="Thi cuối khóa" <%= (quiz != null && "Thi cuối khóa".equals(quiz.getQuizType())) ? "selected" : ""%>>Thi cuối khóa</option>
                                 </select>
                             </div>
-                            <div>
-                                <label for="lessonID" class="block text-sm font-medium text-gray-700 mb-1">Lesson ID (optional):</label>
-                                <input type="number" id="lessonID" name="lessonID"
-                                       class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2 <%= canEdit ? "" : "bg-gray-100 cursor-not-allowed"%>"
-                                       value="<%= (quiz != null && quiz.getLessonID() != null) ? quiz.getLessonID() : ""%>"
-                                       <%= canEdit ? "" : "readonly"%>>
-                            </div>
-                            <div>
-                                <label for="courseID" class="block text-sm font-medium text-gray-700 mb-1">Course ID (optional):</label>
-                                <input type="number" id="courseID" name="courseID"
-                                       class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2 <%= canEdit ? "" : "bg-gray-100 cursor-not-allowed"%>"
-                                       value="<%= (quiz != null && quiz.getCourseID() != null) ? quiz.getCourseID() : ""%>"
-                                       <%= canEdit ? "" : "readonly"%>>
-                            </div>
+                           
+
                             <div>
                                 <label for="questionOrder" class="block text-sm font-medium text-gray-700 mb-1">Question Order (optional):</label>
                                 <input type="number" id="questionOrder" name="questionOrder"
@@ -203,10 +226,8 @@
                     </form>
                 </div>
 
-                <%-- Phần quản lý câu hỏi (chỉ hiển thị khi là chỉnh sửa Quiz và có thể chỉnh sửa) --%>
-                <% if (quiz != null && quiz.getQuizID() > 0 && canEdit) {%>
-                <hr class="my-8 border-gray-300">
-                <div class="bg-white rounded-lg shadow-sm p-6">
+                <div id="tab-questions" class="tab-content bg-white rounded-lg shadow-sm p-6">
+                    <% if (quiz != null && quiz.getQuizID() > 0 && canEdit) {%>
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">Questions for this Quiz</h2>
                     <p class="mb-4">
                         <a href="${pageContext.request.contextPath}/questionDetail?quizId=<%= quiz.getQuizID()%>"
@@ -232,31 +253,38 @@
                                     if (questions != null && !questions.isEmpty()) {
                                         for (Question q : questions) {
                                 %>
-
                                 <tr class="question-row">
                                     <td><%= q.getQuestionID()%></td>
                                     <td><%= q.getQuestionContent()%></td>
-                                    <td><%= q.getQuestionType()%></td>
+                                    <td>
+                                        <%= q.getQuestionType()%>
+                                        <%-- Hiển thị các lựa chọn của câu hỏi nếu cần --%>
+                                        <%--
+                                        <% if (q.getOptions() != null && !q.getOptions().isEmpty()) { %>
+                                            <ul class="list-disc list-inside text-xs mt-1 text-gray-600">
+                                                <% for (Option opt : q.getOptions()) { %>
+                                                    <li><%= opt.getOptionContent()%> <%= opt.isCorrect() ? "(Correct)" : ""%></li>
+                                                <% } %>
+                                            </ul>
+                                        <% } %>
+                                        --%>
+                                    </td>
                                     <td>
                                         <div class="flex items-center space-x-2">
                                             <a href="${pageContext.request.contextPath}/questionDetail?questionId=<%= q.getQuestionID()%>&quizId=<%= quiz.getQuizID()%>"
                                                class="text-indigo-600 hover:text-indigo-900">
                                                 <i class="fas fa-edit"></i> Edit
                                             </a>
-                                            <form action="${pageContext.request.contextPath}/questions" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this question and its options?');">
-                                                <input type="hidden" name="action" value="deleteQuestion">
-                                                <input type="hidden" name="questionId" value="<%= q.getQuestionID()%>">
-                                                <input type="hidden" name="quizId" value="<%= quiz.getQuizID()%>">
-                                                <button type="submit" class="text-red-600 hover:text-red-900">
-                                                    <i class="fas fa-trash"></i> Delete
-                                                </button>
-                                            </form>
+                                            <button type="button" onclick="showDeleteQuestionModal('<%= q.getQuestionID()%>', '<%= quiz.getQuizID()%>')"
+                                                    class="text-red-600 hover:text-red-900 ml-2">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
                                 <%
-                                    }
-                                } else {
+                                        }
+                                    } else {
                                 %>
                                 <tr>
                                     <td colspan="4" class="px-6 py-4 text-center text-gray-500">No questions added yet.</td>
@@ -265,16 +293,16 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <% } else if (quiz != null && quiz.getQuizID() > 0 && !canEdit) { %>
-                <hr class="my-8 border-gray-300">
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Questions for this Quiz</h2>
+                    <% } else if (quiz != null && quiz.getQuizID() > 0 && !canEdit) { %>
                     <p class="text-orange-600 font-medium text-sm">
                         <i class="fas fa-exclamation-triangle mr-1"></i> Questions for this quiz cannot be managed because tests have already been taken.
                     </p>
+                    <% } else { %>
+                    <p class="text-gray-500 font-medium text-sm">
+                        <i class="fas fa-info-circle mr-1"></i> Please save the quiz details first to manage questions.
+                    </p>
+                    <% }%>
                 </div>
-                <% }%>
             </main>
         </div>
 
@@ -305,7 +333,7 @@
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <form id="deleteQuestionForm" action="${pageContext.request.contextPath}/questions" method="POST" style="display:inline;">
+                        <form id="deleteQuestionForm" action="${pageContext.request.contextPath}/questions" method="POST">
                             <input type="hidden" name="action" value="deleteQuestion">
                             <input type="hidden" name="questionId" id="modalQuestionId">
                             <input type="hidden" name="quizId" id="modalQuizIdForQuestionDelete">
@@ -351,6 +379,40 @@
                         const quizId = this.querySelector('input[name="quizId"]').value;
                         showDeleteQuestionModal(questionId, quizId);
                     };
+                }
+            });
+
+            // --- JavaScript cho Tabbed Sections ---
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and hide all content
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    // Add active class to the clicked button
+                    button.classList.add('active');
+
+                    // Show the corresponding content
+                    const targetTabId = button.dataset.tab;
+                    document.getElementById('tab-' + targetTabId).classList.add('active');
+                });
+            });
+
+            // Set the first tab as active by default on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                // Check if quizID is present and canEdit is true to decide default tab
+                const quizID = <%= (quiz != null) ? quiz.getQuizID() : 0%>;
+                const canEdit = <%= canEdit%>;
+
+                if (quizID > 0 && canEdit) {
+                    // If it's an editable quiz, default to "Questions" tab
+                    document.getElementById('tab-questions-btn').click();
+                } else {
+                    // Otherwise, default to "Details" tab
+                    document.getElementById('tab-details-btn').click();
                 }
             });
         </script>

@@ -6,6 +6,7 @@ import model.Question;
 import model.Quiz;
 import model.QuestionOption; // Make sure this is imported if used for saveQuiz
 import java.io.IOException;
+import java.net.URLEncoder; // Added for URL encoding
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -13,13 +14,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession; // Import HttpSession
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebServlet(name = "QuizController", urlPatterns = {"/quizzes", "/quizDetail"})
 public class QuizController extends HttpServlet {
 
-    private static final int PAGE_SIZE = 5;
+    // Removed PAGE_SIZE as it will now be dynamic
+    // private static final int PAGE_SIZE = 5;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -52,16 +55,24 @@ public class QuizController extends HttpServlet {
                 quizDAO.deleteQuiz(quizId);
                 request.setAttribute("successMessage", "Quiz đã được xóa thành công.");
             }
-            handleQuizList(request, response);
+            
+            if (request.getAttribute("errorMessage") != null) {
+                request.getSession().setAttribute("errorMessage", request.getAttribute("errorMessage"));
+            } else if (request.getAttribute("successMessage") != null) {
+                request.getSession().setAttribute("successMessage", request.getAttribute("successMessage"));
+            }
+            response.sendRedirect(request.getContextPath() + "/quizzes");
         } else if ("save".equals(action)) {
             saveQuiz(request, response);
         } else {
-            handleQuizList(request, response);
+            
+            response.sendRedirect(request.getContextPath() + "/quizzes");
         }
     }
 
     private void handleQuizList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         QuizDAO quizDAO = new QuizDAO();
 
         String searchName = request.getParameter("searchName");
@@ -69,19 +80,98 @@ public class QuizController extends HttpServlet {
         String quizType = request.getParameter("quizType");
         String pageStr = request.getParameter("page");
 
-        int currentPage = (pageStr == null || pageStr.isEmpty()) ? 1 : Integer.parseInt(pageStr);
-        int offset = (currentPage - 1) * PAGE_SIZE;
+        String action = request.getParameter("action");
+        if ("updateView".equals(action)) {
+            boolean isCardView = Boolean.parseBoolean(request.getParameter("isCardView"));
+            session.setAttribute("isCardView", isCardView);
+            response.setStatus(HttpServletResponse.SC_OK); // Send OK response for AJAX
+            return; // Stop processing, no need to render JSP
+        }
+        // --- END NEW ---
 
-        List<Quiz> quizzes = quizDAO.getAllQuizzes(searchName, subject, quizType, offset, PAGE_SIZE);
-        int totalQuizzes = quizDAO.getTotalQuizCount(searchName, subject, quizType);
-        int totalPages = (int) Math.ceil((double) totalQuizzes / PAGE_SIZE);
+        // Get view preference from session or set default
+        boolean isTableView = (Boolean) session.getAttribute("isTableView") != null ? (Boolean) session.getAttribute("isTableView") : false; // Default to table view
+        boolean isCardView = !isTableView;
+        // Determine itemsPerPage and colsPerRow dynamically based on view type and quizType
+        int itemsPerPage;
+        int colsPerRow; // Used for card view
+
+  
+        if (isCardView) {
+            // Configuration for Card View
+            if ("Luyện tập".equals(quizType)) {
+                colsPerRow = 4; // 4 columns for "Luyện tập"
+                itemsPerPage = 8; // 2 rows * 4 columns
+            } else if ("Kiểm tra".equals(quizType)) {
+                colsPerRow = 3; // 3 columns for "Kiểm tra"
+                itemsPerPage = 9; // 3 rows * 3 columns
+            } else {
+                // Default for card view if no specific quizType or other types
+                colsPerRow = 5;
+                itemsPerPage = 8; // 2 rows * 5 columns
+            }
+        } else {
+           
+            itemsPerPage = 8; 
+            colsPerRow = 0; 
+        }
+
+        int currentPage = (pageStr == null || pageStr.isEmpty()) ? 1 : Integer.parseInt(pageStr);
+        int offset = (currentPage - 1) * itemsPerPage; // Use dynamic itemsPerPage
+
+        // Retrieve messages from session if redirected from POST
+        String successMessage = (String) session.getAttribute("successMessage");
+        String errorMessage = (String) session.getAttribute("errorMessage");
+        if (successMessage != null) {
+            request.setAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage");
+        }
+        if (errorMessage != null) {
+            request.setAttribute("errorMessage", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
+
+
+        List<Quiz> quizzes = quizDAO.getAllQuizzes(searchName, subject, quizType, offset, itemsPerPage); // Use dynamic itemsPerPage
+        int totalQuizzesCount = quizDAO.getTotalQuizCount(searchName, subject, quizType); // Renamed for clarity and consistency with JSP
+
+        int totalPages = (int) Math.ceil((double) totalQuizzesCount / itemsPerPage);
+        if (totalPages == 0) totalPages = 1; 
+
+        // Adjust currentPage if it's out of bounds
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+        if (currentPage < 1) {
+            currentPage = 1;
+        }
+
+        // Build queryParams for pagination links
+        StringBuilder queryParamsBuilder = new StringBuilder();
+        if (searchName != null && !searchName.isEmpty()) {
+            queryParamsBuilder.append("&searchName=").append(URLEncoder.encode(searchName, "UTF-8"));
+        }
+        if (subject != null && !subject.isEmpty()) {
+            queryParamsBuilder.append("&subject=").append(URLEncoder.encode(subject, "UTF-8"));
+        }
+        if (quizType != null && !quizType.isEmpty()) {
+            queryParamsBuilder.append("&quizType=").append(URLEncoder.encode(quizType, "UTF-8"));
+        }
+        String queryParams = queryParamsBuilder.toString();
+
 
         request.setAttribute("quizzes", quizzes);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("totalQuizzesCount", totalQuizzesCount);
         request.setAttribute("searchName", searchName);
         request.setAttribute("subject", subject);
         request.setAttribute("quizType", quizType);
+        request.setAttribute("queryParams", queryParams);
+        request.setAttribute("itemsPerPage", itemsPerPage);
+        request.setAttribute("colsPerRow", colsPerRow); 
+        request.setAttribute("isCardView", isCardView); 
+
 
         request.getRequestDispatcher("views/quizList.jsp").forward(request, response);
     }
@@ -93,34 +183,32 @@ public class QuizController extends HttpServlet {
         QuestionDAO questionDAO = new QuestionDAO();
 
         Quiz quiz = null;
-        boolean canEdit = true; // **IMPORTANT: Initialize to true for new quizzes or when no ID is provided**
+        boolean canEdit = true; 
 
         if (quizIdStr != null && !quizIdStr.isEmpty()) {
             try {
                 int quizId = Integer.parseInt(quizIdStr);
                 quiz = quizDAO.getQuizById(quizId);
-                
+
                 if (quiz != null) {
-                    canEdit = !quizDAO.hasAttempts(quizId); // Check if attempts exist for an existing quiz
-                    if (canEdit) { // Only load questions if the quiz can be edited
+                    canEdit = !quizDAO.hasAttempts(quizId); 
+                    if (canEdit) { 
                         List<Question> questions = questionDAO.getQuestionsByQuizId(quizId);
                         request.setAttribute("questions", questions);
                     }
                 } else {
-                    // If an ID was provided but no quiz was found, it might be an invalid ID.
-                    // You could redirect or show an error. For now, we'll treat it like adding a new quiz.
-                    // Or, better, redirect to the list with an error message:
-                    response.sendRedirect(request.getContextPath() + "/quizzes?errorMessage=" + java.net.URLEncoder.encode("Quiz not found.", "UTF-8"));
-                    return; // Stop further processing
+                    
+                    response.sendRedirect(request.getContextPath() + "/quizzes?errorMessage=" + URLEncoder.encode("Quiz not found.", "UTF-8"));
+                    return;
                 }
             } catch (NumberFormatException e) {
-                // Handle cases where 'id' parameter is not a valid integer
-                response.sendRedirect(request.getContextPath() + "/quizzes?errorMessage=" + java.net.URLEncoder.encode("Invalid Quiz ID format.", "UTF-8"));
+               
+                response.sendRedirect(request.getContextPath() + "/quizzes?errorMessage=" + URLEncoder.encode("Invalid Quiz ID format.", "UTF-8"));
                 return;
             }
         }
+
         
-        // **ALWAYS set the 'quiz' and 'canEdit' attributes before forwarding**
         request.setAttribute("quiz", quiz);
         request.setAttribute("canEdit", canEdit);
         request.getRequestDispatcher("views/quizDetail.jsp").forward(request, response);
@@ -130,13 +218,13 @@ public class QuizController extends HttpServlet {
             throws ServletException, IOException {
         QuizDAO quizDAO = new QuizDAO();
         Quiz quiz = new Quiz();
-        
+
         String quizIdStr = request.getParameter("quizID");
         if (quizIdStr != null && !quizIdStr.isEmpty()) {
             quiz.setQuizID(Integer.parseInt(quizIdStr));
         }
 
-        // Basic parameter parsing and setting (add validation as needed)
+        
         quiz.setQuizName(request.getParameter("quizName"));
         quiz.setSubject(request.getParameter("subject"));
         quiz.setLevel(request.getParameter("level"));
@@ -144,37 +232,37 @@ public class QuizController extends HttpServlet {
         quiz.setDurationMinutes(Integer.parseInt(request.getParameter("durationMinutes")));
         quiz.setPassRate(Double.parseDouble(request.getParameter("passRate")));
         quiz.setQuizType(request.getParameter("quizType"));
+
         
-        // Handle nullable Integer fields correctly
         String lessonIdStr = request.getParameter("lessonID");
         quiz.setLessonID(lessonIdStr != null && !lessonIdStr.isEmpty() ? Integer.parseInt(lessonIdStr) : null);
-        
+
         String courseIdStr = request.getParameter("courseID");
         quiz.setCourseID(courseIdStr != null && !courseIdStr.isEmpty() ? Integer.parseInt(courseIdStr) : null);
-        
+
         String questionOrderStr = request.getParameter("questionOrder");
         quiz.setQuestionOrder(questionOrderStr != null && !questionOrderStr.isEmpty() ? Integer.parseInt(questionOrderStr) : null);
 
         boolean success = false;
-        if (quiz.getQuizID() == 0) { // Add new quiz
+        if (quiz.getQuizID() == 0) { 
             int newId = quizDAO.addQuiz(quiz);
             success = (newId != -1);
             if (success) {
-                // Redirect to the edit page of the newly created quiz
-                response.sendRedirect(request.getContextPath() + "/quizDetail?id=" + newId + "&successMessage=" + java.net.URLEncoder.encode("Quiz đã được thêm mới thành công.", "UTF-8"));
-                return; // Important: Stop further processing after redirect
+                
+                response.sendRedirect(request.getContextPath() + "/quizDetail?id=" + newId + "&successMessage=" + URLEncoder.encode("Quiz đã được thêm mới thành công.", "UTF-8"));
+                return; 
             } else {
                 request.setAttribute("errorMessage", "Thêm Quiz mới thất bại.");
-                request.setAttribute("quiz", quiz); // Keep entered data
-                request.setAttribute("canEdit", true); // Still editable for a new quiz
+                request.setAttribute("quiz", quiz); 
+                request.setAttribute("canEdit", true); 
                 request.getRequestDispatcher("views/quizDetail.jsp").forward(request, response);
             }
-        } else { // Update existing quiz
-            // Re-check edit condition before attempting to update
+        } else { 
+          
             if (quizDAO.hasAttempts(quiz.getQuizID())) {
                 request.setAttribute("errorMessage", "Không thể cập nhật Quiz này vì đã có lượt làm bài.");
-                // Load original quiz data to prevent displaying partial updates
-                request.setAttribute("quiz", quizDAO.getQuizById(quiz.getQuizID())); 
+                
+                request.setAttribute("quiz", quizDAO.getQuizById(quiz.getQuizID()));
                 request.setAttribute("canEdit", false); // Not editable
                 request.getRequestDispatcher("views/quizDetail.jsp").forward(request, response);
             } else {
@@ -185,7 +273,7 @@ public class QuizController extends HttpServlet {
                     request.setAttribute("errorMessage", "Cập nhật Quiz thất bại.");
                 }
                 // Load the updated quiz data (or original if update failed)
-                request.setAttribute("quiz", quizDAO.getQuizById(quiz.getQuizID())); 
+                request.setAttribute("quiz", quizDAO.getQuizById(quiz.getQuizID()));
                 request.setAttribute("canEdit", !quizDAO.hasAttempts(quiz.getQuizID()));
                 request.getRequestDispatcher("views/quizDetail.jsp").forward(request, response);
             }

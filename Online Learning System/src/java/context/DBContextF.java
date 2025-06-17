@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DBContextF {
-    private static final String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=SWP391DB1;encrypt=false;trustServerCertificate=true;";
+    private static final String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=SWP391DB;encrypt=false;trustServerCertificate=true;";
     private static final String USER = "sa"; 
     private static final String PASS = "sa"; 
 

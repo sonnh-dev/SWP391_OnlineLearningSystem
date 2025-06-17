@@ -18,7 +18,7 @@
             }
             .tooltip .tooltiptext {
                 visibility: hidden;
-                width: 140px; /* Tăng chiều rộng để chứa đủ chữ */
+                width: 160px; /* Tăng chiều rộng để chứa đủ chữ */
                 background-color: #333;
                 color: #fff;
                 text-align: center;
@@ -28,7 +28,7 @@
                 z-index: 1;
                 bottom: 125%; /* Tooltip ở trên nút */
                 left: 50%;
-                margin-left: -70px; /* Điều chỉnh lại margin-left */
+                margin-left: -80px; /* Điều chỉnh lại margin-left */
                 opacity: 0;
                 transition: opacity 0.3s;
             }
@@ -49,6 +49,15 @@
             /* Active page for pagination */
             .pagination .active {
                 @apply z-10 bg-indigo-50 border-indigo-500 text-indigo-600;
+            }
+            /* CSS cho nút active view */
+            .active-view-btn {
+                background-color: #4f46e5; /* indigo-600 */
+                color: white;
+                border-color: #4f46e5;
+            }
+            .active-view-btn:hover {
+                background-color: #4338ca; /* indigo-700 */
             }
         </style>
     </head>
@@ -125,8 +134,19 @@
                     </form>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                    <div class="overflow-x-auto">
+                <%-- Các nút chuyển đổi chế độ xem --%>
+                <div class="flex justify-end mb-4 space-x-2">
+                    <button id="listViewBtn" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 active-view-btn">
+                        <i class="fas fa-list"></i> List View
+                    </button>
+                    <button id="gridViewBtn" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <i class="fas fa-th-large"></i> Grid View
+                    </button>
+                </div>
+
+                <div id="quizListContainer" class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <%-- HIỂN THỊ DẠNG BẢNG (MẶC ĐỊNH) --%>
+                    <div id="tableView" class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -176,18 +196,17 @@
                                         <%= quiz.getSubject()%>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <%-- Badge màu cho Level --%>
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                              <%
-                                                  String level = quiz.getLevel();
-                                                  if ("Beginner".equals(level)) {
-                                                      out.print("bg-green-100 text-green-800");
-                                                  } else if ("Intermediate".equals(level)) {
-                                                      out.print("bg-yellow-100 text-yellow-800");
-                                                  } else if ("Advanced".equals(level)) {
-                                                      out.print("bg-red-100 text-red-800");
-                                                  }
-                                              %>">
+                                                    <%
+                                                        String level = quiz.getLevel();
+                                                        if ("Beginner".equals(level)) {
+                                                            out.print("bg-green-100 text-green-800");
+                                                        } else if ("Intermediate".equals(level)) {
+                                                            out.print("bg-yellow-100 text-yellow-800");
+                                                        } else if ("Advanced".equals(level)) {
+                                                            out.print("bg-red-100 text-red-800");
+                                                        }
+                                                    %>">
                                             <%= level%>
                                         </span>
                                     </td>
@@ -228,8 +247,8 @@
                                     </td>
                                 </tr>
                                 <%
-                                    }
-                                } else {
+                                        }
+                                    } else {
                                 %>
                                 <tr>
                                     <td colspan="9" class="px-6 py-4 text-center text-gray-500">
@@ -241,80 +260,134 @@
                         </table>
                     </div>
 
-                    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                        <div class="flex-1 flex justify-between sm:hidden">
-                            <%-- Nút Previous/Next cho di động --%>
-                            <%
-                                int currentPage = (Integer) request.getAttribute("currentPage");
-                                int totalPages = (Integer) request.getAttribute("totalPages");
-                                String searchName = (String) request.getAttribute("searchName");
-                                String subject = (String) request.getAttribute("subject");
-                                String quizType = (String) request.getAttribute("quizType");
-
-                                String queryParams = "";
-                                if (searchName != null && !searchName.isEmpty()) {
-                                    queryParams += "&searchName=" + searchName;
-                                }
-                                if (subject != null && !subject.isEmpty()) {
-                                    queryParams += "&subject=" + subject;
-                                }
-                                if (quizType != null && !quizType.isEmpty())
-                                    queryParams += "&quizType=" + quizType;
-                            %>
-                            <a href="<%= (currentPage > 1) ? request.getContextPath() + "/quizzes?page=" + (currentPage - 1) + queryParams : "#"%>"
-                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 <%= (currentPage == 1) ? "opacity-50 cursor-not-allowed" : ""%>">
-                                Previous
-                            </a>
-
-                            <a href="<%= (currentPage < totalPages) ? request.getContextPath() + "/quizzes?page=" + (currentPage + 1) + queryParams : "#"%>"
-                               class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 <%= (currentPage == totalPages) ? "opacity-50 cursor-not-allowed" : ""%>">
-                                Next
-                            </a>
-
-                        </div>
-                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                    <%-- HIỂN THỊ DẠNG LƯỚI --%>
+                    <div id="gridView" class="hidden p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <%
+                            if (quizzes != null && !quizzes.isEmpty()) {
+                                for (Quiz quiz : quizzes) {
+                        %>
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-4 flex flex-col justify-between">
                             <div>
-                                <p class="text-sm text-gray-700">
-                                    <%
-                                        // Để hiển thị chính xác "Showing X to Y of Z results",
-                                        // bạn cần truyền tổng số lượng quiz (ví dụ: totalQuizCount) từ servlet
-                                        // Nếu không, quizzes.size() chỉ trả về số lượng quiz trên trang hiện tại.
-                                        int totalQuizzesCount = (request.getAttribute("totalQuizzesCount") != null) ? (Integer) request.getAttribute("totalQuizzesCount") : (quizzes != null ? quizzes.size() : 0);
-                                        int itemsPerPage = 10; // Giả định số mục trên mỗi trang là 10. Điều chỉnh nếu khác.
-                                        int startItem = (quizzes != null && !quizzes.isEmpty()) ? ((currentPage - 1) * itemsPerPage + 1) : 0;
-                                        int endItem = (quizzes != null && !quizzes.isEmpty()) ? Math.min(currentPage * itemsPerPage, totalQuizzesCount) : 0;
-                                    %>
-                                    Showing <span class="font-medium"><%= startItem%></span> to <span class="font-medium"><%= endItem%></span> of <span class="font-medium"><%= totalQuizzesCount%></span> results
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2"><%= quiz.getQuizName()%></h3>
+                                <p class="text-sm text-gray-600 mb-1">
+                                    <i class="fas fa-book mr-1 text-indigo-500"></i> **Subject:** <%= quiz.getSubject()%>
                                 </p>
+                                <p class="text-sm text-gray-600 mb-1">
+                                    <i class="fas fa-hourglass-half mr-1 text-blue-500"></i> **Duration:** <%= quiz.getDurationMinutes()%> min
+                                </p>
+                                <p class="text-sm text-gray-600 mb-1">
+                                    <i class="fas fa-question-circle mr-1 text-green-500"></i> **Questions:** <%= quiz.getNumQuestions()%>
+                                </p>
+                                <p class="text-sm text-gray-600 mb-2">
+                                    <i class="fas fa-percent mr-1 text-purple-500"></i> **Pass Rate:** <%= String.format("%.2f", quiz.getPassRate())%>%
+                                </p>
+                                <div class="mb-3">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                <%
+                                                    String level = quiz.getLevel();
+                                                    if ("Beginner".equals(level)) {
+                                                        out.print("bg-green-100 text-green-800");
+                                                    } else if ("Intermediate".equals(level)) {
+                                                        out.print("bg-yellow-100 text-yellow-800");
+                                                    } else if ("Advanced".equals(level)) {
+                                                        out.print("bg-red-100 text-red-800");
+                                                    }
+                                                %>">
+                                        <%= level%>
+                                    </span>
+                                    <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                        <%= quiz.getQuizType()%>
+                                    </span>
+                                </div>
                             </div>
-                            <div>
-                                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                                    <%-- Nút Previous --%>
-                                    <a href="<%= (currentPage > 1) ? request.getContextPath() + "/quizzes?page=" + (currentPage - 1) + queryParams : "#"%>"
-                                       class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 <%= (currentPage == 1) ? "opacity-50 cursor-not-allowed" : ""%>">
-                                        <span class="sr-only">Previous</span>
-                                        <i class="fas fa-chevron-left"></i>
-                                    </a>
-
-
-                                    <%-- Các nút số trang --%>
-                                    <% for (int i = 1; i <= totalPages; i++) {%>
-                                    <a href="${pageContext.request.contextPath}/quizzes?page=<%= i%><%= queryParams%>"
-                                       class="relative inline-flex items-center px-4 py-2 border text-sm font-medium
-                                       <%= (i == currentPage) ? "active" : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"%>">
-                                        <%= i%>
-                                    </a>
+                            <div class="flex justify-end space-x-2 mt-4 border-t pt-3">
+                                <%
+                                    boolean canEdit = (quiz.getQuestionOrder() == null || quiz.getQuestionOrder() == 0);
+                                %>
+                                <a href="${pageContext.request.contextPath}/quizDetail?id=<%= quiz.getQuizID()%>"
+                                   class="tooltip px-3 py-1 text-sm rounded-md <%= canEdit ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none"%>"
+                                   <%= canEdit ? "" : "onclick=\"return false;\""%>>
+                                    <i class="fas fa-edit mr-1"></i> Edit
+                                    <% if (!canEdit) { %>
+                                    <span class="tooltiptext">Không thể chỉnh sửa - đã có lượt làm bài</span>
                                     <% }%>
-
-                                    <%-- Nút Next --%>
-                                    <a href="<%= (currentPage < totalPages) ? request.getContextPath() + "/quizzes?page=" + (currentPage + 1) + queryParams : "#"%>"
-                                       class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 <%= (currentPage == totalPages) ? "opacity-50 cursor-not-allowed" : ""%>">
-                                        <span class="sr-only">Next</span>
-                                        <i class="fas fa-chevron-right"></i>
-                                    </a>
-
-                                </nav>
+                                </a>
+                                <button type="button" onclick="showDeleteModal('<%= quiz.getQuizID()%>')"
+                                        class="px-3 py-1 text-sm rounded-md bg-red-500 text-white hover:bg-red-600">
+                                    <i class="fas fa-trash mr-1"></i> Delete
+                                </button>
                             </div>
+                        </div>
+                        <%
+                                }
+                            } else {
+                        %>
+                        <div class="col-span-full text-center py-8 text-gray-500">
+                            Không tìm thấy bài kiểm tra nào.
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+
+                <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                    <div class="flex-1 flex justify-between sm:hidden">
+                        <%-- Nút Previous/Next cho di động --%>
+                        <%
+                            int currentPage = (Integer) request.getAttribute("currentPage");
+                            int totalPages = (Integer) request.getAttribute("totalPages");
+                            String searchName = (String) request.getAttribute("searchName");
+                            String subject = (String) request.getAttribute("subject");
+                            String quizType = (String) request.getAttribute("quizType");
+
+                            String queryParams = "";
+                            if (searchName != null && !searchName.isEmpty()) {
+                                queryParams += "&searchName=" + searchName;
+                            }
+                            if (subject != null && !subject.isEmpty()) {
+                                queryParams += "&subject=" + subject;
+                            }
+                            if (quizType != null && !quizType.isEmpty())
+                                queryParams += "&quizType=" + quizType;
+                        %>
+                        <a href="<%= (currentPage > 1) ? request.getContextPath() + "/quizzes?page=" + (currentPage - 1) + queryParams : "#"%>"
+                           class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 <%= (currentPage == 1) ? "opacity-50 cursor-not-allowed" : ""%>">
+                            Previous
+                        </a>
+
+                        <a href="<%= (currentPage < totalPages) ? request.getContextPath() + "/quizzes?page=" + (currentPage + 1) + queryParams : "#"%>"
+                           class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 <%= (currentPage == totalPages) ? "opacity-50 cursor-not-allowed" : ""%>">
+                            Next
+                        </a>
+
+                    </div>
+                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+
+                        <div>
+                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                <%-- Nút Previous --%>
+                                <a href="<%= (currentPage > 1) ? request.getContextPath() + "/quizzes?page=" + (currentPage - 1) + queryParams : "#"%>"
+                                   class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 <%= (currentPage == 1) ? "opacity-50 cursor-not-allowed" : ""%>">
+                                    <span class="sr-only">Previous</span>
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+
+                                <%-- Các nút số trang --%>
+                                <% for (int i = 1; i <= totalPages; i++) {%>
+                                <a href="${pageContext.request.contextPath}/quizzes?page=<%= i%><%= queryParams%>"
+                                   class="relative inline-flex items-center px-4 py-2 border text-sm font-medium
+                                   <%= (i == currentPage) ? "active" : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"%>">
+                                    <%= i%>
+                                </a>
+                                <% }%>
+
+                                <%-- Nút Next --%>
+                                <a href="<%= (currentPage < totalPages) ? request.getContextPath() + "/quizzes?page=" + (currentPage + 1) + queryParams : "#"%>"
+                                   class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 <%= (currentPage == totalPages) ? "opacity-50 cursor-not-allowed" : ""%>">
+                                    <span class="sr-only">Next</span>
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+
+                            </nav>
                         </div>
                     </div>
                 </div>
@@ -369,6 +442,13 @@
             const resetFiltersBtn = document.getElementById('resetFilters');
             const filterForm = document.querySelector('form[method="GET"]'); // Lấy form lọc GET
 
+            // Lấy các phần tử cho chuyển đổi chế độ xem
+            const listViewBtn = document.getElementById('listViewBtn');
+            const gridViewBtn = document.getElementById('gridViewBtn');
+            const tableView = document.getElementById('tableView');
+            const gridView = document.getElementById('gridView');
+            const quizListContainer = document.getElementById('quizListContainer');
+
             // Hàm hiển thị modal xác nhận xóa
             function showDeleteModal(quizId) {
                 modalQuizId.value = quizId; // Gán ID của quiz vào input hidden trong form xóa
@@ -391,6 +471,50 @@
                 document.getElementById('quizType').value = '';
                 // Gửi lại form để server xử lý reset các bộ lọc
                 filterForm.submit();
+            });
+
+            // Logic chuyển đổi chế độ xem
+            // Lấy chế độ xem đã lưu từ localStorage hoặc mặc định là 'list'
+            let currentView = localStorage.getItem('quizViewMode') || 'list';
+
+            function updateView() {
+                if (currentView === 'list') {
+                    tableView.classList.remove('hidden');
+                    gridView.classList.add('hidden');
+                    listViewBtn.classList.add('active-view-btn');
+                    gridViewBtn.classList.remove('active-view-btn');
+                    // Loại bỏ padding nếu cần khi ở chế độ bảng để tránh bị double padding từ quizListContainer
+                    quizListContainer.classList.remove('p-4'); 
+                    quizListContainer.classList.remove('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4', 'gap-6');
+
+                } else {
+                    tableView.classList.add('hidden');
+                    gridView.classList.remove('hidden');
+                    listViewBtn.classList.remove('active-view-btn');
+                    gridViewBtn.classList.add('active-view-btn');
+                    // Thêm padding cho quizListContainer khi ở chế độ lưới
+                    quizListContainer.classList.add('p-4'); 
+                    // Thêm lại class grid cho quizListContainer (chứ không phải gridView)
+                    // Vì gridView đã có sẵn các class grid-cols-X bên trong
+                    // Nếu bạn muốn gridView là container chính, bỏ quizListContainer đi.
+                    // Với cấu trúc hiện tại, quizListContainer là container bao ngoài
+                    // Tôi đã bỏ các class grid từ quizListContainer vì gridView đã có sẵn.
+                }
+            }
+
+            // Thiết lập chế độ xem ban đầu khi tải trang
+            updateView();
+
+            listViewBtn.addEventListener('click', () => {
+                currentView = 'list';
+                localStorage.setItem('quizViewMode', 'list');
+                updateView();
+            });
+
+            gridViewBtn.addEventListener('click', () => {
+                currentView = 'grid';
+                localStorage.setItem('quizViewMode', 'grid');
+                updateView();
             });
         </script>
     </body>
