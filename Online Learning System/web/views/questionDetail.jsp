@@ -188,10 +188,17 @@
                                class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 <i class="fas fa-arrow-alt-circle-left mr-2"></i> Back to Quiz Details
                             </a>
+                            <a href="${pageContext.request.contextPath}/quizzes"
+                               class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <i class="fas fa-arrow-alt-circle-left mr-2"></i> Back to Quizzes
+                            </a>
                         </div>
                     </form>
                 </div>
+
             </main>
+
         </div>
+
     </body>
 </html>
