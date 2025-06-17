@@ -2,35 +2,35 @@
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
        <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>servlet.LoginServlet</servlet-class>
+        <servlet-class>controller.auth.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
-        <servlet-class>servlet.RegisterServlet</servlet-class>
+        <servlet-class>controller.auth.RegisterServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>VerifyEmailServlet</servlet-name>
-        <servlet-class>servlet.VerifyEmailServlet</servlet-class>
+        <servlet-class>controller.auth.VerifyEmailServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>BlogListServlet</servlet-name>
-        <servlet-class>servlet.BlogListServlet</servlet-class>
+        <servlet-class>controller.blog.BlogListServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PostServlet</servlet-name>
-        <servlet-class>servlet.PostServlet</servlet-class>
+        <servlet-class>controller.blog.PostServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SliderListServlet</servlet-name>
-        <servlet-class>servlet.SliderListServlet</servlet-class>
+        <servlet-class>controller.slider.SliderListServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditSliderServlet</servlet-name>
-        <servlet-class>servlet.EditSliderServlet</servlet-class>
+        <servlet-class>controller.slider.EditSliderServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SliderDetailServlet</servlet-name>
-        <servlet-class>servlet.SliderDetailServlet</servlet-class>
+        <servlet-class>controller.slider.SliderDetailServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
