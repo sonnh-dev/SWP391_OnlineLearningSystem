@@ -119,12 +119,12 @@
                                 <i class="fas fa-info-circle mr-2"></i>Chi tiết Quiz
                             </button>
                             <% if (quiz != null && quiz.getQuizID() > 0) { %>
-                                <button type="button" id="tab-questions-btn"
-                                        class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                        data-tab="questions">
-                                    <i class="fas fa-question-circle mr-2"></i>Quản lý Câu hỏi
-                                </button>
-                            <% } %>
+                            <button type="button" id="tab-questions-btn"
+                                    class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                    data-tab="questions">
+                                <i class="fas fa-question-circle mr-2"></i>Quản lý Câu hỏi
+                            </button>
+                            <% }%>
                         </nav>
                     </div>
                 </div>
@@ -196,14 +196,15 @@
                                     <option value="Thi cuối khóa" <%= (quiz != null && "Thi cuối khóa".equals(quiz.getQuizType())) ? "selected" : ""%>>Thi cuối khóa</option>
                                 </select>
                             </div>
-                           
 
                             <div>
-                                <label for="questionOrder" class="block text-sm font-medium text-gray-700 mb-1">Question Order (optional):</label>
-                                <input type="number" id="questionOrder" name="questionOrder"
-                                       class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2 <%= canEdit ? "" : "bg-gray-100 cursor-not-allowed"%>"
-                                       value="<%= (quiz != null && quiz.getQuestionOrder() != null) ? quiz.getQuestionOrder() : ""%>"
-                                       <%= canEdit ? "" : "readonly"%>>
+                                <label for="questionOrder" class="block text-sm font-medium text-gray-700 mb-1">QuestionOrder</label>
+                                <select id="questionOrder" name="questionOrder"
+                                        class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2 <%= canEdit ? "" : "bg-gray-100 cursor-not-allowed"%>"
+                                        <%= canEdit ? "" : "disabled"%>>
+                                    <option value="0" <%= (quiz != null && "0".equals(String.valueOf(quiz.getQuestionOrder()))) ? "selected" : ""%>>Not Attempted</option>
+                                    <option value="1" <%= (quiz != null && "1".equals(String.valueOf(quiz.getQuestionOrder()))) ? "selected" : ""%>>Attempted</option>
+                                </select>
                             </div>
                         </div>
 
@@ -283,8 +284,8 @@
                                     </td>
                                 </tr>
                                 <%
-                                        }
-                                    } else {
+                                    }
+                                } else {
                                 %>
                                 <tr>
                                     <td colspan="4" class="px-6 py-4 text-center text-gray-500">No questions added yet.</td>
