@@ -3,10 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package servlet;
+package controller.slider;
 
 
-import dao.SliderDAO;
+import dao.SliderDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -150,7 +150,7 @@ public class EditSliderServlet extends HttpServlet {
                 return;
             }
 
-            SliderDAO sliderDAO = new SliderDAO();
+            SliderDao sliderDAO = new SliderDao();
             sliderDAO.updateSlider(sliderID, sliderTitle, sliderContent, sliderURL, status);
 
             HttpSession session = request.getSession();

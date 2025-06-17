@@ -3,9 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package servlet;
+package controller.slider;
 
-import dao.SliderDAO;
+import dao.SliderDao;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -60,7 +60,7 @@ public class SliderListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
 
-        SliderDAO dao = new SliderDAO();
+        SliderDao dao = new SliderDao();
         HttpSession session = request.getSession(); // Lấy session
 
         String keyword = request.getParameter("search");

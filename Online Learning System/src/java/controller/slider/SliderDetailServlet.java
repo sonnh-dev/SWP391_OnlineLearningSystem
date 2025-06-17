@@ -3,9 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package servlet;
+package controller.slider;
 
-import dao.SliderDAO;
+import dao.SliderDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,7 +60,7 @@ public class SliderDetailServlet extends HttpServlet {
             int sliderID = Integer.parseInt(request.getParameter("id"));
 
             // Sử dụng SliderDAO để lấy thông tin slider theo ID
-            SliderDAO sliderDAO = new SliderDAO();
+            SliderDao sliderDAO = new SliderDao();
             Slider slider = sliderDAO.getSliderById(sliderID);
 
             if (slider != null) {
