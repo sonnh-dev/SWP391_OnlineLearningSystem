@@ -174,6 +174,7 @@ CREATE TABLE SliderImage (
     SliderTitle NVARCHAR(255) NOT NULL,
     SliderContent TEXT,
     SliderURL NVARCHAR(2083),
+	Status BIT,
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 
@@ -772,13 +773,13 @@ INSERT INTO Lesson (ChapterID, Title, IsFree, LessonOrder) VALUES
 (30, 'Daily Reflection and Review Habits', 1, 1),
 (30, 'Building Systems for Success', 0, 2);
 
-INSERT INTO SliderImage (CourseID, SliderTitle, SliderContent, SliderURL)
+INSERT INTO SliderImage (SliderID,CourseID, SliderTitle, SliderContent, SliderURL, Status)
 VALUES
-(4, 'Boost Your Confidence in Public Speaking', 'Learn practical tips and techniques to overcome stage fright and speak clearly.', 'images/sliders/image1.png'),
-(2, 'Master Time Management Today', 'Prioritize what matters and reclaim your hours with proven time strategies.', 'images/sliders/image2.png'),
-(6, 'Enhance Your EQ for Workplace Success', 'Emotional intelligence improves teamwork, communication, and leadership.', 'images/sliders/image3.png'),
-(7, 'Become a Pro at Problem Solving', 'Tackle complex problems with confidence using structured problem-solving tools.', 'images/sliders/image4.png');
-
+(1,4, 'Boost Your Confidence in Public Speaking', 'Learn practical tips and techniques to overcome stage fright and speak clearly.', 'images/sliders/image1.png', 1),
+(2,2, 'Master Time Management Today', 'Prioritize what matters and reclaim your hours with proven time strategies.', 'images/sliders/image2.png', 1),
+(3,6, 'Enhance Your EQ for Workplace Success', 'Emotional intelligence improves teamwork, communication, and leadership.', 'images/sliders/image3.png', 0),
+(4,7, 'Become a Pro at Problem Solving', 'Tackle complex problems with confidence using structured problem-solving tools.', 'images/sliders/image4.png', 1);
+SET IDENTITY_INSERT SliderImage ON;
 INSERT INTO BlogContent (BlogID, Content) VALUES
 (1, '
 <p>Effective communication is one of the most essential skills to succeed in both personal and professional life. It involves not just speaking clearly but also listening attentively, understanding non-verbal cues, and adapting your message to the audience.</p>
