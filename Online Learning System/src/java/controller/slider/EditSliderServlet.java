@@ -6,7 +6,7 @@
 package controller.slider;
 
 
-import dao.SliderDao;
+import dao.SliderDAO1;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -150,7 +150,7 @@ public class EditSliderServlet extends HttpServlet {
                 return;
             }
 
-            SliderDao sliderDAO = new SliderDao();
+            SliderDAO1 sliderDAO = new SliderDAO1();
             sliderDAO.updateSlider(sliderID, sliderTitle, sliderContent, sliderURL, status);
 
             HttpSession session = request.getSession();

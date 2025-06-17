@@ -5,7 +5,7 @@
 
 package controller.slider;
 
-import dao.SliderDao;
+import dao.SliderDAO1;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,7 +60,7 @@ public class SliderDetailServlet extends HttpServlet {
             int sliderID = Integer.parseInt(request.getParameter("id"));
 
             // Sử dụng SliderDAO để lấy thông tin slider theo ID
-            SliderDao sliderDAO = new SliderDao();
+            SliderDAO1 sliderDAO = new SliderDAO1();
             Slider slider = sliderDAO.getSliderById(sliderID);
 
             if (slider != null) {

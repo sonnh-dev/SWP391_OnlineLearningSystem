@@ -5,7 +5,7 @@
 
 package controller.slider;
 
-import dao.SliderDao;
+import dao.SliderDAO1;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -60,7 +60,7 @@ public class SliderListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
 
-        SliderDao dao = new SliderDao();
+        SliderDAO1 dao = new SliderDAO1();
         HttpSession session = request.getSession(); // Lấy session
 
         String keyword = request.getParameter("search");
