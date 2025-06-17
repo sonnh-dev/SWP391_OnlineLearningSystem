@@ -177,6 +177,10 @@ CREATE TABLE SliderImage (
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder)
+VALUES
+(1, 1, N'Lãnh đạo trong môi trường thay đổi', N'Leadership', N'Trung bình', 5, 20, 70.00, N'Luyện tập', 1),
+(1, 1, N'Lãnh đạo nhóm hiệu quả', N'Leadership', N'Khó', 6, 25, 75.00, N'Kiểm tra', 2);
 INSERT INTO [Users] (firstName, lastName, gender, email, phoneNumber, role, status, avatarURL, password, address, dateOfBirth)
 VALUES
 ('John', 'Doe', 'Male', 'sonnhhe189023@fpt.edu.vn', '1234567890', 'User', 1, 'avatars/john.jpg', '123', '123 Main St, NY', '1995-04-10'),
@@ -226,7 +230,7 @@ PRINT 'Leadership Quiz and Questions inserted.';
 -- 2. Quiz về Quản lý Thời gian (Time Management)
 PRINT 'Inserting Quiz: Effective Time Management...';
 INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
-(NULL, NULL, N'Quản lý Thời gian Hiệu quả', N'Time Management', N'Dễ', 2, 8, 65.00, N'Luyện tập', NULL, GETDATE(), GETDATE());
+(NULL, NULL, N'Quản lý Thời gian Hiệu quả', N'Time Management', N'Dễ', 2, 8, 65.00, N'Luyện tập', 1, GETDATE(), GETDATE());
 DECLARE @TimeManagementQuizID INT = SCOPE_IDENTITY();
 
 -- Câu hỏi 1 (Time Management)
