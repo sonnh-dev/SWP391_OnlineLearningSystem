@@ -33,7 +33,7 @@
                     <div class="carousel-inner">
                         <c:forEach var="slider" items="${slider}" varStatus="status">
                             <div class="carousel-item ${status.first ? 'active' : ''}"  >
-                                <a href="CourseDetail?icourseID=${slider.courseID}">
+                                <a href="CourseDetail?courseID=${slider.courseID}">
                                     <img src="${slider.sliderURL}" class="d-block w-100" style="height: 475px; object-fit: cover;" alt="First slide">
                                     <div class="carousel-caption bg-dark bg-opacity-50 rounded-3">
                                         <h5 class="text-white">${slider.sliderTitle}</h5>

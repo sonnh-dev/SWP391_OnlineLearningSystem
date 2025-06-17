@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     const carouselEl = document.querySelector('#courseCarousel');
     const captionBox = document.getElementById('external-caption');
@@ -38,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     onStateChange: function (event) {
                         if (event.data === YT.PlayerState.PLAYING) {
-                            carousel.pause();
-                        } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                            carousel.pause(); // Dừng tự động chuyển slide
+                        } else if (event.data === YT.PlayerState.ENDED) {
                             setTimeout(() => carousel.next(), 5000);
                         }
                     }
@@ -100,5 +99,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 4000);
     updateCaption();
 });
-
-
