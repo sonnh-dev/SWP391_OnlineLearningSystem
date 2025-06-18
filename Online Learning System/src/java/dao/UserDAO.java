@@ -2,6 +2,7 @@
 package dao;
 
 import context.DBContext2;
+import java.io.File;
 import model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -505,13 +506,14 @@ public class UserDAO extends DBContext2 {
     );
      */
     public User getLoginUser(Account account) {
-        String sql = "SELECT FirstName, LastName, Email, PhoneNumber, AvatarUrl FROM Users WHERE email = ? AND password = ?";
+        String sql = "SELECT UserID, FirstName, LastName, Email, PhoneNumber, AvatarUrl FROM Users WHERE email = ? AND password = ?";
         try (Connection con = DBContext2.getConnection(); PreparedStatement stm = con.prepareStatement(sql)) {
             stm.setString(1, account.getEmail());
             stm.setString(2, account.getPassword());
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 User user = new User();
+                user.setUserId(rs.getInt("UserID"));
                 user.setFirstName(rs.getString("FirstName"));
                 user.setLastName(rs.getString("LastName"));
                 user.setEmail(rs.getString("Email"));
