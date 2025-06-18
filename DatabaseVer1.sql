@@ -198,19 +198,19 @@ CREATE TABLE SliderImage (
 INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder)
 VALUES
 (1, 1, N'Lãnh đạo trong môi trường thay đổi', N'Leadership', N'Trung bình', 5, 20, 70.00, N'Luyện tập', 1),
-(1, 1, N'Lãnh đạo nhóm hiệu quả', N'Leadership', N'Khó', 6, 25, 75.00, N'Kiểm tra', 2);
+(2, 1, N'Lãnh đạo nhóm hiệu quả', N'Leadership', N'Khó', 6, 25, 75.00, N'Kiểm tra', 2);
 INSERT INTO [Users] (firstName, lastName, gender, email, phoneNumber, role, status, avatarURL, password, address, dateOfBirth)
 VALUES
-('John', 'Doe', 'Male', 'sonnhhe189023@fpt.edu.vn', '1234567890', 'User', 1, 'images/users/user_1.png', '123', '123 Main St, NY', '1995-04-10'),
-('Jane', 'Smith', 'Female', 'jane.smith@example.com', '2345678901', 'User', 1, 'images/users/user_1.png', 'hashed_password2', '456 Park Ave, LA', '1988-09-23'),
-('Michael', 'Brown', 'Male', 'michael.brown@example.com', '3456789012', 'User', 1, 'images/users/user_1.png', 'hashed_password3', '789 Sunset Blvd, CA', '1992-12-02'),
-('Emily', 'Johnson', 'Female', 'emily.j@example.com', '4567890123', 'User', 1, 'images/users/user_1.png', 'hashed_password4', '321 Ocean Dr, FL', '1999-06-15'),
-('David', 'Wilson', 'Male', 'david.w@example.com', '5678901234', 'User', 1, 'images/users/user_1.png', 'hashed_password5', '111 River Rd, TX', '1985-01-07'),
-('Sarah', 'Lee', 'Female', 'sarah.lee@example.com', '6789012345', 'User', 1, 'images/users/user_1.png', 'hashed_password6', '222 Lakeview St, WA', '2000-03-19'),
-('Chris', 'Kim', 'Male', 'chris.kim@example.com', '7890123456', 'User', 1, 'images/users/user_1.png', 'hashed_password7', '555 Mountain Rd, CO', '1997-07-29'),
-('Anna', 'Garcia', 'Female', 'anna.g@example.com', '8901234567', 'User', 1, 'images/users/user_1.png', 'hashed_password8', '777 Valley Rd, IL', '1990-11-11'),
-('Daniel', 'Martinez', 'Male', 'daniel.m@example.com', '9012345678', 'User', 1, 'images/users/user_1.png', 'hashed_password9', '999 Canyon Dr, AZ', '1996-08-05'),
-('Laura', 'Nguyen', 'Female', 'laura.nguyen@example.com', '0123456789', 'User', 1, 'images/users/user_1.png', 'hashed_password10', '888 Forest Ave, OR', '1994-05-30');
+('John', 'Doe', 'Male', 'sonnhhe189023@fpt.edu.vn', '1234567890', 'User', 1, 'media/users/user_1.png', '123', '123 Main St, NY', '1995-04-10'),
+('Jane', 'Smith', 'Female', 'jane.smith@example.com', '2345678901', 'User', 1, 'media/users/user_1.png', 'hashed_password2', '456 Park Ave, LA', '1988-09-23'),
+('Michael', 'Brown', 'Male', 'michael.brown@example.com', '3456789012', 'User', 1, 'media/users/user_1.png', 'hashed_password3', '789 Sunset Blvd, CA', '1992-12-02'),
+('Emily', 'Johnson', 'Female', 'emily.j@example.com', '4567890123', 'User', 1, 'media/users/user_1.png', 'hashed_password4', '321 Ocean Dr, FL', '1999-06-15'),
+('David', 'Wilson', 'Male', 'david.w@example.com', '5678901234', 'User', 1, 'media/users/user_1.png', 'hashed_password5', '111 River Rd, TX', '1985-01-07'),
+('Sarah', 'Lee', 'Female', 'sarah.lee@example.com', '6789012345', 'User', 1, 'media/users/user_1.png', 'hashed_password6', '222 Lakeview St, WA', '2000-03-19'),
+('Chris', 'Kim', 'Male', 'chris.kim@example.com', '7890123456', 'User', 1, 'media/users/user_1.png', 'hashed_password7', '555 Mountain Rd, CO', '1997-07-29'),
+('Anna', 'Garcia', 'Female', 'anna.g@example.com', '8901234567', 'User', 1, 'media/users/user_1.png', 'hashed_password8', '777 Valley Rd, IL', '1990-11-11'),
+('Daniel', 'Martinez', 'Male', 'daniel.m@example.com', '9012345678', 'User', 1, 'media/users/user_1.png', 'hashed_password9', '999 Canyon Dr, AZ', '1996-08-05'),
+('Laura', 'Nguyen', 'Female', 'laura.nguyen@example.com', '0123456789', 'User', 1, 'media/users/user_1.png', 'hashed_password10', '888 Forest Ave, OR', '1994-05-30');
 
 -- USE YourDatabaseName; -- Bỏ comment dòng này và thay bằng tên DB của bạn nếu cần
 
@@ -363,20 +363,20 @@ INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions,
 
 INSERT INTO Blog (UserID, Title, Date, Category, ImageURL, TotalView, Summary)
 VALUES
-(1, 'Mastering Communication Skills', '2025-05-01', 'Communication', 'images/blog/image1.png', 120, 'Learn how to effectively communicate in both personal and professional settings.'),
-(2, 'Time Management Hacks', '2025-05-02', 'Time Management', 'images/blog/image2.png', 98, 'Tips and tricks to manage your time efficiently.'),
-(1, 'Emotional Intelligence in Daily Life', '2025-05-03', 'Emotional Intelligence', 'images/blog/image3.png', 145, 'Manage emotions and improve personal relationships.'),
-(4, 'Effective Leadership Habits', '2025-05-04', 'Leadership', 'images/blog/image4.png', 160, 'Daily habits of successful leaders.'),
-(3, 'Problem Solving in the Workplace', '2025-05-05', 'Problem Solving', 'images/blog/image5.png', 60, 'Approaches and tools to solve problems efficiently.'),
-(4, 'Public Speaking for Beginners', '2025-05-06', 'Communication', 'images/blog/image6.png', 130, 'Overcome fear and deliver impactful speeches.'),
-(2, 'Time Blocking Method Explained', '2025-05-07', 'Time Management', 'images/blog/image7.png', 90, 'Use time blocking to stay focused and productive.'),
-(6, 'Empathy in Leadership', '2025-05-08', 'Leadership', 'images/blog/image8.png', 180, 'How empathetic leadership drives team success.'),
-(8, 'Boost Your Emotional Intelligence', '2025-05-09', 'Emotional Intelligence', 'images/blog/image9.png', 110, 'Recognize and manage emotional triggers effectively.'),
-(9, 'Critical Thinking Techniques', '2025-05-10', 'Problem Solving', 'images/blog/image10.png', 70, 'Sharpen your analytical skills for better decisions.');
+(1, 'Mastering Communication Skills', '2025-05-01', 'Communication', 'media/blog/image1.png', 120, 'Learn how to effectively communicate in both personal and professional settings.'),
+(2, 'Time Management Hacks', '2025-05-02', 'Time Management', 'media/blog/image2.png', 98, 'Tips and tricks to manage your time efficiently.'),
+(1, 'Emotional Intelligence in Daily Life', '2025-05-03', 'Emotional Intelligence', 'media/blog/image3.png', 145, 'Manage emotions and improve personal relationships.'),
+(4, 'Effective Leadership Habits', '2025-05-04', 'Leadership', 'media/blog/image4.png', 160, 'Daily habits of successful leaders.'),
+(3, 'Problem Solving in the Workplace', '2025-05-05', 'Problem Solving', 'media/blog/image5.png', 60, 'Approaches and tools to solve problems efficiently.'),
+(4, 'Public Speaking for Beginners', '2025-05-06', 'Communication', 'media/blog/image6.png', 130, 'Overcome fear and deliver impactful speeches.'),
+(2, 'Time Blocking Method Explained', '2025-05-07', 'Time Management', 'media/blog/image7.png', 90, 'Use time blocking to stay focused and productive.'),
+(6, 'Empathy in Leadership', '2025-05-08', 'Leadership', 'media/blog/image8.png', 180, 'How empathetic leadership drives team success.'),
+(8, 'Boost Your Emotional Intelligence', '2025-05-09', 'Emotional Intelligence', 'media/blog/image9.png', 110, 'Recognize and manage emotional triggers effectively.'),
+(9, 'Critical Thinking Techniques', '2025-05-10', 'Problem Solving', 'media/blog/image10.png', 70, 'Sharpen your analytical skills for better decisions.');
 INSERT INTO Course 
 (Title, Category, Lectures, ImageURL, CourseShortDescription, Description, TotalEnrollment)
 VALUES
-('Strategic Leadership', 'Leadership', 10, 'images/courses/image1.png',
+('Strategic Leadership', 'Leadership', 10, 'media/courses/image1.png',
 'Lead with vision and strategy in dynamic environments.',
 '
 <p>Strategic leadership is about steering an organization toward long-term success by aligning people, vision, and strategy. Unlike traditional leadership, which may focus on daily operations, strategic leadership emphasizes foresight, adaptability, and innovation.</p>
@@ -399,7 +399,7 @@ VALUES
 <h3>Conclusion</h3>
 <p>Strategic leadership is a powerful skill that combines vision, influence, and execution. By learning how to lead strategically, you position yourself and your organization for sustainable growth and success.</p>
 ', 240),
-('Time Management Mastery', 'Time Management', 10, 'images/courses/image2.png',
+('Time Management Mastery', 'Time Management', 10, 'media/courses/image2.png',
 'Organize your schedule and manage priorities efficiently.',
 '
 <p>Time management is more than just filling out a planner—it''s about intentionally allocating your time to achieve meaningful goals while maintaining balance. In a world of distractions and busy schedules, mastering your time is the key to reducing stress and increasing productivity.</p>
@@ -422,7 +422,7 @@ VALUES
 <h3>Conclusion</h3>
 <p>Mastering time management is a lifelong journey. With practice and discipline, you can reduce stress, boost productivity, and create more space for the things that truly matter.</p>
 ', 250),
-('Mastering Self-Awareness', 'Emotional Intelligence', 7, 'images/courses/image3.png',
+('Mastering Self-Awareness', 'Emotional Intelligence', 7, 'media/courses/image3.png',
 'Understand and manage your emotions effectively.',
 '
 <p>Self-awareness is the foundation of emotional intelligence, strong leadership, and meaningful relationships. It’s about recognizing your thoughts, emotions, and behaviors—and understanding how they affect yourself and others.</p>
@@ -445,7 +445,7 @@ VALUES
 <h3>Conclusion</h3>
 <p>Self-awareness is not a destination but a continuous journey. The more you learn about yourself, the more empowered you become to make conscious choices that align with your values and purpose.</p>
 ', 190),
-('Public Speaking Essentials', 'Communication', 8, 'images/courses/image4.png',
+('Public Speaking Essentials', 'Communication', 8, 'media/courses/image4.png',
 'Become a confident public speaker with real-world tips.',
 '
 <p>Public speaking is a skill that can open doors to new opportunities, whether youre delivering a presentation, pitching an idea, or leading a team. It’s not just about talking—it’s about connecting, persuading, and inspiring your audience.</p>
@@ -468,7 +468,7 @@ VALUES
 <h3>Conclusion</h3>
 <p>With consistent effort, anyone can become an effective speaker. Public speaking is a journey, and every talk is an opportunity to improve your voice, your message, and your confidence.</p>
 ', 320),
-('Leadership Fundamentals', 'Leadership', 15, 'images/courses/image5.png',
+('Leadership Fundamentals', 'Leadership', 15, 'media/courses/image5.png',
 'Gain essential leadership skills to inspire and guide teams.',
 '
 <p>Leadership is more than a job title—it’s about guiding others toward a shared vision and helping them thrive along the way. Whether you''re new to a leadership role or looking to refine your style, understanding the fundamentals is crucial.</p>
@@ -491,7 +491,7 @@ VALUES
 <h3>Conclusion</h3>
 <p>Leadership is a skill that grows with experience, awareness, and feedback. By focusing on core principles and staying true to your values, you can lead with impact and authenticity.</p>
 ', 270),
-('Emotional Intelligence at Work', 'Emotional Intelligence', 9, 'images/courses/image6.png',
+('Emotional Intelligence at Work', 'Emotional Intelligence', 9, 'media/courses/image6.png',
 'Improve emotional awareness and interpersonal skills.',
 '
 <p>Emotional intelligence (EQ) is the ability to recognize, understand, and manage your emotions—and to do the same with others. At work, EQ helps you navigate relationships, lead with empathy, and handle stress effectively.</p>
@@ -515,7 +515,7 @@ VALUES
 <h3>Conclusion</h3>
 <p>Emotional intelligence isn’t fixed—it can be developed with awareness and practice. By honing your EQ, you can improve your work relationships, boost performance, and create a more positive and productive environment.</p>
 ', 210),
-('Problem Solving Techniques', 'Problem Solving', 11, 'images/courses/image7.png',
+('Problem Solving Techniques', 'Problem Solving', 11, 'media/courses/image7.png',
 'Approach and resolve complex issues logically.',
 '
 <p>Problem solving is a core skill in today’s dynamic world. Whether you’re in business, education, or daily life, the ability to approach challenges methodically and creatively makes all the difference.</p>
@@ -538,7 +538,7 @@ VALUES
 <h3>Conclusion</h3>
 <p>Problem solving is not about always having the right answer, but about having the right mindset. With practice and structure, you can turn challenges into opportunities for growth and innovation.</p>
 ', 180),
-('Critical Thinking Skills', 'Problem Solving', 9, 'images/courses/image8.png',
+('Critical Thinking Skills', 'Problem Solving', 9, 'media/courses/image8.png',
 'Learn to analyze situations and make sound decisions.',
 '
 <p>Critical thinking is the ability to objectively analyze information and make reasoned judgments. It’s essential for navigating complex information and avoiding cognitive biases.</p>
@@ -561,7 +561,7 @@ VALUES
 <h3>Conclusion</h3>
 <p>Critical thinking is a lifelong skill that enhances decision-making, innovation, and leadership. The more you practice, the sharper your mind becomes in every aspect of life.</p>
 ', 200),
-('Effective Communication Skills', 'Communication', 12, 'images/courses/image9.png',
+('Effective Communication Skills', 'Communication', 12, 'media/courses/image9.png',
 'Master verbal and non-verbal communication in all contexts.',
 '
 <p>Effective communication is one of the most essential skills to succeed in both personal and professional life. It involves not just speaking clearly but also listening attentively, understanding non-verbal cues, and adapting your message to the audience.</p>
@@ -587,7 +587,7 @@ VALUES
 <h3>Conclusion</h3>
 <p>Mastering communication skills takes time and conscious effort, but the benefits are immense — from stronger relationships to better career opportunities. Start with small daily practices, and you''ll see gradual improvement that transforms your interactions.</p>
 ', 300),
-('Productivity & Planning Bootcamp', 'Time Management', 11, 'images/courses/image10.png',
+('Productivity & Planning Bootcamp', 'Time Management', 11, 'media/courses/image10.png',
 'Get more done in less time with practical techniques.',
 '
 <p>Productivity isn’t about doing more—it’s about doing what matters most, efficiently and effectively. Planning plays a vital role in helping you align your time and energy with your goals.</p>
@@ -612,7 +612,7 @@ VALUES
 ', 230);
 
 INSERT INTO CourseAdditional (CourseID, ContentURL, IsVideo, Caption, Content) VALUES
-(1, 'images/blog/image1.png', 0, 'Team leadership with clear strategic direction', 'An illustration of a leadership team collaborating to develop and execute a well-defined strategy for organizational success.'),
+(1, 'media/blog/image1.png', 0, 'Team leadership with clear strategic direction', 'An illustration of a leadership team collaborating to develop and execute a well-defined strategy for organizational success.'),
 (1, 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80', 0, 'Building an effective strategic vision', 'Strategic vision serves as a guiding compass, enabling organizations to set long-term goals and inspire collective efforts.'),
 (1, 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80', 0, 'Analyzing business context for leadership decisions', 'Effective leaders evaluate both internal and external business factors to make informed and sustainable strategic decisions.'),
 (1, 'https://www.youtube.com/watch?v=iuYlGRnC7J8', 1, 'Video: Practical strategic leadership', 'This video explores real-world case studies and best practices in strategic leadership within dynamic business environments.'),
@@ -636,9 +636,9 @@ INSERT INTO CourseAdditional (CourseID, ContentURL, IsVideo, Caption, Content) V
 (5, 'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=800&q=80', 0, 'Leading by example', 'Demonstrating integrity and professionalism sets the tone.'),
 (5, 'https://www.youtube.com/watch?v=Z9MHrLrzBfI', 1, 'Video: What makes a leader', 'A breakdown of essential qualities new leaders need.'),
 (5, 'https://www.youtube.com/watch?v=NQN4mtTagL0', 1, 'Video: Leadership in action', 'See how effective leaders influence teams and culture.'),
-(6, 'images/blog/image1.png', 0, 'Understanding emotional cues', 'Recognizing non-verbal signals to foster empathy and clarity.'),
-(6, 'images/blog/image2.png', 0, 'Responding vs. reacting', 'Learning to pause and choose mindful responses in workplace scenarios.'),
-(6, 'images/blog/image3.png', 0, 'Team emotional climate', 'How leaders set the emotional tone of their teams.'),
+(6, 'media/blog/image1.png', 0, 'Understanding emotional cues', 'Recognizing non-verbal signals to foster empathy and clarity.'),
+(6, 'media/blog/image2.png', 0, 'Responding vs. reacting', 'Learning to pause and choose mindful responses in workplace scenarios.'),
+(6, 'media/blog/image3.png', 0, 'Team emotional climate', 'How leaders set the emotional tone of their teams.'),
 (6, 'https://www.youtube.com/watch?v=LgUCyWhJf6s', 1, 'Video: Emotional intelligence explained', 'Daniel Goleman’s breakdown of EQ in the workplace.'),
 (6, 'https://www.youtube.com/watch?v=6bbLWsvDW5o', 1, 'Video: EQ for leaders', 'Learn how EQ affects communication, motivation, and collaboration.'),
 (7, 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80', 0, 'Group brainstorming for complex problems', 'Collaborative sessions help uncover creative solutions through diverse perspectives.'),
@@ -647,18 +647,18 @@ INSERT INTO CourseAdditional (CourseID, ContentURL, IsVideo, Caption, Content) V
 (7, 'https://www.youtube.com/watch?v=7kPrLMchT5o', 1, 'Video: Solving real-world business challenges', 'Watch teams apply frameworks to practical case studies.'),
 (7, 'https://www.youtube.com/watch?v=RSXyw0UMOpQ', 1, 'Video: Structured problem-solving process', 'Step-by-step video tutorial on practical application of structured thinking.'),
 (8, 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80', 0, 'Evaluating arguments with logic', 'Use logic to dissect arguments and distinguish fact from opinion.'),
-(8, 'images/blog/image4.png', 0, 'Critical thinking in group decisions', 'Applying objectivity and clarity during collaborative choices.'),
-(8, 'images/blog/image5.png', 0, 'Identifying hidden biases', 'Recognizing how assumptions affect judgment and reasoning.'),
+(8, 'media/blog/image4.png', 0, 'Critical thinking in group decisions', 'Applying objectivity and clarity during collaborative choices.'),
+(8, 'media/blog/image5.png', 0, 'Identifying hidden biases', 'Recognizing how assumptions affect judgment and reasoning.'),
 (8, 'https://www.youtube.com/watch?v=dItUGF8GdTw', 1, 'Video: Introduction to critical thinking', 'Foundations of reasoning, evidence, and skeptical inquiry.'),
 (8, 'https://www.youtube.com/watch?v=wwUe7T2OKQE', 1, 'Video: Spotting flawed arguments', 'Analyzing logical fallacies in real-life conversations and media.'),
 (9, 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80', 0, 'Delivering clear and engaging messages', 'Communicate your ideas in a structured and relatable way.'),
-(9, 'images/blog/image6.png', 0, 'Active listening in team meetings', 'Truly hearing others to strengthen collaboration and trust.'),
-(9, 'images/blog/image7.png', 0, 'Adapting tone and body language', 'Effective use of nonverbal cues and situational communication.'),
+(9, 'media/blog/image6.png', 0, 'Active listening in team meetings', 'Truly hearing others to strengthen collaboration and trust.'),
+(9, 'media/blog/image7.png', 0, 'Adapting tone and body language', 'Effective use of nonverbal cues and situational communication.'),
 (9, 'https://www.youtube.com/watch?v=7hr60EumwQ4', 1, 'Video: Mastering professional communication', 'Skills for confident, respectful, and persuasive conversations.'),
 (9, 'https://www.youtube.com/watch?v=m79fQpy8mYk', 1, 'Video: Communication do’s and don’ts', 'Common mistakes and how to speak clearly and assertively.'),
-(10, 'images/blog/image8.png', 0, 'Setting priorities with clear goals', 'Define what matters most to stay focused and effective.'),
-(10, 'images/blog/image9.png', 0, 'Planning with digital tools and calendars', 'Use apps and systems to manage time and avoid overload.'),
-(10, 'images/blog/image10.png', 0, 'Daily review and reflection routines', 'Consistency and reflection enhance daily progress.'),
+(10, 'media/blog/image8.png', 0, 'Setting priorities with clear goals', 'Define what matters most to stay focused and effective.'),
+(10, 'media/blog/image9.png', 0, 'Planning with digital tools and calendars', 'Use apps and systems to manage time and avoid overload.'),
+(10, 'media/blog/image10.png', 0, 'Daily review and reflection routines', 'Consistency and reflection enhance daily progress.'),
 (10, 'https://www.youtube.com/watch?v=iONDebHX9qk', 1, 'Video: Time management hacks', 'Productivity techniques used by high performers.'),
 (10, 'https://www.youtube.com/watch?v=J1qiCdrXHgU', 1, 'Video: Planning smarter, not harder', 'Learn to plan your day based on energy and focus zones.');
 
@@ -792,11 +792,12 @@ INSERT INTO Lesson (ChapterID, Title, IsFree, LessonOrder) VALUES
 
 INSERT INTO SliderImage (SliderID,CourseID, SliderTitle, SliderContent, SliderURL, Status)
 VALUES
-(1,4, 'Boost Your Confidence in Public Speaking', 'Learn practical tips and techniques to overcome stage fright and speak clearly.', 'images/sliders/image1.png', 1),
-(2,2, 'Master Time Management Today', 'Prioritize what matters and reclaim your hours with proven time strategies.', 'images/sliders/image2.png', 1),
-(3,6, 'Enhance Your EQ for Workplace Success', 'Emotional intelligence improves teamwork, communication, and leadership.', 'images/sliders/image3.png', 0),
-(4,7, 'Become a Pro at Problem Solving', 'Tackle complex problems with confidence using structured problem-solving tools.', 'images/sliders/image4.png', 1);
+(1,4, 'Boost Your Confidence in Public Speaking', 'Learn practical tips and techniques to overcome stage fright and speak clearly.', 'media/sliders/image1.png', 1),
+(2,2, 'Master Time Management Today', 'Prioritize what matters and reclaim your hours with proven time strategies.', 'media/sliders/image2.png', 1),
+(3,6, 'Enhance Your EQ for Workplace Success', 'Emotional intelligence improves teamwork, communication, and leadership.', 'media/sliders/image3.png', 0),
+(4,7, 'Become a Pro at Problem Solving', 'Tackle complex problems with confidence using structured problem-solving tools.', 'media/sliders/image4.png', 1);
 SET IDENTITY_INSERT SliderImage ON;
+
 INSERT INTO BlogContent (BlogID, Content) VALUES
 (1, '
 <p>Effective communication is one of the most essential skills to succeed in both personal and professional life. It involves not just speaking clearly but also listening attentively, understanding non-verbal cues, and adapting your message to the audience.</p>
