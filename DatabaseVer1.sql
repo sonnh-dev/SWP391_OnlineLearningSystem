@@ -1211,7 +1211,7 @@ VALUES (
     'Workplace',
     'Published',
     1,
-    'images/post/thumbnail1.png',
+    'media/post/thumbnail1.png',
     'Remote Work: The Future of Work Is Here
 Remote work — once a perk — is now a core part of modern professional life. Enabled by technology, it offers flexibility, autonomy, and access to global talent like never before.
 
@@ -1245,18 +1245,18 @@ Maintain a dedicated workspace to separate personal and professional life.
 
 -- Video chính
 INSERT INTO PostVideos (PostID, VideoURL, Description)
-VALUES (1, 'videos/communication.mp4', 'Explain the post');
+VALUES (1, 'media/post/communication.mp4', 'Explain the post');
 
 -- Hình ảnh minh họa chủ đề
 INSERT INTO PostImages (PostID, ImageURL, Description)
-VALUES (1, 'images/post/topic1.png', 'Topic of the post');
+VALUES (1, 'media/post/topic1.png', 'Topic of the post');
 
 -- Hình ảnh quảng bá khóa học
 INSERT INTO PostImages (PostID, ImageURL, Description)
-VALUES (1, 'images/post/logo-course.png', 'Logo of the course advertised');
+VALUES (1, 'media/post/logo-course.png', 'Logo of the course advertised');
 
 -- Video quảng cáo
 INSERT INTO PostVideos (PostID, VideoURL, Description)
-VALUES (1, 'videos/advertise.mp4', 'Advertise course');
+VALUES (1, 'media/post/advertise.mp4', 'Advertise course');
 
 
