@@ -1,7 +1,6 @@
 package dao;
 
 import context.DBContext;
-import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

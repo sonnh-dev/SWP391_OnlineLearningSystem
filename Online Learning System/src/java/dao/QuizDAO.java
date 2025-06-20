@@ -5,7 +5,6 @@
 package dao;
 import context.DBContextF;
 import java.sql.Statement;
-import java.sql.Date; 
 import model.Quiz;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -33,6 +33,21 @@
                 cursor: pointer;
                 border-radius: 6px;
             }
+            .carousel-control-prev,
+            .carousel-control-next {
+                width: 5%;
+                top: 50%;
+                transform: translateY(-50%);
+                opacity: 0.8;
+            }
+
+            .carousel-control-prev {
+                left: 10px;
+            }
+            .carousel-control-next {
+                right: 10px;
+            }
+
         </style>
     </head>
     <body>
@@ -499,30 +514,30 @@
                         </div>
                     </div>
                     <!-- Contact Info -->
-                    <div class="card border-0 shadow-sm mb-4">
-                        <div class="card-body p-4">
-                            <h5 class="card-title mb-3">Contact Us</h5>
-                            <ul class="list-unstyled mb-0">
-                                <li class="mb-3 d-flex">
-                                    <i class="bi bi-geo-alt text-primary me-2"></i>
-                                    <span>123 Education Street, Learning City, 10001</span>
-                                </li>
-                                <li class="mb-3 d-flex">
-                                    <i class="bi bi-telephone text-primary me-2"></i>
-                                    <span>+1 (555) 123-4567</span>
-                                </li>
-                                <li class="mb-3 d-flex">
-                                    <i class="bi bi-envelope text-primary me-2"></i>
-                                    <span>info@edulearn.com</span>
-                                </li>
-                                <li class="d-flex">
-                                    <i class="bi bi-clock text-primary me-2"></i>
-                                    <div>
-                                        <p class="mb-1">Monday - Friday: 9am - 5pm</p>
+                    <div class="card shadow mt-4">
+                        <div class="card-body">
+                            <h3 class="card-title h5 fw-bold mb-3">Contact Us</h3>
+                            <div class="list-unstyled" style="text-decoration: none; color: #000;">
+                                <div class="d-flex mt-3 mb-3">
+                                    <span class="contact-icon px-2 pt-1"><i class="fas fa-map-marker-alt"></i></span>
+                                    <span> 123 Hoa Lac, Thach That, Ha Noi, 600000</span>
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <span class="contact-icon px-2 pt-1"><i class="fas fa-phone-alt"></i></span>
+                                    <span>+84 (0) 123 456 789</span>
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <span class="contact-icon px-2 pt-1"><i class="fas fa-envelope"></i></span>
+                                    <span>sonnhhe189023@fpt.edu.vn</span>
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <span class="contact-icon px-2 pt-1"><i class="fas fa-clock"></i></span>
+                                    <div class="mb-2">
+                                        <p class="mb-1">Monday - Friday: 7.30am - 5pm</p>
                                         <p class="mb-0">Saturday - Sunday: Closed</p>
                                     </div>
-                                </li>
-                            </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -598,7 +613,17 @@
         <script src="assets/js/courseDetail.js"></script>
         <script src="assets/js/courseDetailReview.js"></script>
         <script>
-            window.contextPath = '${pageContext.request.contextPath}';
+            window.addEventListener("message", function (event) {
+                if (event.data.action === "closeModalAndRedirect") {
+                    const modalEl = document.getElementById("popupModal");
+                    let modal = bootstrap.Modal.getInstance(modalEl);
+                    if (!modal) {
+                        modal = new bootstrap.Modal(modalEl);
+                    }
+                    modal.hide();
+                    window.location.href = "MyRegistrations";
+                }
+            });
         </script>
     </body>
 </html>

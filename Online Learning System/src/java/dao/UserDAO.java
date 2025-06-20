@@ -2,7 +2,6 @@
 package dao;
 
 import context.DBContext2;
-import java.io.File;
 import model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -325,6 +324,55 @@ public class UserDAO extends DBContext2 {
         return user;
     }
 
+    public User getUserByEmail(String mail) throws ClassNotFoundException {
+        DBContext2 db = new DBContext2();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        User user = null;
+        try {
+            con = db.getConnection();
+            String sql = "SELECT userId, firstName, lastName, gender, email, phoneNumber, role, status, avatarUrl, address, dateOfBirth FROM Users WHERE email = ?";
+            ps = con.prepareStatement(sql);
+             ps.setString(1, mail);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User(
+                        rs.getInt("userId"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("gender"),
+                        rs.getString("email"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("role"),
+                        rs.getBoolean("status"),
+                        rs.getString("avatarUrl"),
+                        // No password for security reasons when retrieving details
+                        null,
+                        rs.getString("address"),
+                        rs.getDate("dateOfBirth") != null ? rs.getDate("dateOfBirth").toLocalDate() : null
+                );
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return user;
+    }
+
     public boolean addUser(User user) throws ClassNotFoundException {
         DBContext2 db = new DBContext2();
         Connection con = null;
@@ -524,5 +572,16 @@ public class UserDAO extends DBContext2 {
         } catch (SQLException e) {
         }
         return null;
+    }
+
+    public boolean isEmailExists(String email) {
+        String sql = "SELECT 1 FROM Users WHERE Email = ?";
+        try (Connection con = DBContext2.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+        }
+        return false;
     }
 }

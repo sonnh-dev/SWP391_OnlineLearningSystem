@@ -94,12 +94,16 @@ CREATE TABLE CourseReviewMedia (
 CREATE TABLE UserCourse (
     UserID INT,
     CourseID INT,
-    IsEnrolled BIT,
-    EnrollDate DATE,
+    PackageID INT,
+    EnrollDate DATE DEFAULT GETDATE(),
     Progress DECIMAL(5,2),
+    Status NVARCHAR(50),
+    ValidFrom DATE NULL,
+	ValidTo DATE NULL,
     PRIMARY KEY (UserID, CourseID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+    FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
+    FOREIGN KEY (PackageID) REFERENCES CoursePackage(PackageID)
 );
 --Chapter: hiện khi học.
 CREATE TABLE Chapter (

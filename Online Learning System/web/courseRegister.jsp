@@ -16,7 +16,7 @@
             <!-------------------------------------------------------->
             <!-- Registration Form -->
             <form id="registrationForm" method="post" action="CourseRegister">    
-                <input type="hidden" name="courseID" value="${course.courseID}" />
+                <input type="hidden" name="courseID" id="courseID" value="${courseID}">
                 <div class="mb-5">
                     <h3 class="fs-5 fw-semibold text-dark mb-4">Select Package</h3>
                     <div class="row">
@@ -27,7 +27,7 @@
                                 <label class="package-card card h-100 border shadow-sm p-3 rounded-4 w-100">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <h5 class="fs-5 fw-semibold">${p.packageName}</h5>
-                                        <input type="radio" class="form-check-input mt-0 fs-5" name="package" data-name="${p.packageName}" 
+                                        <input type="radio" class="form-check-input mt-0 fs-5" name="packageID" data-name="${p.packageName}" 
                                                data-price="${discountPrice}" value="${p.packageID}"  <c:if test="${loop.first}">checked</c:if> > 
                                         </div>
                                         <h3 class="fs-4 fw-bold mb-2" style="color: #4f46e5;">
@@ -164,6 +164,7 @@
             </form>
         </div>
         <script>
+            //Đổi giá tiền tương ứng với package
             const updatePackageInfo = (radio) => {
                 const name = radio.dataset.name;
                 const price = Number(radio.dataset.price).toLocaleString('vi-VN') + '₫';
@@ -178,6 +179,29 @@
             // Cập nhật thông tin mặc định lúc trang load
             window.addEventListener('DOMContentLoaded', () => {
                 updatePackageInfo(document.querySelector('input[name="package"]:checked'));
+            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.getElementById("registrationForm");
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(form);
+                    fetch("./CourseRegister", {
+                        method: "POST",
+                        body: formData
+                    })
+                            .then(response => {
+                                if (!response.ok)
+                                    throw new Error("Submit failed");
+                                alert("Register successfully");
+                                window.parent.postMessage({action: "closeModalAndRedirect"}, "*");
+                            })
+                            .catch(error => {
+                                console.error(error);
+                                alert("Failed to register. Please try again.");
+                            });
+                });
             });
         </script>
     </body>
