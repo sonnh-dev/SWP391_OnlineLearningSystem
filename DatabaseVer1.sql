@@ -256,7 +256,7 @@ PRINT '--- Inserting Quizzes for Specific Subjects ---';
 -- 1. Quiz về Lãnh đạo (Leadership)
 PRINT 'Inserting Quiz: Leadership Principles...';
 INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
-(NULL, NULL, N'Nguyên tắc Lãnh đạo', N'Leadership', N'Trung bình', 2, 10, 70.00, N'Kiểm tra', NULL, GETDATE(), GETDATE());
+(NULL, NULL, N'Nguyên tắc Lãnh đạo', N'Leadership', N'Trung bình', 2, 10, 70.00, N'Kiểm tra', 1, GETDATE(), GETDATE());
 DECLARE @LeadershipQuizID INT = SCOPE_IDENTITY();
 
 -- Câu hỏi 1 (Leadership)
