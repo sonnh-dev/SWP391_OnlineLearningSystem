@@ -32,6 +32,10 @@
         <servlet-name>SliderDetailServlet</servlet-name>
         <servlet-class>controller.slider.SliderDetailServlet</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>EditPostServlet</servlet-name>
+        <servlet-class>controller.post.EditPostServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -63,5 +67,9 @@
     <servlet-mapping>
         <servlet-name>SliderDetailServlet</servlet-name>
         <url-pattern>/slider-detail</url-pattern>
+    </servlet-mapping>
+        <servlet-mapping>
+        <servlet-name>EditPostServlet</servlet-name>
+        <url-pattern>/EditPostServlet</url-pattern>
     </servlet-mapping>
 </web-app>
