@@ -105,7 +105,7 @@ public class CourseRegisterServlet extends HttpServlet {
             try {
                 userDAO.addUser(user);
                 user = userDAO.getUserByEmail(email);
-                 request.getRequestDispatcher("login.jsp").forward(request, response);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(CourseRegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
