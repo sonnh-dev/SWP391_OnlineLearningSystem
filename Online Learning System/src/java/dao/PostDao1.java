@@ -96,26 +96,35 @@ public class PostDao1 extends context2 {
     }
 }
 // Cập nhật nội dung chính của bài viết
-public void updatePost(Post1 post) {
-    String sql = "UPDATE Posts SET Title = ?, BriefInfo = ?, Description = ?, PostInfo = ?, " +
-                 "Category = ?, Status = ?, IsFeatured = ? WHERE PostID = ?";
+public void updatePost(int id, String title, String category, String briefInfo, String description,
+                       String postinfo, String thumbnailURL, String image1URL, String image2URL,
+                       String video1URL, String video2URL, String status, boolean featured) {
+
+    String sql = "UPDATE Posts SET title=?, category=?, briefInfo=?, description=?, postinfo=?, " +
+                 "thumbnailURL=?, image1URL=?, image2URL=?, video1URL=?, video2URL=?, status=?, featured=? WHERE postID=?";
     try (Connection conn = getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        ps.setString(1, post.getTitle());
-        ps.setString(2, post.getBriefInfo());
-        ps.setString(3, post.getDescription());
-        ps.setString(4, post.getPostinfo());
-        ps.setString(5, post.getCategory());
-        ps.setString(6, post.getStatus());
-        ps.setBoolean(7, post.isFeatured());
-        ps.setInt(8, post.getPostID());
-
+        ps.setString(1, title);
+        ps.setString(2, category);
+        ps.setString(3, briefInfo);
+        ps.setString(4, description);
+        ps.setString(5, postinfo);
+        ps.setString(6, thumbnailURL);
+        ps.setString(7, image1URL);
+        ps.setString(8, image2URL);
+        ps.setString(9, video1URL);
+        ps.setString(10, video2URL);
+        ps.setString(11, status);
+        ps.setBoolean(12, featured);
+        ps.setInt(13, id);
         ps.executeUpdate();
-    } catch (SQLException e) {
+
+    } catch (Exception e) {
         e.printStackTrace();
     }
 }
+
 
 // Cập nhật thumbnail
 public void updateThumbnail(int postId, String url) {

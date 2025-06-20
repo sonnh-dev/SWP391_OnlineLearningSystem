@@ -9,20 +9,32 @@ import dao.PostDao1;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
+
 import java.io.File;
-import java.nio.file.Paths;
-import model.Post1;
+import java.nio.charset.StandardCharsets;
+
+import java.util.List;
+
+import org.apache.commons.fileupload2.core.DiskFileItemFactory;
+import org.apache.commons.fileupload2.core.FileItem;
+import org.apache.commons.fileupload2.jakarta.JakartaServletFileUpload;
+import org.apache.commons.fileupload2.jakarta.JakartaServletRequestContext;
 
 /**
  *
  * @author ADMIN
  */
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024,
+    maxFileSize = 50 * 1024 * 1024,
+    maxRequestSize = 100 * 1024 * 1024
+)
 public class EditPostServlet extends HttpServlet {
-   
+    private final String UPLOAD_DIR = "uploads"; 
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -70,64 +82,104 @@ public class EditPostServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-     throws ServletException, IOException {
+      throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
-        int postID = Integer.parseInt(request.getParameter("postID"));
-        String title = request.getParameter("title");
-        String category = request.getParameter("category");
-        String briefInfo = request.getParameter("briefInfo");
-        String description = request.getParameter("description");
-        String postInfo = request.getParameter("postinfo");
-        String status = request.getParameter("status");
-        boolean featured = request.getParameter("featured") != null;
-
-        PostDao1 dao = new PostDao1();
-
-        Post1 post = new Post1();
-        post.setPostID(postID);
-        post.setTitle(title);
-        post.setCategory(category);
-        post.setBriefInfo(briefInfo);
-        post.setDescription(description);
-        post.setPostinfo(postInfo);
-        post.setStatus(status);
-        post.setIsFeatured(featured);
-
-        // Đường dẫn lưu thật trên máy chủ
-        String appPath = request.getServletContext().getRealPath("");
-
-        // Tải lên các file và lưu đúng thư mục
-        String thumbnail = uploadFile(request.getPart("thumbnail"), appPath, "images/post");
-        String image1 = uploadFile(request.getPart("image1"), appPath, "images/post");
-        String image2 = uploadFile(request.getPart("image2"), appPath, "images/post");
-        String video1 = uploadFile(request.getPart("video1"), appPath, "videos");
-        String video2 = uploadFile(request.getPart("video2"), appPath, "videos");
-
-        // Gọi DAO để cập nhật các phần tương ứng nếu có file mới
-        if (thumbnail != null) dao.updateThumbnail(postID, thumbnail);
-        if (image1 != null) dao.updateImage(postID, 1, image1);
-        if (image2 != null) dao.updateImage(postID, 2, image2);
-        if (video1 != null) dao.updateVideo(postID, 1, video1);
-        if (video2 != null) dao.updateVideo(postID, 2, video2);
-
-        dao.updatePost(post);
-
-        response.sendRedirect("postDetail.jsp?postID=" + postID);
-    }
-
-    private String uploadFile(Part part, String appPath, String folderPath) throws IOException {
-        if (part != null && part.getSize() > 0) {
-            String fileName = System.currentTimeMillis() + "_" + Paths.get(part.getSubmittedFileName()).getFileName().toString();
-            String fullPath = appPath + File.separator + folderPath + File.separator + fileName;
-            part.write(fullPath);
-
-            // Trả về đường dẫn tương đối để lưu vào DB (ví dụ: images/post/xxx.png)
-            return folderPath + "/" + fileName;
+        if (!JakartaServletFileUpload.isMultipartContent(request)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Form must have enctype=multipart/form-data.");
+            return;
         }
-        return null;
+
+        final String UPLOAD_DIRECTORY = "uploads/posts"; // Change if needed
+        DiskFileItemFactory factory = DiskFileItemFactory.builder().get();
+        JakartaServletFileUpload upload = new JakartaServletFileUpload(factory);
+
+        int postID = 0;
+        String title = "", category = "", briefInfo = "", description = "", postInfo = "";
+        String thumbnailURL = "";
+        boolean featured = false;
+        String image1URL = "", image2URL = "", video1URL = "", video2URL = "";
+        String status = "";
+
+        try {
+            JakartaServletRequestContext ctx = new JakartaServletRequestContext(request);
+            List<FileItem> formItems = upload.parseRequest(ctx);
+
+            for (FileItem item : formItems) {
+                if (item.isFormField()) {
+                    String fieldName = item.getFieldName();
+                    String fieldValue = item.getString(StandardCharsets.UTF_8);
+
+                    switch (fieldName) {
+                        case "postID":
+                            postID = Integer.parseInt(fieldValue);
+                            break;
+                        case "title":
+                            title = fieldValue;
+                            break;
+                        case "category":
+                            category = fieldValue;
+                            break;
+                        case "briefInfo":
+                            briefInfo = fieldValue;
+                            break;
+                        case "description":
+                            description = fieldValue;
+                            break;
+                        case "postinfo":
+                            postInfo = fieldValue;
+                            break;
+                        case "status":
+                            status = fieldValue;
+                            break;
+                        case "featured":
+                            featured = true;
+                            break;
+                    }
+                } else {
+                    String fileName = item.getName();
+                    if (fileName != null && !fileName.isEmpty()) {
+                        String appPath = request.getServletContext().getRealPath("");
+                        String uploadPath = appPath + File.separator + UPLOAD_DIRECTORY;
+                        File uploadDir = new File(uploadPath);
+                        if (!uploadDir.exists()) uploadDir.mkdirs();
+
+                        String savedName = System.currentTimeMillis() + "_" + new File(fileName).getName();
+                        String filePath = uploadPath + File.separator + savedName;
+                        item.write(new File(filePath).toPath()); // ✅ đúng với phiên bản 2.x
+
+                        String relativePath = UPLOAD_DIRECTORY + "/" + savedName;
+                        String field = item.getFieldName();
+                        switch (field) {
+                            case "thumbnail": thumbnailURL = relativePath; break;
+                            case "image1": image1URL = relativePath; break;
+                            case "image2": image2URL = relativePath; break;
+                            case "video1": video1URL = relativePath; break;
+                            case "video2": video2URL = relativePath; break;
+                        }
+                    }
+                }
+            }
+
+            if (postID <= 0) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid post ID.");
+                return;
+            }
+
+            PostDao1 dao = new PostDao1();
+            dao.updatePost(postID, title, category, briefInfo, description, postInfo, thumbnailURL, image1URL, image2URL, video1URL, video2URL, status, featured);
+
+           response.sendRedirect("postDetail?id=" + postID); // Or redirect back to list
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error updating post: " + e.getMessage());
+        }
     }
+
+
 
 
     /** 
