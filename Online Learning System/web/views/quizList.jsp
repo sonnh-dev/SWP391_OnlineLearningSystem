@@ -5,11 +5,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Quizzes List</title>
+
         <%-- Nhúng Tailwind CSS (sử dụng CDN cho đơn giản) --%>
         <script src="https://cdn.tailwindcss.com"></script>
         <%-- Nhúng Font Awesome (sử dụng CDN cho các biểu tượng) --%>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
         <style>
             /* CSS tùy chỉnh cho tooltip */
             .tooltip {
@@ -59,6 +62,47 @@
             .active-view-btn:hover {
                 background-color: #4338ca; /* indigo-700 */
             }
+
+            /* CSS cho ẩn cột/hàng (quan trọng: !important để đảm bảo ghi đè) */
+            .hidden-col {
+                display: none !important;
+            }
+
+            /* Tùy chỉnh cho checkbox dropdown menu của Tailwind */
+            .form-checkbox { /* Tùy chỉnh checkbox cơ bản */
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                display: inline-block;
+                vertical-align: middle;
+                height: 1rem;
+                width: 1rem;
+                cursor: pointer;
+                background-color: #fff;
+                border: 1px solid #d1d5db;
+                border-radius: 0.25rem;
+            }
+            .form-checkbox:checked {
+                background-color: #4f46e5;
+                border-color: #4f46e5;
+                background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+            }
+            .form-checkbox:focus {
+                outline: 2px solid transparent;
+                outline-offset: 2px;
+                box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5); /* focus:ring-indigo-500 */
+            }
+            .text-indigo-600 {
+                color: #4f46e5;
+            }
+            .transition {
+                transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 150ms;
+            }
+            .ease-in-out {
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            }
         </style>
     </head>
     <body class="bg-gray-100 font-sans leading-normal tracking-normal">
@@ -66,7 +110,7 @@
             <header class="bg-indigo-600 text-white p-4 shadow-md">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                     <h1 class="text-3xl font-bold">Quizzes List</h1>
-                    <%-- Nút thêm mới đặt ở đây cho dễ nhìn --%>
+                    <%-- Nút thêm mới --%>
                     <a href="${pageContext.request.contextPath}/quizDetail"
                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         <i class="fas fa-plus mr-2"></i> Add New Quiz
@@ -110,7 +154,6 @@
                                     <option value="Problem Solving" <%= "Problem Solving".equals(request.getAttribute("subject")) ? "selected" : ""%>>Problem Solving</option>
                                     <option value="Emotional Intelligence" <%= "Emotional Intelligence".equals(request.getAttribute("subject")) ? "selected" : ""%>>Emotional Intelligence</option>
                                     <option value="Communication" <%= "Communication".equals(request.getAttribute("subject")) ? "selected" : ""%>>Communication</option>
-                                    <%-- Thêm các Subject khác từ DB hoặc tĩnh --%>
                                 </select>
                             </div>
                             <div>
@@ -119,7 +162,6 @@
                                     <option value="">All Types</option>
                                     <option value="Luyện tập" <%= "Luyện tập".equals(request.getAttribute("quizType")) ? "selected" : ""%>>Luyện tập</option>
                                     <option value="Kiểm tra" <%= "Kiểm tra".equals(request.getAttribute("quizType")) ? "selected" : ""%>>Kiểm tra</option>
-                                    <%-- Thêm các QuizType khác từ DB hoặc tĩnh --%>
                                 </select>
                             </div>
                         </div>
@@ -134,100 +176,155 @@
                     </form>
                 </div>
 
-                <%-- Các nút chuyển đổi chế độ xem --%>
-                <div class="flex justify-end mb-4 space-x-2">
-                    <button id="listViewBtn" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 active-view-btn">
-                        <i class="fas fa-list"></i> List View
-                    </button>
-                    <button id="gridViewBtn" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <i class="fas fa-th-large"></i> Grid View
-                    </button>
+                <%-- Các nút chuyển đổi chế độ xem và ẩn/hiện cột/hàng --%>
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex space-x-2">
+                        <div class="relative inline-block text-left">
+                            <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="columnToggleMenuButton" aria-expanded="true" aria-haspopup="true">
+                                <i class="fas fa-eye-slash mr-2"></i> Ẩn/Hiện Cột
+                                <i class="fas fa-chevron-down ml-2 -mr-1"></i>
+                            </button>
+                            <div class="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="columnToggleMenuButton" id="columnToggleMenu">
+                                <div class="py-1" role="none">
+                                    <label class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <input type="checkbox" data-col-target="0" checked class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                        <span class="ml-2">ID</span>
+                                    </label>
+                                    <label class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <input type="checkbox" data-col-target="1" checked class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                        <span class="ml-2">Name</span>
+                                    </label>
+                                    <label class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <input type="checkbox" data-col-target="2" checked class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                        <span class="ml-2">Subject</span>
+                                    </label>
+                                    <label class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <input type="checkbox" data-col-target="3" checked class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                        <span class="ml-2">Level</span>
+                                    </label>
+                                    <label class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <input type="checkbox" data-col-target="4" checked class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                        <span class="ml-2"># Questions</span>
+                                    </label>
+                                    <label class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <input type="checkbox" data-col-target="5" checked class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                        <span class="ml-2">Duration (min)</span>
+                                    </label>
+                                    <label class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <input type="checkbox" data-col-target="6" checked class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                        <span class="ml-2">Pass Rate (%)</span>
+                                    </label>
+                                    <label class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <input type="checkbox" data-col-target="7" checked class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                        <span class="ml-2">Quiz Type</span>
+                                    </label>
+                                    <label class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <input type="checkbox" data-col-target="8" checked class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                        <span class="ml-2">Actions</span>
+                                    </label>
+                                </div>
+                                <div class="px-4 py-2 border-t border-gray-200 text-right">
+                                    <button class="px-3 py-1 text-sm rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="applyColumnChangesBtn">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="toggleAllRowsBtn" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <i class="fas fa-eye-slash mr-2"></i> Ẩn Tất Cả Hàng
+                        </button>
+                    </div>
+
+                    <div class="flex space-x-2">
+                        <button id="listViewBtn" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 active-view-btn">
+                            <i class="fas fa-list"></i> List View
+                        </button>
+                        <button id="gridViewBtn" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <i class="fas fa-th-large"></i> Grid View
+                        </button>
+                    </div>
                 </div>
 
                 <div id="quizListContainer" class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <%-- HIỂN THỊ DẠNG BẢNG (MẶC ĐỊNH) --%>
                     <div id="tableView" class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200" id="quizTable">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="0">
                                         ID
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="1">
                                         Name
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="2">
                                         Subject
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="3">
                                         Level
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="4">
                                         # Questions
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="5">
                                         Duration (min)
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="6">
                                         Pass Rate (%)
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="7">
                                         Quiz Type
                                     </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="8">
                                         Actions
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody class="bg-white divide-y divide-gray-200" id="quizTableBody">
                                 <%
                                     List<Quiz> quizzes = (List<Quiz>) request.getAttribute("quizzes");
                                     if (quizzes != null && !quizzes.isEmpty()) {
-                                        for (Quiz quiz : quizzes) {
+                                        for (int rowIndex = 0; rowIndex < quizzes.size(); rowIndex++) {
+                                            Quiz quiz = quizzes.get(rowIndex);
                                 %>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                <tr data-row-index="<%= rowIndex %>" class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" data-col-index="0">
                                         <%= quiz.getQuizID()%>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-col-index="1">
                                         <%= quiz.getQuizName()%>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="2">
                                         <%= quiz.getSubject()%>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="3">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                                    <%
-                                                        String level = quiz.getLevel();
-                                                        if ("Beginner".equals(level)) {
-                                                            out.print("bg-green-100 text-green-800");
-                                                        } else if ("Intermediate".equals(level)) {
-                                                            out.print("bg-yellow-100 text-yellow-800");
-                                                        } else if ("Advanced".equals(level)) {
-                                                            out.print("bg-red-100 text-red-800");
-                                                        }
-                                                    %>">
+                                                      <%
+                                                          String level = quiz.getLevel();
+                                                          if ("Beginner".equals(level)) {
+                                                              out.print("bg-green-100 text-green-800");
+                                                          } else if ("Intermediate".equals(level)) {
+                                                              out.print("bg-yellow-100 text-yellow-800");
+                                                          } else if ("Advanced".equals(level)) {
+                                                              out.print("bg-red-100 text-red-800");
+                                                          }
+                                                      %>">
                                             <%= level%>
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="4">
                                         <%= quiz.getNumQuestions()%>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="5">
                                         <%= quiz.getDurationMinutes()%> min
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="6">
                                         <%= String.format("%.2f", quiz.getPassRate())%>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="7">
                                         <%= quiz.getQuizType()%>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" data-col-index="8">
                                         <div class="flex space-x-2">
                                             <%
-                                                // Sử dụng questionOrder để kiểm tra số lượt làm bài
-                                                // Giả định: nếu questionOrder = 0 hoặc NULL, có nghĩa là chưa có lượt làm bài.
-                                                // Nếu questionOrder > 0, có nghĩa là đã có lượt làm bài.
                                                 boolean canEdit = (quiz.getQuestionOrder() == null || quiz.getQuestionOrder() == 0);
                                             %>
                                             <a href="${pageContext.request.contextPath}/quizDetail?id=<%= quiz.getQuizID()%>"
@@ -238,7 +335,6 @@
                                                 <span class="tooltiptext">Không thể chỉnh sửa - đã có lượt làm bài</span>
                                                 <% }%>
                                             </a>
-                                            <%-- Nút Delete sẽ hiển thị modal xác nhận --%>
                                             <button type="button" onclick="showDeleteModal('<%= quiz.getQuizID()%>')"
                                                     class="text-red-600 hover:text-red-900">
                                                 <i class="fas fa-trash"></i>
@@ -270,29 +366,29 @@
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-900 mb-2"><%= quiz.getQuizName()%></h3>
                                 <p class="text-sm text-gray-600 mb-1">
-                                    <i class="fas fa-book mr-1 text-indigo-500"></i> **Subject:** <%= quiz.getSubject()%>
+                                    <i class="fas fa-book mr-1 text-indigo-500"></i> <strong>Subject:</strong> <%= quiz.getSubject()%>
                                 </p>
                                 <p class="text-sm text-gray-600 mb-1">
-                                    <i class="fas fa-hourglass-half mr-1 text-blue-500"></i> **Duration:** <%= quiz.getDurationMinutes()%> min
+                                    <i class="fas fa-hourglass-half mr-1 text-blue-500"></i> <strong>Duration:</strong> <%= quiz.getDurationMinutes()%> min
                                 </p>
                                 <p class="text-sm text-gray-600 mb-1">
-                                    <i class="fas fa-question-circle mr-1 text-green-500"></i> **Questions:** <%= quiz.getNumQuestions()%>
+                                    <i class="fas fa-question-circle mr-1 text-green-500"></i> <strong>Questions:</strong> <%= quiz.getNumQuestions()%>
                                 </p>
                                 <p class="text-sm text-gray-600 mb-2">
-                                    <i class="fas fa-percent mr-1 text-purple-500"></i> **Pass Rate:** <%= String.format("%.2f", quiz.getPassRate())%>%
+                                    <i class="fas fa-percent mr-1 text-purple-500"></i> <strong>Pass Rate:</strong> <%= String.format("%.2f", quiz.getPassRate())%>%
                                 </p>
                                 <div class="mb-3">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                                <%
-                                                    String level = quiz.getLevel();
-                                                    if ("Beginner".equals(level)) {
-                                                        out.print("bg-green-100 text-green-800");
-                                                    } else if ("Intermediate".equals(level)) {
-                                                        out.print("bg-yellow-100 text-yellow-800");
-                                                    } else if ("Advanced".equals(level)) {
-                                                        out.print("bg-red-100 text-red-800");
-                                                    }
-                                                %>">
+                                                  <%
+                                                      String level = quiz.getLevel();
+                                                      if ("Beginner".equals(level)) {
+                                                          out.print("bg-green-100 text-green-800");
+                                                      } else if ("Intermediate".equals(level)) {
+                                                          out.print("bg-yellow-100 text-yellow-800");
+                                                      } else if ("Advanced".equals(level)) {
+                                                          out.print("bg-red-100 text-red-800");
+                                                      }
+                                                  %>">
                                         <%= level%>
                                     </span>
                                     <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
@@ -375,7 +471,7 @@
                                 <% for (int i = 1; i <= totalPages; i++) {%>
                                 <a href="${pageContext.request.contextPath}/quizzes?page=<%= i%><%= queryParams%>"
                                    class="relative inline-flex items-center px-4 py-2 border text-sm font-medium
-                                   <%= (i == currentPage) ? "active" : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"%>">
+                                          <%= (i == currentPage) ? "active" : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"%>">
                                     <%= i%>
                                 </a>
                                 <% }%>
@@ -440,41 +536,136 @@
             const cancelDeleteBtn = document.getElementById('cancelDelete');
             const modalQuizId = document.getElementById('modalQuizId');
             const resetFiltersBtn = document.getElementById('resetFilters');
-            const filterForm = document.querySelector('form[method="GET"]'); // Lấy form lọc GET
+            const filterForm = document.querySelector('form[method="GET"]');
 
-            // Lấy các phần tử cho chuyển đổi chế độ xem
             const listViewBtn = document.getElementById('listViewBtn');
             const gridViewBtn = document.getElementById('gridViewBtn');
             const tableView = document.getElementById('tableView');
             const gridView = document.getElementById('gridView');
             const quizListContainer = document.getElementById('quizListContainer');
 
-            // Hàm hiển thị modal xác nhận xóa
+            const quizTable = document.getElementById('quizTable');
+            const quizTableBody = document.getElementById('quizTableBody');
+            const columnToggleMenuButton = document.getElementById('columnToggleMenuButton');
+            const columnToggleMenu = document.getElementById('columnToggleMenu');
+            const toggleAllRowsBtn = document.getElementById('toggleAllRowsBtn');
+            const applyColumnChangesBtn = document.getElementById('applyColumnChangesBtn'); // Nút OK
+
+            // Biến tạm thời để lưu trạng thái cột đã chọn trong dropdown
+            let tempHiddenColumns = new Set(); // Sử dụng Set để lưu các columnIndex cần ẩn
+
+
+            // --- Hàm hiển thị/ẩn modal xóa (Tailwind CSS) ---
             function showDeleteModal(quizId) {
-                modalQuizId.value = quizId; // Gán ID của quiz vào input hidden trong form xóa
+                modalQuizId.value = quizId;
                 deleteModal.classList.remove('hidden'); // Hiển thị modal
             }
 
-            // Hàm ẩn modal xác nhận xóa
             function hideDeleteModal() {
                 deleteModal.classList.add('hidden'); // Ẩn modal
-                modalQuizId.value = ''; // Xóa ID đã lưu
+                modalQuizId.value = '';
             }
 
-            // Gắn sự kiện click cho nút "Hủy" trong modal
             cancelDeleteBtn.addEventListener('click', hideDeleteModal);
 
-            // Gắn sự kiện click cho nút "Reset" trong phần lọc
+            // --- Hàm Reset Filters ---
             resetFiltersBtn.addEventListener('click', () => {
                 document.getElementById('searchName').value = '';
                 document.getElementById('subject').value = '';
                 document.getElementById('quizType').value = '';
-                // Gửi lại form để server xử lý reset các bộ lọc
                 filterForm.submit();
             });
 
-            // Logic chuyển đổi chế độ xem
-            // Lấy chế độ xem đã lưu từ localStorage hoặc mặc định là 'list'
+            // --- Logic đóng/mở dropdown ẩn/hiện cột (Tailwind CSS) ---
+            columnToggleMenuButton.addEventListener('click', (event) => {
+                event.stopPropagation(); // Ngăn sự kiện click lan ra ngoài
+                columnToggleMenu.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (event) => {
+                // Đóng dropdown nếu click ra ngoài menu hoặc nút
+                if (!columnToggleMenuButton.contains(event.target) && !columnToggleMenu.contains(event.target)) {
+                    columnToggleMenu.classList.add('hidden');
+                }
+            });
+
+            // --- Gắn sự kiện cho các checkbox trong menu ẩn/hiện cột ---
+            document.querySelectorAll('#columnToggleMenu input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', (event) => {
+                    const columnIndex = parseInt(event.target.dataset.colTarget);
+                    if (event.target.checked) {
+                        tempHiddenColumns.delete(columnIndex); // Nếu checked, tức là muốn hiện, xóa khỏi set ẩn
+                    } else {
+                        tempHiddenColumns.add(columnIndex); // Nếu unchecked, tức là muốn ẩn, thêm vào set ẩn
+                    }
+                });
+            });
+
+            // --- Hàm áp dụng thay đổi cột khi nhấn OK ---
+            applyColumnChangesBtn.addEventListener('click', () => {
+                // Áp dụng trạng thái ẩn cho các cột
+                document.querySelectorAll('#quizTable th, #quizTable td').forEach(cell => {
+                    const columnIndex = parseInt(cell.dataset.colIndex);
+                    if (tempHiddenColumns.has(columnIndex)) {
+                        cell.classList.add('hidden-col');
+                    } else {
+                        cell.classList.remove('hidden-col');
+                    }
+                });
+
+                // Lưu trạng thái cuối cùng vào localStorage
+                localStorage.setItem('hiddenColumns', JSON.stringify(Array.from(tempHiddenColumns)));
+
+                // Đóng dropdown menu sau khi áp dụng
+                columnToggleMenu.classList.add('hidden');
+            });
+
+            // --- Hàm để ẩn/hiện tất cả các hàng ---
+            let allRowsHidden = false;
+            toggleAllRowsBtn.addEventListener('click', () => {
+                const rows = quizTableBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    if (allRowsHidden) {
+                        row.classList.remove('hidden-col');
+                    } else {
+                        row.classList.add('hidden-col');
+                    }
+                });
+                allRowsHidden = !allRowsHidden;
+                toggleAllRowsBtn.innerHTML = `<i class="fas ${allRowsHidden ? 'fa-eye' : 'fa-eye-slash'} mr-2"></i> ${allRowsHidden ? 'Hiện Tất Cả Hàng' : 'Ẩn Tất Cả Hàng'}`;
+            });
+
+            // --- Khôi phục trạng thái cột khi tải trang ---
+            function restoreColumnState() {
+                const storedHiddenColumns = JSON.parse(localStorage.getItem('hiddenColumns')) || [];
+                tempHiddenColumns = new Set(storedHiddenColumns); // Khôi phục trạng thái tạm thời từ localStorage
+
+                // Cập nhật trạng thái checkbox và ẩn/hiện cột theo storedHiddenColumns
+                document.querySelectorAll('#columnToggleMenu input[type="checkbox"]').forEach(checkbox => {
+                    const columnIndex = parseInt(checkbox.dataset.colTarget);
+                    const cells = document.querySelectorAll(`#quizTable th[data-col-index="${columnIndex}"], #quizTable td[data-col-index="${columnIndex}"]`);
+
+                    if (storedHiddenColumns.includes(columnIndex)) {
+                        // Nếu cột này đáng lẽ phải ẩn
+                        cells.forEach(cell => {
+                            if (!cell.classList.contains('hidden-col')) {
+                                cell.classList.add('hidden-col');
+                            }
+                        });
+                        checkbox.checked = false; // Bỏ chọn checkbox
+                    } else {
+                        // Nếu cột này đáng lẽ phải hiện
+                        cells.forEach(cell => {
+                            if (cell.classList.contains('hidden-col')) {
+                                cell.classList.remove('hidden-col');
+                            }
+                        });
+                        checkbox.checked = true; // Chọn checkbox
+                    }
+                });
+            }
+
+            // --- Logic chuyển đổi chế độ xem (List/Grid) ---
             let currentView = localStorage.getItem('quizViewMode') || 'list';
 
             function updateView() {
@@ -483,27 +674,19 @@
                     gridView.classList.add('hidden');
                     listViewBtn.classList.add('active-view-btn');
                     gridViewBtn.classList.remove('active-view-btn');
-                    // Loại bỏ padding nếu cần khi ở chế độ bảng để tránh bị double padding từ quizListContainer
-                    quizListContainer.classList.remove('p-4'); 
-                    quizListContainer.classList.remove('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4', 'gap-6');
-
                 } else {
                     tableView.classList.add('hidden');
                     gridView.classList.remove('hidden');
                     listViewBtn.classList.remove('active-view-btn');
                     gridViewBtn.classList.add('active-view-btn');
-                    // Thêm padding cho quizListContainer khi ở chế độ lưới
-                    quizListContainer.classList.add('p-4'); 
-                    // Thêm lại class grid cho quizListContainer (chứ không phải gridView)
-                    // Vì gridView đã có sẵn các class grid-cols-X bên trong
-                    // Nếu bạn muốn gridView là container chính, bỏ quizListContainer đi.
-                    // Với cấu trúc hiện tại, quizListContainer là container bao ngoài
-                    // Tôi đã bỏ các class grid từ quizListContainer vì gridView đã có sẵn.
                 }
             }
 
-            // Thiết lập chế độ xem ban đầu khi tải trang
-            updateView();
+            // --- Gọi các hàm khởi tạo khi DOM đã tải ---
+            document.addEventListener('DOMContentLoaded', () => {
+                updateView(); // Cập nhật chế độ xem trước
+                restoreColumnState(); // Sau đó khôi phục trạng thái ẩn của cột
+            });
 
             listViewBtn.addEventListener('click', () => {
                 currentView = 'list';
