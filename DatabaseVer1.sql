@@ -195,10 +195,42 @@ CREATE TABLE SliderImage (
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 
+<<<<<<< Updated upstream
 INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder)
 VALUES
 (1, 1, N'Lãnh đạo trong môi trường thay đổi', N'Leadership', N'Trung bình', 5, 20, 70.00, N'Luyện tập', 1),
 (2, 1, N'Lãnh đạo nhóm hiệu quả', N'Leadership', N'Khó', 6, 25, 75.00, N'Kiểm tra', 2);
+=======
+CREATE TABLE Posts (
+    PostID INT PRIMARY KEY IDENTITY(1,1),
+    Title NVARCHAR(255),
+    BriefInfo NVARCHAR(500),
+    Description NVARCHAR(MAX),
+	Postinfo NVARCHAR(MAX),
+    Category NVARCHAR(100),
+    Status NVARCHAR(50),
+    IsFeatured BIT DEFAULT 0,
+    ThumbnailURL NVARCHAR(255),
+    CreatedDate DATETIME DEFAULT GETDATE()
+);
+
+-- Bảng lưu các video trong bài viết
+CREATE TABLE PostVideos (
+    VideoID INT PRIMARY KEY IDENTITY(1,1),
+    PostID INT FOREIGN KEY REFERENCES Posts(PostID),
+    VideoURL NVARCHAR(255),
+    Description NVARCHAR(255)
+);
+
+-- Bảng lưu các hình ảnh phụ
+CREATE TABLE PostImages (
+    ImageID INT PRIMARY KEY IDENTITY(1,1),
+    PostID INT FOREIGN KEY REFERENCES Posts(PostID),
+    ImageURL NVARCHAR(255),
+    Description NVARCHAR(255)
+);
+
+>>>>>>> Stashed changes
 INSERT INTO [Users] (firstName, lastName, gender, email, phoneNumber, role, status, avatarURL, password, address, dateOfBirth)
 VALUES
 ('John', 'Doe', 'Male', 'sonnhhe189023@fpt.edu.vn', '1234567890', 'User', 1, 'media/users/user_1.png', '123', '123 Main St, NY', '1995-04-10'),
@@ -248,7 +280,7 @@ PRINT 'Leadership Quiz and Questions inserted.';
 -- 2. Quiz về Quản lý Thời gian (Time Management)
 PRINT 'Inserting Quiz: Effective Time Management...';
 INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
-(NULL, NULL, N'Quản lý Thời gian Hiệu quả', N'Time Management', N'Dễ', 2, 8, 65.00, N'Luyện tập', 1, GETDATE(), GETDATE());
+(NULL, NULL, N'Quản lý Thời gian Hiệu quả', N'Time Management', N'Dễ', 2, 8, 65.00, N'Luyện tập', NULL, GETDATE(), GETDATE());
 DECLARE @TimeManagementQuizID INT = SCOPE_IDENTITY();
 
 -- Câu hỏi 1 (Time Management)
@@ -1165,5 +1197,62 @@ INSERT INTO BlogContent (BlogID, Content) VALUES
 </ul>
 
 <h3>Conclusion</h3>
-<p>Critical thinking is a vital skill that strengthens your ability to make sound judgments and innovate. Regular practice sharpens your mind and empowers your career.</p>
-');
+<p>Critical thinking is a vital skill that strengthens your ability to make sound judgments and innovate. Regular practice sharpens your mind and empowers your career.</p>');
+
+INSERT INTO Posts (Title, BriefInfo, Description, Category, Status, IsFeatured, ThumbnailURL, Postinfo)
+VALUES (
+    'Remote Work Communication',
+    'Learn how to maintain clear and effective communication with your team members when working remotely.',
+    'Remote work has become increasingly common, but it presents unique challenges for team communication. This post explores strategies for maintaining clear and effective communication in remote teams.',
+    'Workplace',
+    'Published',
+    1,
+    'images/post/thumbnail1.png',
+    'Remote Work: The Future of Work Is Here
+Remote work — once a perk — is now a core part of modern professional life. Enabled by technology, it offers flexibility, autonomy, and access to global talent like never before.
+
+Benefits
+Flexibility: Work from anywhere, manage your own schedule.
+
+Productivity: Fewer office distractions and commute time.
+
+Cost savings: Reduced overhead for companies; savings on travel and meals for employees.
+
+Work-life balance: More time for family, health, and personal growth.
+
+Challenges
+Communication gaps if not managed with the right tools.
+
+Loneliness & isolation without social interaction.
+
+Overworking due to lack of boundaries between home and work.
+
+Best Practices
+Use tools like Slack, Zoom, Notion, Trello for collaboration.
+
+Set clear expectations and measurable goals.
+
+Encourage regular check-ins and virtual team building.
+
+Maintain a dedicated workspace to separate personal and professional life.
+
+“Remote work isn’t just a trend — it’s a transformation.”'
+);
+
+-- Video chính
+INSERT INTO PostVideos (PostID, VideoURL, Description)
+VALUES (1, 'videos/communication.mp4', 'Explain the post');
+
+-- Hình ảnh minh họa chủ đề
+INSERT INTO PostImages (PostID, ImageURL, Description)
+VALUES (1, 'images/post/topic1.png', 'Topic of the post');
+
+-- Hình ảnh quảng bá khóa học
+INSERT INTO PostImages (PostID, ImageURL, Description)
+VALUES (1, 'images/post/logo-course.png', 'Logo of the course advertised');
+
+-- Video quảng cáo
+INSERT INTO PostVideos (PostID, VideoURL, Description)
+VALUES (1, 'videos/advertise.mp4', 'Advertise course');
+
+
