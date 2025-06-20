@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 formData.append('mediaCaptions', captions[i] || '');
             });
 
-            fetch(`${window.contextPath}/CourseDetail`, {method: 'POST', body: formData})
+            fetch(`./CourseDetail`, {method: 'POST', body: formData})
                     .then(() => {
                         alert('Review submitted!');
                         //reset form.

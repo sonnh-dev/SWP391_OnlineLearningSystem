@@ -173,12 +173,12 @@
                 document.getElementById('summaryPrice').textContent = price;
             };
             // Gắn sự kiện cho từng radio
-            document.querySelectorAll('input[name="package"]').forEach(radio => {
+            document.querySelectorAll('input[name="packageID"]').forEach(radio => {
                 radio.addEventListener('change', () => updatePackageInfo(radio));
             });
             // Cập nhật thông tin mặc định lúc trang load
             window.addEventListener('DOMContentLoaded', () => {
-                updatePackageInfo(document.querySelector('input[name="package"]:checked'));
+                updatePackageInfo(document.querySelector('input[name="packageID"]:checked'));
             });
         </script>
         <script>
