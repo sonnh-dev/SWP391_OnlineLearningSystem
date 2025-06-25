@@ -1,34 +1,39 @@
-
 package model.course;
 
 import java.util.Date;
+import java.util.List;
 
-public class Course {
+/**
+ *
+ * @author sonpk
+ */
+public class CourseList {
     private int courseID;
     private String title;
     private String category;
     private int lectures;
     private String imageURL;
     private String courseShortDescription;
-    private String description;
     private Date updateDate;
     private int totalEnrollment;
+    private int rating;
+    private List<CoursePackage> coursePackage;
 
-    public Course() {
+    public CourseList() {
     }
 
-    public Course(int courseID, String title, String category, int lectures, String imageURL, String courseShortDescription, String description, Date updateDate, int totalEnrollment) {
+    public CourseList(int courseID, String title, String category, int lectures, String imageURL, String courseShortDescription, Date updateDate, int totalEnrollment, int rating, List<CoursePackage> coursePackage) {
         this.courseID = courseID;
         this.title = title;
         this.category = category;
         this.lectures = lectures;
         this.imageURL = imageURL;
         this.courseShortDescription = courseShortDescription;
-        this.description = description;
         this.updateDate = updateDate;
         this.totalEnrollment = totalEnrollment;
+        this.rating = rating;
+        this.coursePackage = coursePackage;
     }
-
 
     public int getCourseID() {
         return courseID;
@@ -78,14 +83,6 @@ public class Course {
         this.courseShortDescription = courseShortDescription;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Date getUpdateDate() {
         return updateDate;
     }
@@ -102,4 +99,21 @@ public class Course {
         this.totalEnrollment = totalEnrollment;
     }
 
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public List<CoursePackage> getCoursePackage() {
+        return coursePackage;
+    }
+
+    public void setCoursePackage(List<CoursePackage> coursePackage) {
+        this.coursePackage = coursePackage;
+    }
+    
+    
 }

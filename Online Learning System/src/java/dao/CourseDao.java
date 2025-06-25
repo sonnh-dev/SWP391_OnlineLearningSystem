@@ -10,6 +10,28 @@ import model.course.Course;
 
 public class CourseDao extends DBContext {
 
+    public List<Course> getAllCourse() {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT * FROM Course";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Course course = new Course();
+                course.setCourseID(rs.getInt("CourseID"));
+                course.setTitle(rs.getString("Title"));
+                course.setCategory(rs.getString("Category"));
+                course.setLectures(rs.getInt("Lectures"));
+                course.setImageURL(rs.getString("ImageURL"));
+                course.setCourseShortDescription(rs.getString("CourseShortDescription"));
+                course.setDescription(rs.getString("Description"));
+                course.setUpdateDate(rs.getDate("UpdateDate"));
+                course.setTotalEnrollment(rs.getInt("TotalEnrollment"));
+                courses.add(course);
+            }
+        } catch (SQLException e) {
+        }
+        return courses;
+    }
+
     public List<Course> get3HotestCoursesofDifferentCategories() {
         List<Course> courses = new ArrayList<>();
         String sql = "WITH bestCourse AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY Category ORDER BY TotalEnrollment DESC) AS num FROM Course) SELECT TOP 3 * FROM bestCourse WHERE num = 1 ORDER BY  TotalEnrollment DESC";
@@ -26,6 +48,7 @@ public class CourseDao extends DBContext {
                 course.setImageURL(rs.getString("imageURL"));
                 course.setCourseShortDescription(rs.getString("CourseShortDescription"));
                 course.setDescription(rs.getString("description"));
+                course.setUpdateDate(rs.getDate("UpdateDate"));
                 course.setTotalEnrollment(rs.getInt("totalEnrollment"));
                 courses.add(course);
             }
@@ -50,6 +73,7 @@ public class CourseDao extends DBContext {
                 course.setImageURL(rs.getString("imageURL"));
                 course.setCourseShortDescription(rs.getString("CourseShortDescription"));
                 course.setDescription(rs.getString("description"));
+                course.setUpdateDate(rs.getDate("UpdateDate"));
                 course.setTotalEnrollment(rs.getInt("totalEnrollment"));
                 courses.add(course);
             }
@@ -73,6 +97,7 @@ public class CourseDao extends DBContext {
                 course.setImageURL(rs.getString("imageURL"));
                 course.setCourseShortDescription(rs.getString("CourseShortDescription"));
                 course.setDescription(rs.getString("description"));
+                course.setUpdateDate(rs.getDate("UpdateDate"));
                 course.setTotalEnrollment(rs.getInt("totalEnrollment"));
             }
         } catch (SQLException e) {
