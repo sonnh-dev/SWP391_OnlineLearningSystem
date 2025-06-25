@@ -182,8 +182,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // === Call all initializers ===
-    initRecommend();
     initMediaModal();
+    initRecommend();
     initUpload();
     initFormSubmit();
 });

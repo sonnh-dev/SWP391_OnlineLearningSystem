@@ -397,7 +397,7 @@
                                                 <div class="review-item" style="width: 180px; position: relative; ">
                                                     <c:choose>
                                                         <c:when test="${media.video}">
-                                                            <img  style="width: 100%; border-radius: 6px; cursor: pointer; object-fit: cover" 
+                                                            <img
                                                                   src="https://cdn.pixabay.com/photo/2017/03/13/04/25/play-button-2138735_1280.png"
                                                                   alt="Video"
                                                                   style="width: 100%; border-radius: 6px; cursor: pointer; object-fit: cover"
@@ -456,20 +456,19 @@
 
                 <!-- Sidebar -->
                 <div class="col-sm-3">
-                    <!-- Search Box -->
+                    <!-- Search Subjects -->
                     <div class="card border-0 shadow-sm mb-4">
                         <div class="card-body p-4">
                             <h5 class="card-title mb-3">Search Subjects</h5>
-                            <form class="d-flex">
-                                <input class="form-control me-2" type="search" placeholder="Search subjects..."
-                                       aria-label="Search">
+                            <form class="d-flex" action="CourseList" method="get">
+                                <input name="search" class="form-control me-2" placeholder="Search subjects..."
+                                       aria-label="Search" value="${param.keyword}">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="bi bi-search"></i>
                                 </button>
                             </form>
                         </div>
                     </div>
-
                     <!-- Categories -->
                     <div class="card border-0 shadow-sm mb-4">
                         <div class="card-body p-4">
@@ -477,7 +476,10 @@
                             <ul class="list-group list-group-flush">
                                 <c:forEach var="category" items="${category}">
                                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                        <a href="#" class="text-decoration-none text-dark">${category}</a>
+                                        <a href="CourseList?category=${category}"
+                                           class="text-decoration-none text-dark">
+                                            ${category}
+                                        </a>
                                     </li>
                                 </c:forEach>
                             </ul>

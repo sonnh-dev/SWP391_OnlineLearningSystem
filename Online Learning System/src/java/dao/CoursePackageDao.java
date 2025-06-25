@@ -13,7 +13,7 @@ public class CoursePackageDao extends DBContext {
 
     public List<CoursePackage> getCoursePackagesByCourseID(int courseID) {
         List<CoursePackage> packages = new ArrayList<>();
-        String sql = "SELECT * FROM CoursePackage WHERE CourseID = ?";
+        String sql = "SELECT * FROM CoursePackage WHERE CourseID = ? ORDER BY OriginalPrice ASC";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, courseID);

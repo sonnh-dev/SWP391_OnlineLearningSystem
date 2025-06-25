@@ -98,6 +98,19 @@ public class CourseReviewDao extends DBContext {
         return 0;
     }
 
+    public int getCourseRatingByCourseId(int courseId) {
+        String sql = "SELECT AVG(CAST(CASE WHEN IsRecommended = 1 THEN 1 ELSE 0 END AS FLOAT)) * 100 AS Rating FROM CourseReview WHERE CourseID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, courseId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("Rating");
+            }
+        } catch (SQLException e) {
+        }
+        return 0;
+    }
+
     private CourseReview extractReview(ResultSet rs) throws SQLException {
         CourseReview review = new CourseReview();
         review.setReviewID(rs.getInt("ReviewID"));

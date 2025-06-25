@@ -60,7 +60,7 @@
                     </c:when>
                     <c:otherwise>
                         <li class="nav-item">
-                            <a class="nav-link" href="pagination">
+                            <a class="nav-link" href="CourseList">
                                 <i class="bi bi-journal-code me-1"></i>Course
                             </a>
                         </li>
