@@ -616,8 +616,6 @@
         <script src="assets/js/courseDetailReview.js"></script>
         <script>
             window.addEventListener("message", (event) => {
-                if (!event.data || typeof event.data !== "object")
-                    return;
                 const {action} = event.data;
                 if (action === "closePopupAndRedirect") {
                     document.getElementById("popupModal").style.display = "none";
@@ -626,15 +624,10 @@
 
                 if (action === "proceedToPayment") {
                     const {userId, courseId, packageId, price} = event.data;
-
-                    // 1. Đóng popup
                     document.getElementById("popupModal").style.display = "none";
-
-                    // 2. Gửi dữ liệu đến servlet create-payment
                     const form = document.createElement("form");
                     form.method = "POST";
                     form.action = "create-payment";
-
                     const fields = {userId, courseId, packageId, price};
                     for (const key in fields) {
                         const input = document.createElement("input");
@@ -643,7 +636,6 @@
                         input.value = fields[key];
                         form.appendChild(input);
                     }
-
                     document.body.appendChild(form);
                     form.submit();
                 }
@@ -661,6 +653,20 @@
                     alert(message);
                 }
                 window.location.href = "check-mail.jsp";
+            });
+        </script>
+        <script>
+            function getParam(param) {
+                return new URLSearchParams(window.location.search).get(param);
+            }
+
+            window.addEventListener('DOMContentLoaded', () => {
+                const showPopup = getParam('popup');
+                const courseID = getParam('courseID');
+                if (showPopup === '1' && courseID) {
+                    const modal = new bootstrap.Modal(document.getElementById('popupModal'));
+                    modal.show();
+                }
             });
         </script>
     </body>

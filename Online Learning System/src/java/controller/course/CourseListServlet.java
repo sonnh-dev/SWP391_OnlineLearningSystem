@@ -44,7 +44,7 @@ public class CourseListServlet extends HttpServlet {
                 fieldLabels.add(label);
             }
         }
-
+        
         request.setAttribute("fieldLabels", fieldLabels);
         // Featured courses
         List<Course> featuredSubjects = courseDao.get4HotestCoursesofDifferentCategories();

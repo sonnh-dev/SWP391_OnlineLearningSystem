@@ -119,6 +119,8 @@
                             <!-- Subject -->
                             <c:forEach var="course" items="${listofCourse}">
                                 <div class="course-item"
+                                     data-courseID="${course.courseID}"
+                                     data-courseName="${course.title}"
                                      data-updated="${course.updateDate.time}"
                                      data-enrolled="${course.totalEnrollment}"
                                      data-rating="${course.rating}"
@@ -190,7 +192,7 @@
                                                     <a class="btn btn-outline-secondary btn-sm w-100" href="CourseDetail?courseID=${course.courseID}">
                                                         <i class="bi bi-info-circle me-1"></i> View Details
                                                     </a>
-                                                    <a class="btn btn-primary btn-sm w-100" href="/details">
+                                                    <a class="btn btn-primary btn-sm w-100 register-btn" href="CourseDetail?courseID=${course.courseID}&popup=1">
                                                         <i class="bi bi-cart-plus me-1"></i> Register Now
                                                     </a>
                                                 </div>
