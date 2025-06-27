@@ -168,13 +168,14 @@
                                                 <div class="mb-3">
                                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                                         <span class="fw-bold text-secondary">Package:</span>
-                                                        <span class="badge bg-danger discount-badge" style="display: none;"></span>
+                                                        <span class="badge bg-danger discount-badge" style="display: none;" value></span>
                                                     </div>
                                                     <!-- Course Package -->
                                                     <select class="form-select form-select-sm mb-3 course-package">
                                                         <c:forEach var="pkg" items="${course.coursePackage}">
                                                             <option 
-                                                                data-price="${pkg.originalPrice}" 
+                                                                data-price="${pkg.originalPrice}"
+                                                                data-saleRate="${pkg.saleRate}"
                                                                 data-sale="${pkg.originalPrice * (1 - pkg.saleRate / 100.0)}">
                                                                 ${pkg.packageName}
                                                             </option>

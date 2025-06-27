@@ -398,13 +398,13 @@
                                                     <c:choose>
                                                         <c:when test="${media.video}">
                                                             <img
-                                                                  src="https://cdn.pixabay.com/photo/2017/03/13/04/25/play-button-2138735_1280.png"
-                                                                  alt="Video"
-                                                                  style="width: 100%; border-radius: 6px; cursor: pointer; object-fit: cover"
-                                                                  data-bs-toggle="modal"
-                                                                  data-bs-target="#mediaModal"
-                                                                  data-type="video"
-                                                                  data-src="${media.mediaURL}" />
+                                                                src="https://cdn.pixabay.com/photo/2017/03/13/04/25/play-button-2138735_1280.png"
+                                                                alt="Video"
+                                                                style="width: 100%; border-radius: 6px; cursor: pointer; object-fit: cover"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#mediaModal"
+                                                                data-type="video"
+                                                                data-src="${media.mediaURL}" />
                                                         </c:when>
                                                         <c:otherwise>
                                                             <img src="${media.mediaURL}"
@@ -615,16 +615,52 @@
         <script src="assets/js/courseDetail.js"></script>
         <script src="assets/js/courseDetailReview.js"></script>
         <script>
-            window.addEventListener("message", function (event) {
-                if (event.data.action === "closeModalAndRedirect") {
-                    const modalEl = document.getElementById("popupModal");
-                    let modal = bootstrap.Modal.getInstance(modalEl);
-                    if (!modal) {
-                        modal = new bootstrap.Modal(modalEl);
-                    }
-                    modal.hide();
-                    window.location.href = "MyRegistrations";
+            window.addEventListener("message", (event) => {
+                if (!event.data || typeof event.data !== "object")
+                    return;
+                const {action} = event.data;
+                if (action === "closePopupAndRedirect") {
+                    document.getElementById("popupModal").style.display = "none";
+                    window.location.href = event.data.redirectUrl;
                 }
+
+                if (action === "proceedToPayment") {
+                    const {userId, courseId, packageId, price} = event.data;
+
+                    // 1. Đóng popup
+                    document.getElementById("popupModal").style.display = "none";
+
+                    // 2. Gửi dữ liệu đến servlet create-payment
+                    const form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = "create-payment";
+
+                    const fields = {userId, courseId, packageId, price};
+                    for (const key in fields) {
+                        const input = document.createElement("input");
+                        input.type = "hidden";
+                        input.name = key;
+                        input.value = fields[key];
+                        form.appendChild(input);
+                    }
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        </script>
+        <script>
+            window.addEventListener("message", function (event) {
+                if (!event.data || typeof event.data !== "object")
+                    return;
+
+                const {action, message} = event.data;
+
+                if (action === "notifyAccountCreated") {
+                    document.getElementById("popupModal").style.display = "none";
+                    alert(message);
+                }
+                window.location.href = "check-mail.jsp";
             });
         </script>
     </body>

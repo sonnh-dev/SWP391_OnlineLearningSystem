@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" %>
+    <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,29 +19,11 @@
                         <i class="bi bi-house-door-fill me-1"></i>Home
                     </a>
                 </li>
-
-                <li class="nav-item position-relative" style="margin-right: 10px">
-                    <a class="nav-link" href="cart.jsp">
-                        <i class="bi bi-cart fs-5" ></i>
-                        <c:set var="cartSize" value="${fn:length(cart_list)}" />
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2"
-                              style="font-size: 0.65rem; padding: 4px 6px;">
-                            <c:choose>
-                                <c:when test="${cartSize > 0}">
-                                    ${cartSize}
-                                </c:when>
-                                <c:otherwise>
-                                    0
-                                </c:otherwise>
-                            </c:choose>
-                        </span>
-                    </a>
-                </li>
                 <c:choose>
                     <c:when test="${not empty auth}">
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/orders.jsp">
-                                <i class="bi bi-journal-bookmark"></i> My courses
+                            <a class="nav-link" href="CourseList">
+                                <i class="bi bi-journal-code me-1"></i>Course
                             </a>
                         </li>
                         <li class="nav-item dropdown">
@@ -53,6 +35,8 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="profile.jsp">My Profile</a></li>
+                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/orders.jsp">My Courses</a></li>
+                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myRegistation">My Registation</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="logout">Logout</a></li>
                             </ul>

@@ -15,8 +15,9 @@
         <div class="bg-white rounded shadow p-4 p-md-5">
             <!-------------------------------------------------------->
             <!-- Registration Form -->
-            <form id="registrationForm" method="post" action="CourseRegister">    
-                <input type="hidden" name="courseID" id="courseID" value="${courseID}">
+            <form method="post" action="CourseRegister">    
+                <input type="hidden" name="courseID" value="${courseID}">
+                <input type="hidden" name="price" id="priceInput" />
                 <div class="mb-5">
                     <h3 class="fs-5 fw-semibold text-dark mb-4">Select Package</h3>
                     <div class="row">
@@ -105,7 +106,7 @@
                 </c:if>
                 <!-- Logged In User Info -->
                 <c:if test="${not empty auth}">
-                    <div id="loginUser" class="mb-4">
+                    <div class="mb-4">
                         <div class="bg-light p-3 rounded d-flex align-items-center shadow-sm">
                             <!-- User Icon -->
                             <div class="bg-primary bg-opacity-25 rounded-circle d-flex justify-content-center align-items-center me-3"
@@ -164,44 +165,25 @@
             </form>
         </div>
         <script>
-            //Đổi giá tiền tương ứng với package
-            const updatePackageInfo = (radio) => {
-                const name = radio.dataset.name;
-                const price = Number(radio.dataset.price).toLocaleString('vi-VN') + '₫';
-                document.getElementById('summaryPackage').textContent = name;
-                document.getElementById('packagePrice').textContent = price;
-                document.getElementById('summaryPrice').textContent = price;
-            };
-            // Gắn sự kiện cho từng radio
-            document.querySelectorAll('input[name="packageID"]').forEach(radio => {
-                radio.addEventListener('change', () => updatePackageInfo(radio));
-            });
-            // Cập nhật thông tin mặc định lúc trang load
-            window.addEventListener('DOMContentLoaded', () => {
-                updatePackageInfo(document.querySelector('input[name="packageID"]:checked'));
-            });
-        </script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const form = document.getElementById("registrationForm");
-                form.addEventListener("submit", function (e) {
-                    e.preventDefault();
-                    const formData = new FormData(form);
-                    fetch("./CourseRegister", {
-                        method: "POST",
-                        body: formData
-                    })
-                            .then(response => {
-                                if (!response.ok)
-                                    throw new Error("Submit failed");
-                                alert("Register successfully");
-                                window.parent.postMessage({action: "closeModalAndRedirect"}, "*");
-                            })
-                            .catch(error => {
-                                console.error(error);
-                                alert("Failed to register. Please try again.");
-                            });
+            document.addEventListener("DOMContentLoaded", () => {
+                const packageRadios = document.querySelectorAll('input[name="packageID"]');
+                function updatePackageInfo(radio) {
+                    const name = radio.dataset.name;
+                    const rawPrice = radio.dataset.price; // giữ dạng số
+                    const formattedPrice = Number(rawPrice).toLocaleString('vi-VN') + '₫';
+
+                    document.getElementById('summaryPackage').textContent = name;
+                    document.getElementById('packagePrice').textContent = formattedPrice;
+                    document.getElementById('summaryPrice').textContent = formattedPrice;
+                    document.getElementById('priceInput').value = rawPrice;
+                }
+                packageRadios.forEach(radio => {
+                    radio.addEventListener("change", () => updatePackageInfo(radio));
                 });
+                const defaultRadio = document.querySelector('input[name="packageID"]:checked');
+                if (defaultRadio) {
+                    updatePackageInfo(defaultRadio);
+                }
             });
         </script>
     </body>
