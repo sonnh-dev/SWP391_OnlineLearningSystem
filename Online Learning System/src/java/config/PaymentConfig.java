@@ -20,6 +20,12 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class PaymentConfig {
 
+    //NCB
+    //9704198526191432198
+    //NGUYEN VAN A
+    //07/15
+    //123456
+    
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_ReturnUrl = "http://localhost:8080/Online_Learning_System/vnpay-return";
     public static String vnp_TmnCode = "E2AL3M4I";

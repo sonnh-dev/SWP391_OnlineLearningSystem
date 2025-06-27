@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <a href="/my-courses" class="btn btn-outline-primary mt-4">Go my course</a>
+                <a href="myCourse" class="btn btn-outline-primary mt-4">Go my course</a>
             </div>
         </div>
 

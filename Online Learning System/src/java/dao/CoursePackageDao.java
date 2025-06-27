@@ -54,4 +54,26 @@ public class CoursePackageDao extends DBContext {
         }
         return null;
     }
+    
+        public CoursePackage getCoursePackagesByPackageID(int packageID) {
+        String sql = "SELECT * FROM CoursePackage WHERE PackageID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, packageID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CoursePackage coursePackage = new CoursePackage(
+                        rs.getInt("PackageID"),
+                        rs.getInt("CourseID"),
+                        rs.getString("PackageName"),
+                        rs.getDouble("OriginalPrice"),
+                        rs.getInt("SaleRate"),
+                        rs.getString("Description")
+                );
+                return coursePackage;
+            }
+        } catch (SQLException e) {
+        }
+        return null;
+    }
 }

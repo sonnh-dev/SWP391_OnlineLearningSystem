@@ -43,8 +43,7 @@ public class CourseRegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         Account auth = (Account) session.getAttribute("auth");
-        int courseID = 2;
-                //Integer.parseInt(request.getParameter("courseID"));
+        int courseID = Integer.parseInt(request.getParameter("courseID"));
         List<CoursePackage> coursePackage = new CoursePackageDao().getCoursePackagesByCourseID(courseID);
         request.setAttribute("coursePackage", coursePackage);
         if (auth != null) {
@@ -95,6 +94,10 @@ public class CourseRegisterServlet extends HttpServlet {
             request.setAttribute("email", email);
             request.setAttribute("mobile", mobile);
             request.setAttribute("gender", gender);
+            int courseID = Integer.parseInt(request.getParameter("courseID"));
+            List<CoursePackage> coursePackage = new CoursePackageDao().getCoursePackagesByCourseID(courseID);
+            request.setAttribute("coursePackage", coursePackage);
+            request.setAttribute("courseID", courseID);
             request.getRequestDispatcher("courseRegister.jsp").forward(request, response);
             return;
         }
@@ -104,16 +107,26 @@ public class CourseRegisterServlet extends HttpServlet {
             user = new User(0, firstName, lastName, gender, email, mobile, "user", true, "default.png", null, null, null);
             try {
                 userDAO.addUser(user);
-                user = userDAO.getUserByEmail(email);
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                response.setContentType("text/html;charset=UTF-8");
+                response.getWriter().println("<script>window.parent.postMessage({"
+                        + "action: 'notifyAccountCreated', "
+                        + "message: 'Account created, please check your email to further process.'"
+                        + "}, '*');</script>");
+                return;
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(CourseRegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         UserCourseDao userCourseDao = new UserCourseDao();
         userCourseDao.addUserCourse(new UserCourse(user.getUserId(), courseId, packageId, null, 0.0, "Pending", null, null));
-        response.setStatus(HttpServletResponse.SC_OK);
+        request.setAttribute("userId", user.getUserId());
+        request.setAttribute("courseId", courseId);
+        request.setAttribute("packageId", packageId);
+        double price = Double.parseDouble(request.getParameter("price"));
+        request.setAttribute("price", price);
+        request.getRequestDispatcher("/prePayment").forward(request, response);
     }
+
     @Override
     public String getServletInfo() {
         return "Short description";
