@@ -48,22 +48,10 @@ CREATE TABLE Course (
     Category NVARCHAR(255),
     Lectures INT,
     ImageURL NVARCHAR(255),
-    CourseShortDescription NVARCHAR(255),
+	CourseShortDescription NVARCHAR(255),
     Description TEXT,
-	UpdateDate DATETIME DEFAULT GETDATE(),
     TotalEnrollment INT DEFAULT 0
 );
-CREATE TRIGGER UpdateCourseDate
-ON Course
-AFTER UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
-    UPDATE Course
-    SET UpdateDate = GETDATE()
-    FROM Course c
-    INNER JOIN inserted i ON c.CourseID = i.CourseID;
-END;
 -- Nội dung của (course details, với slider và video)
 CREATE TABLE CourseAdditional (
   CourseID INT NOT NULL,
@@ -210,6 +198,20 @@ CREATE TABLE SliderImage (
 	Status BIT,
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
+-- Thêm bảng QuizAttemptDetails (nếu chưa có)
+CREATE TABLE QuizAttemptDetails (
+    AttemptDetailID INT PRIMARY KEY IDENTITY(1,1),
+    AttemptID INT NOT NULL,
+    QuestionID INT NOT NULL,
+    SelectedOptionID INT NULL, -- NULL nếu chưa trả lời hoặc là câu hỏi tự luận
+    UserAnswerText TEXT NULL, -- Nếu là câu hỏi tự luận (nếu cần)
+    IsMarked BIT DEFAULT 0, -- Để đánh dấu câu hỏi cần xem lại
+    FOREIGN KEY (AttemptID) REFERENCES QuizAttempts(AttemptID),
+    FOREIGN KEY (QuestionID) REFERENCES Questions(QuestionID),
+    FOREIGN KEY (SelectedOptionID) REFERENCES QuestionOptions(OptionID)
+);
+
+
 
 <<<<<<< Updated upstream
 INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder)
@@ -244,25 +246,6 @@ CREATE TABLE PostImages (
     PostID INT FOREIGN KEY REFERENCES Posts(PostID),
     ImageURL NVARCHAR(255),
     Description NVARCHAR(255)
-);
-
-CREATE TABLE PaymentTransaction (
-    TransactionId INT IDENTITY PRIMARY KEY,
-    UserID INT NOT NULL,
-    CourseID INT NOT NULL,
-    PackageID INT NOT NULL,
-    OrderCode VARCHAR(100) NOT NULL,         
-    Amount DECIMAL(10,2) NOT NULL,
-    Vnp_TransactionNo VARCHAR(100),         
-    Vnp_ResponseCode VARCHAR(10),
-    Vnp_OrderInfo NVARCHAR(255),
-    Status VARCHAR(20) CHECK (Status IN ('PENDING', 'SUCCESS', 'FAILED')),
-    CreatedAt DATETIME DEFAULT GETDATE(),
-    PaidAt DATETIME NULL,
-    
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
-    FOREIGN KEY (PackageID) REFERENCES CoursePackage(PackageID)
 );
 
 >>>>>>> Stashed changes
@@ -441,7 +424,7 @@ VALUES
 (8, 'Boost Your Emotional Intelligence', '2025-05-09', 'Emotional Intelligence', 'media/blog/image9.png', 110, 'Recognize and manage emotional triggers effectively.'),
 (9, 'Critical Thinking Techniques', '2025-05-10', 'Problem Solving', 'media/blog/image10.png', 70, 'Sharpen your analytical skills for better decisions.');
 INSERT INTO Course 
- Title, Category, Lectures, ImageURL, CourseShortDescription, Description, UpdateDate, TotalEnrollment)
+(Title, Category, Lectures, ImageURL, CourseShortDescription, Description, TotalEnrollment)
 VALUES
 ('Strategic Leadership', 'Leadership', 10, 'media/courses/image1.png',
 'Lead with vision and strategy in dynamic environments.',
@@ -465,7 +448,7 @@ VALUES
 </ol>
 <h3>Conclusion</h3>
 <p>Strategic leadership is a powerful skill that combines vision, influence, and execution. By learning how to lead strategically, you position yourself and your organization for sustainable growth and success.</p>
-', '2025-06-1', 240),
+', 240),
 ('Time Management Mastery', 'Time Management', 10, 'media/courses/image2.png',
 'Organize your schedule and manage priorities efficiently.',
 '
@@ -488,7 +471,7 @@ VALUES
 </ol>
 <h3>Conclusion</h3>
 <p>Mastering time management is a lifelong journey. With practice and discipline, you can reduce stress, boost productivity, and create more space for the things that truly matter.</p>
-', '2025-06-2', 250),
+', 250),
 ('Mastering Self-Awareness', 'Emotional Intelligence', 7, 'media/courses/image3.png',
 'Understand and manage your emotions effectively.',
 '
@@ -511,7 +494,7 @@ VALUES
 <p>Greater self-awareness leads to better emotional regulation, stronger communication, and more effective leadership. It also fosters humility and openness to learning—essential traits in any successful career.</p>
 <h3>Conclusion</h3>
 <p>Self-awareness is not a destination but a continuous journey. The more you learn about yourself, the more empowered you become to make conscious choices that align with your values and purpose.</p>
-', '2025-06-3', 190),
+', 190),
 ('Public Speaking Essentials', 'Communication', 8, 'media/courses/image4.png',
 'Become a confident public speaker with real-world tips.',
 '
@@ -534,7 +517,7 @@ VALUES
 </ol>
 <h3>Conclusion</h3>
 <p>With consistent effort, anyone can become an effective speaker. Public speaking is a journey, and every talk is an opportunity to improve your voice, your message, and your confidence.</p>
-', '2025-06-4', 320),
+', 320),
 ('Leadership Fundamentals', 'Leadership', 15, 'media/courses/image5.png',
 'Gain essential leadership skills to inspire and guide teams.',
 '
@@ -557,7 +540,7 @@ VALUES
 </ol>
 <h3>Conclusion</h3>
 <p>Leadership is a skill that grows with experience, awareness, and feedback. By focusing on core principles and staying true to your values, you can lead with impact and authenticity.</p>
-', '2025-06-5', 270),
+', 270),
 ('Emotional Intelligence at Work', 'Emotional Intelligence', 9, 'media/courses/image6.png',
 'Improve emotional awareness and interpersonal skills.',
 '
@@ -581,7 +564,7 @@ VALUES
 </ol>
 <h3>Conclusion</h3>
 <p>Emotional intelligence isn’t fixed—it can be developed with awareness and practice. By honing your EQ, you can improve your work relationships, boost performance, and create a more positive and productive environment.</p>
-', '2025-06-6', 210),
+', 210),
 ('Problem Solving Techniques', 'Problem Solving', 11, 'media/courses/image7.png',
 'Approach and resolve complex issues logically.',
 '
@@ -604,7 +587,7 @@ VALUES
 </ol>
 <h3>Conclusion</h3>
 <p>Problem solving is not about always having the right answer, but about having the right mindset. With practice and structure, you can turn challenges into opportunities for growth and innovation.</p>
-', '2025-06-7', 180),
+', 180),
 ('Critical Thinking Skills', 'Problem Solving', 9, 'media/courses/image8.png',
 'Learn to analyze situations and make sound decisions.',
 '
@@ -627,7 +610,7 @@ VALUES
 </ol>
 <h3>Conclusion</h3>
 <p>Critical thinking is a lifelong skill that enhances decision-making, innovation, and leadership. The more you practice, the sharper your mind becomes in every aspect of life.</p>
-', '2025-06-8', 200),
+', 200),
 ('Effective Communication Skills', 'Communication', 12, 'media/courses/image9.png',
 'Master verbal and non-verbal communication in all contexts.',
 '
@@ -653,7 +636,7 @@ VALUES
 <p>Noise, cultural differences, emotional biases, and misunderstandings can hinder effective communication. Being aware of these barriers helps you navigate and overcome them.</p>
 <h3>Conclusion</h3>
 <p>Mastering communication skills takes time and conscious effort, but the benefits are immense — from stronger relationships to better career opportunities. Start with small daily practices, and you''ll see gradual improvement that transforms your interactions.</p>
-', '2025-06-9', 300),
+', 300),
 ('Productivity & Planning Bootcamp', 'Time Management', 11, 'media/courses/image10.png',
 'Get more done in less time with practical techniques.',
 '
@@ -676,7 +659,7 @@ VALUES
 </ol>
 <h3>Conclusion</h3>
 <p>Becoming more productive isn’t about perfection—it’s about intention. With the right mindset and systems, you can take control of your time, reduce stress, and achieve more of what truly matters.</p>
-', '2025-06-10', 230);
+', 230);
 
 INSERT INTO CourseAdditional (CourseID, ContentURL, IsVideo, Caption, Content) VALUES
 (1, 'media/blog/image1.png', 0, 'Team leadership with clear strategic direction', 'An illustration of a leadership team collaborating to develop and execute a well-defined strategy for organizational success.'),
@@ -1289,3 +1272,5 @@ VALUES (1, 'media/post/logo-course.png', 'Logo of the course advertised');
 -- Video quảng cáo
 INSERT INTO PostVideos (PostID, VideoURL, Description)
 VALUES (1, 'media/post/advertise.mp4', 'Advertise course');
+
+
