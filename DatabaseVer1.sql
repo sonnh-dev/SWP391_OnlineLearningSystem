@@ -210,7 +210,24 @@ CREATE TABLE QuizAttemptDetails (
     FOREIGN KEY (QuestionID) REFERENCES Questions(QuestionID),
     FOREIGN KEY (SelectedOptionID) REFERENCES QuestionOptions(OptionID)
 );
-
+CREATE TABLE PaymentTransaction (
+    TransactionId INT IDENTITY PRIMARY KEY,
+    UserID INT NOT NULL,
+    CourseID INT NOT NULL,
+    PackageID INT NOT NULL,
+    OrderCode VARCHAR(100) NOT NULL,         
+    Amount DECIMAL(10,2) NOT NULL,
+    Vnp_TransactionNo VARCHAR(100),         
+    Vnp_ResponseCode VARCHAR(10),
+    Vnp_OrderInfo NVARCHAR(255),
+    Status VARCHAR(20) CHECK (Status IN ('PENDING', 'SUCCESS', 'FAILED')),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    PaidAt DATETIME NULL,
+    
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
+    FOREIGN KEY (PackageID) REFERENCES CoursePackage(PackageID)
+);
 
 
 <<<<<<< Updated upstream
