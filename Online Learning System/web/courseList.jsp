@@ -209,7 +209,6 @@
                         </ul>
                     </nav>
                 </div>
-
                 <!-- Sidebar -->
                 <div class="col-sm-3">
                     <!-- Search Box -->

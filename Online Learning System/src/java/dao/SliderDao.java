@@ -13,7 +13,7 @@ public class SliderDao extends DBContext {
 
     public List<Slider> getAllSlider() {
         List<Slider> list = new ArrayList<>();
-        String sql = "SELECT * FROM SliderImage";
+        String sql = "SELECT * FROM SliderImage WHERE Status = 1";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
