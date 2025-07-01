@@ -118,7 +118,7 @@ public class CourseRegisterServlet extends HttpServlet {
             }
         }
         UserCourseDao userCourseDao = new UserCourseDao();
-        userCourseDao.addUserCourse(new UserCourse(user.getUserId(), courseId, packageId, null, 0.0, "Pending", null, null));
+        userCourseDao.addUserCourse(new UserCourse(user.getUserId(), courseId, packageId,"","","", null, 0.0, "Pending", null, null));
         request.setAttribute("userId", user.getUserId());
         request.setAttribute("courseId", courseId);
         request.setAttribute("packageId", packageId);

@@ -1,10 +1,19 @@
-    <%@ page pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
+<%@ page import="dao.UserDAO" %>
+<%@ page import="model.User" %>
+<%@ page import="model.Account" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <%@ include file="/includes/auth.jsp" %>
+<%
+  if (auth != null) {
+   User user = new UserDAO().getLoginUser(auth);
+   request.setAttribute("user", user);
+  }
+%>
 <nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-white">
     <div class="container">
         <!-- Logo -->
@@ -35,8 +44,18 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="profile.jsp">My Profile</a></li>
-                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/orders.jsp">My Courses</a></li>
-                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myRegistation">My Registation</a></li>
+                                <li>
+                                    <form action="${pageContext.request.contextPath}/MyCourse" method="post" class="dropdown-item p-0">
+                                        <input type="hidden" name="userID" value="${user.userId}" />
+                                        <button type="submit" class="dropdown-item w-100 text-start">My Courses</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="${pageContext.request.contextPath}/myRegistation" method="post" class="dropdown-item p-0">
+                                        <input type="hidden" name="userID" value="${user.userId}" />
+                                        <button type="submit" class="dropdown-item w-100 text-start">My Registration</button>
+                                    </form>
+                                </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="logout">Logout</a></li>
                             </ul>

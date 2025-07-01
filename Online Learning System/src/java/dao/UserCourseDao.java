@@ -8,6 +8,8 @@ import context.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import model.course.UserCourse;
 
 public class UserCourseDao extends DBContext {
@@ -25,5 +27,28 @@ public class UserCourseDao extends DBContext {
             ps.executeUpdate();
         } catch (SQLException e) {
         }
+    }
+
+    public List<UserCourse> getUserCoursesByUserID(int userID) {
+        List<UserCourse> userCourses = new ArrayList<>();
+        String sql = "SELECT * FROM UserCourse WHERE UserID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                UserCourse userCourse = new UserCourse();
+                userCourse.setUserID(rs.getInt("UserID"));
+                userCourse.setCourseID(rs.getInt("CourseID"));
+                userCourse.setPackageID(rs.getInt("PackageID"));
+                userCourse.setProgress(rs.getDouble("Progress"));
+                userCourse.setStatus(rs.getString("Status"));
+                userCourse.setValidFrom(rs.getString("ValidFrom"));
+                userCourse.setValidTo(rs.getString("ValidTo"));
+                userCourses.add(userCourse);
+            }
+        } catch (SQLException e) {
+        }
+        return userCourses;
     }
 }
