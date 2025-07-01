@@ -651,15 +651,14 @@
                 if (action === "notifyAccountCreated") {
                     document.getElementById("popupModal").style.display = "none";
                     alert(message);
+                    window.location.href = "check-mail.jsp";
                 }
-                window.location.href = "check-mail.jsp";
             });
         </script>
         <script>
             function getParam(param) {
                 return new URLSearchParams(window.location.search).get(param);
             }
-
             window.addEventListener('DOMContentLoaded', () => {
                 const showPopup = getParam('popup');
                 const courseID = getParam('courseID');

@@ -19,11 +19,13 @@ public class PaymentTransaction {
     private String status;
     private Timestamp createdAt;
     private Timestamp paidAt;
+    private Timestamp validFrom;
+    private Timestamp validTo;
 
     public PaymentTransaction() {
     }
 
-    public PaymentTransaction(int transactionId, int userId, int courseId, int packageId, String orderCode, double amount, String vnpTransactionNo, String vnpResponseCode, String vnpOrderInfo, String status, Timestamp createdAt, Timestamp paidAt) {
+    public PaymentTransaction(int transactionId, int userId, int courseId, int packageId, String orderCode, double amount, String vnpTransactionNo, String vnpResponseCode, String vnpOrderInfo, String status, Timestamp createdAt, Timestamp paidAt, Timestamp validFrom, Timestamp validTo) {
         this.transactionId = transactionId;
         this.userId = userId;
         this.courseId = courseId;
@@ -36,6 +38,8 @@ public class PaymentTransaction {
         this.status = status;
         this.createdAt = createdAt;
         this.paidAt = paidAt;
+        this.validFrom = validFrom;
+        this.validTo = validTo;
     }
 
     public int getTransactionId() {
@@ -134,5 +138,20 @@ public class PaymentTransaction {
         this.paidAt = paidAt;
     }
 
+    public Timestamp getValidFrom() {
+        return validFrom;
+    }
+
+    public void setValidFrom(Timestamp validFrom) {
+        this.validFrom = validFrom;
+    }
+
+    public Timestamp getValidTo() {
+        return validTo;
+    }
+
+    public void setValidTo(Timestamp validTo) {
+        this.validTo = validTo;
+    }
 
 }

@@ -24,7 +24,7 @@ public class MyCourseServlet extends HttpServlet {
             throws ServletException, IOException {
         int userID = Integer.parseInt( request.getParameter("userID"));
         UserCourseDao userCourseDao = new UserCourseDao();
-        List<UserCourse> userCourse = userCourseDao.getUserCoursesByUserID(userID);
+        List<UserCourse> userCourse = userCourseDao.getUserCoursesByUserIDPayed(userID);
         CourseDao courseDao = new CourseDao();
         for (UserCourse uc : userCourse) {
             Course course = courseDao.getCourseByID(uc.getCourseID());
