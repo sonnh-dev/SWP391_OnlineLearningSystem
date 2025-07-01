@@ -25,6 +25,7 @@ public class CoursePackageDao extends DBContext {
                         rs.getString("PackageName"),
                         rs.getDouble("OriginalPrice"),
                         rs.getInt("SaleRate"),
+                        rs.getInt("UseTime"),
                         rs.getString("Description")
                 );
                 packages.add(coursePackage);
@@ -47,6 +48,7 @@ public class CoursePackageDao extends DBContext {
                         rs.getString("PackageName"),
                         rs.getDouble("OriginalPrice"),
                         rs.getInt("SaleRate"),
+                        rs.getInt("UseTime"),
                         rs.getString("Description")
                 );
             }
@@ -68,6 +70,7 @@ public class CoursePackageDao extends DBContext {
                         rs.getString("PackageName"),
                         rs.getDouble("OriginalPrice"),
                         rs.getInt("SaleRate"),
+                        rs.getInt("UseTime"),
                         rs.getString("Description")
                 );
                 return coursePackage;

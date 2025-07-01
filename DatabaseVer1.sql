@@ -53,17 +53,6 @@ CREATE TABLE Course (
 	UpdateDate DATETIME DEFAULT GETDATE(),
     TotalEnrollment INT DEFAULT 0
 );
-CREATE TRIGGER UpdateCourseDate
-ON Course
-AFTER UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
-    UPDATE Course
-    SET UpdateDate = GETDATE()
-    FROM Course c
-    INNER JOIN inserted i ON c.CourseID = i.CourseID;
-END;
 -- Nội dung của (course details, với slider và video)
 CREATE TABLE CourseAdditional (
   CourseID INT NOT NULL,
@@ -81,6 +70,7 @@ CREATE TABLE CoursePackage (
     PackageName NVARCHAR(255),
     OriginalPrice DECIMAL(10,2),
     SaleRate INT, -- (%) giảm giá
+	UseTime INT,
     Description VARCHAR(200),
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
@@ -134,7 +124,6 @@ CREATE TABLE Lesson (
     LessonOrder INT,
     FOREIGN KEY (ChapterID) REFERENCES Chapter(ChapterID)
 );
-
 -- Nội dung bài học (LessonContent) - KHÔNG ĐỔI
 CREATE TABLE LessonContent (
     LessonID INT PRIMARY KEY,
@@ -142,7 +131,15 @@ CREATE TABLE LessonContent (
     VideoURL NVARCHAR(255),
     FOREIGN KEY (LessonID) REFERENCES Lesson(LessonID)
 );
-
+CREATE TABLE UserLessonActivity (
+    ActivityID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT NOT NULL,
+    LessonID INT NOT NULL,
+	CourseID INT NOT NULL,
+    IsCompleted BIT DEFAULT 0,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (LessonID) REFERENCES Lesson(LessonID)
+);
 --- BẢNG QUẢN LÝ QUIZ VÀ CÂU HỎI ---
 
 -- Bảng Quizzes (thay thế LessonQuiz, được cải tiến)
@@ -242,12 +239,12 @@ CREATE TABLE PaymentTransaction (
 );
 
 
-<<<<<<< Updated upstream
+--<<< Updated upstream
 INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder)
 VALUES
 (1, 1, N'Lãnh đạo trong môi trường thay đổi', N'Leadership', N'Trung bình', 5, 20, 70.00, N'Luyện tập', 1),
 (2, 1, N'Lãnh đạo nhóm hiệu quả', N'Leadership', N'Khó', 6, 25, 75.00, N'Kiểm tra', 2);
-=======
+--======
 CREATE TABLE Posts (
     PostID INT PRIMARY KEY IDENTITY(1,1),
     Title NVARCHAR(255),
@@ -277,7 +274,7 @@ CREATE TABLE PostImages (
     Description NVARCHAR(255)
 );
 
->>>>>>> Stashed changes
+-->>>>>> Stashed changes
 INSERT INTO [Users] (firstName, lastName, gender, email, phoneNumber, role, status, avatarURL, password, address, dateOfBirth)
 VALUES
 ('John', 'Doe', 'Male', 'sonnhhe189023@fpt.edu.vn', '1234567890', 'User', 1, 'media/users/user_1.png', '123', '123 Main St, NY', '1995-04-10'),
@@ -740,40 +737,39 @@ INSERT INTO CourseAdditional (CourseID, ContentURL, IsVideo, Caption, Content) V
 (10, 'media/blog/image10.png', 0, 'Daily review and reflection routines', 'Consistency and reflection enhance daily progress.'),
 (10, 'https://www.youtube.com/watch?v=iONDebHX9qk', 1, 'Video: Time management hacks', 'Productivity techniques used by high performers.'),
 (10, 'https://www.youtube.com/watch?v=J1qiCdrXHgU', 1, 'Video: Planning smarter, not harder', 'Learn to plan your day based on energy and focus zones.');
-
-
-INSERT INTO CoursePackage (CourseID, PackageName, OriginalPrice, SaleRate, Description)
+INSERT INTO CoursePackage 
+(CourseID, PackageName, OriginalPrice, SaleRate, UseTime, Description) 
 VALUES
-(1, 'Basic', 1200000, 50, 'Course materials, No extra resources, No certificate'),
-(1, 'Standard', 1600000, 38, 'Course materials, Extra resources, No certificate'),
-(1, 'Premium', 2000000, 30, 'Course materials, Extra resources, Certificate included'),
-(2, 'Basic', 1000000, 50, 'Core lessons, No worksheets, No certificate'),
-(2, 'Standard', 1400000, 43, 'Lessons + worksheets, No certificate'),
-(2, 'Premium', 1800000, 33, 'Full program, Worksheets, Certificate included'),
-(3, 'Basic', 800000, 50, 'Core access, No journaling, No certificate'),
-(3, 'Standard', 1200000, 42, 'Journaling tools, No certificate'),
-(3, 'Premium', 1600000, 31, 'Full tools, Journaling, Certificate included'),
-(4, 'Basic', 900000, 49, 'Basic tips, No interaction, No certificate'),
-(4, 'Standard', 1300000, 38, 'Interactive exercises, No certificate'),
-(4, 'Premium', 1700000, 29, 'Advanced content, Certificate included'),
-(5, 'Basic', 1100000, 49, 'Essential lessons, No team tools, No certificate'),
-(5, 'Standard', 1500000, 40, 'Includes team tools, No certificate'),
-(5, 'Premium', 1900000, 32, 'Mentorship + tools, Certificate included'),
-(6, 'Basic', 850000, 49, 'Basic EI, No coaching, No certificate'),
-(6, 'Standard', 1250000, 41, 'Coaching included, No certificate'),
-(6, 'Premium', 1650000, 29, 'Coaching + tools, Certificate included'),
-(7, 'Basic', 800000, 50, 'Toolkit access, No case studies, No certificate'),
-(7, 'Standard', 1200000, 43, 'Includes case studies, No certificate'),
-(7, 'Premium', 1600000, 33, 'Case studies + 1:1 help, Certificate included'),
-(8, 'Basic', 850000, 50, 'Quick access, No practice tests, No certificate'),
-(8, 'Standard', 1250000, 42, 'Practice tests included, No certificate'),
-(8, 'Premium', 1650000, 32, 'Tests + coaching, Certificate included'),
-(9, 'Basic', 970000, 50, 'Starter pack, No tasks, No certificate'),
-(9, 'Standard', 1370000, 41, 'Includes dialogues, No certificate'),
-(9, 'Premium', 1770000, 32, 'Live demo + tasks, Certificate included'),
-(10, 'Basic', 880000, 50, 'Basic planner, No tools, No certificate'),
-(10, 'Standard', 1280000, 39, 'Includes tools, No certificate'),
-(10, 'Premium', 1680000, 31, 'Full tools + support, Certificate included');
+(1, 'Basic', 1200000, 50, 90, 'Course materials, No extra resources, No certificate'),
+(1, 'Standard', 1600000, 30, 180, 'Course materials, Extra resources, No certificate'),
+(1, 'Premium', 2000000, 30, 0, 'Course materials, Extra resources, Certificate included'),
+(2, 'Basic', 1000000, 50, 90, 'Core lessons, No worksheets, No certificate'),
+(2, 'Standard', 1400000, 43, 180, 'Lessons + worksheets, No certificate'),
+(2, 'Premium', 1800000, 33, 0, 'Full program, Worksheets, Certificate included'),
+(3, 'Basic', 800000, 50, 90, 'Core access, No journaling, No certificate'),
+(3, 'Standard', 1200000, 42, 180, 'Journaling tools, No certificate'),
+(3, 'Premium', 1600000, 31, 0, 'Full tools, Journaling, Certificate included'),
+(4, 'Basic', 900000, 49, 90, 'Basic tips, No interaction, No certificate'),
+(4, 'Standard', 1300000, 38, 180, 'Interactive exercises, No certificate'),
+(4, 'Premium', 1700000, 29, 0, 'Advanced content, Certificate included'),
+(5, 'Basic', 1100000, 49, 90, 'Essential lessons, No team tools, No certificate'),
+(5, 'Standard', 1500000, 40, 180, 'Includes team tools, No certificate'),
+(5, 'Premium', 1900000, 32, 0, 'Mentorship + tools, Certificate included'),
+(6, 'Basic', 850000, 49, 90, 'Basic EI, No coaching, No certificate'),
+(6, 'Standard', 1250000, 41, 180, 'Coaching included, No certificate'),
+(6, 'Premium', 1650000, 29, 0, 'Coaching + tools, Certificate included'),
+(7, 'Basic', 800000, 50, 90, 'Toolkit access, No case studies, No certificate'),
+(7, 'Standard', 1200000, 43, 180, 'Includes case studies, No certificate'),
+(7, 'Premium', 1600000, 33, 0, 'Case studies + 1:1 help, Certificate included'),
+(8, 'Basic', 850000, 50, 90, 'Quick access, No practice tests, No certificate'),
+(8, 'Standard', 1250000, 42, 180, 'Practice tests included, No certificate'),
+(8, 'Premium', 1650000, 32, 0, 'Tests + coaching, Certificate included'),
+(9, 'Basic', 970000, 50, 90, 'Starter pack, No tasks, No certificate'),
+(9, 'Standard', 1370000, 41, 180, 'Includes dialogues, No certificate'),
+(9, 'Premium', 1770000, 32, 0, 'Live demo + tasks, Certificate included'),
+(10, 'Basic', 880000, 50, 90, 'Basic planner, No tools, No certificate'),
+(10, 'Standard', 1280000, 39, 180, 'Includes tools, No certificate'),
+(10, 'Premium', 1680000, 31, 0, 'Full tools + support, Certificate included');
 
 INSERT INTO Chapter (CourseID, Title, ChapterOrder) VALUES
 (1, 'Understanding Strategic Leadership', 1),
@@ -1302,4 +1298,14 @@ VALUES (1, 'media/post/logo-course.png', 'Logo of the course advertised');
 INSERT INTO PostVideos (PostID, VideoURL, Description)
 VALUES (1, 'media/post/advertise.mp4', 'Advertise course');
 
-
+CREATE TRIGGER UpdateCourseDate
+ON Course
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE Course
+    SET UpdateDate = GETDATE()
+    FROM Course c
+    INNER JOIN inserted i ON c.CourseID = i.CourseID;
+END;

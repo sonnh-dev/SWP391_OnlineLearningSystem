@@ -40,6 +40,17 @@
                                         </c:if>
                                     </h3>
                                     <ul class="list-unstyled mt-1">
+                                        <li class="fw-semibold mb-2">
+                                            <i class="bi bi-clock me-2 text-primary"></i>
+                                            <c:choose>
+                                                <c:when test="${p.useTime == 0}">
+                                                    Lifetime access
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${p.useTime} days
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </li>
                                         <c:forEach var="feature" items="${fn:split(p.description, ',')}">
                                             <li class="d-flex align-items-center
                                                 ${fn:contains(feature, 'No') ? 'text-muted' : 'text-success'} mb-2">
