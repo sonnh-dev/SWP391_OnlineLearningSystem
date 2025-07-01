@@ -33,46 +33,58 @@ public class PaymentDAO extends DBContext {
     }
 
     public boolean updatePaymentTransaction(PaymentTransaction trans) {
-        String sql = "UPDATE PaymentTransaction SET "
+        String updateTransactionSQL = "UPDATE PaymentTransaction SET "
                 + "Vnp_TransactionNo = ?, Vnp_ResponseCode = ?, Vnp_OrderInfo = ?, Status = ?, PaidAt = ? "
                 + "WHERE TransactionId = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, trans.getVnpTransactionNo());
-            ps.setString(2, trans.getVnpResponseCode());
-            ps.setString(3, trans.getVnpOrderInfo());
-            ps.setString(4, trans.getStatus());
-            ps.setTimestamp(5, trans.getPaidAt());
-            ps.setInt(6, trans.getTransactionId());
 
-            return ps.executeUpdate() > 0;
+        String updateUserCourseSQL = "UPDATE UserCourse SET Status = ? "
+                + "WHERE UserID = ? AND CourseID = ?";
+
+        try (PreparedStatement ps1 = connection.prepareStatement(updateTransactionSQL); PreparedStatement ps2 = connection.prepareStatement(updateUserCourseSQL)) {
+            ps1.setString(1, trans.getVnpTransactionNo());
+            ps1.setString(2, trans.getVnpResponseCode());
+            ps1.setString(3, trans.getVnpOrderInfo());
+            ps1.setString(4, trans.getStatus());
+            ps1.setTimestamp(5, trans.getPaidAt());
+            ps1.setInt(6, trans.getTransactionId());
+
+            int rows1 = ps1.executeUpdate();
+
+            ps2.setString(1, trans.getStatus());
+            ps2.setInt(2, trans.getUserId());
+            ps2.setInt(3, trans.getCourseId());
+
+            int rows2 = ps2.executeUpdate();
+
+            return rows1 > 0 && rows2 > 0;
         } catch (SQLException e) {
         }
         return false;
     }
 
-public PaymentTransaction getPaymentTransactionByOrderCode(String orderCode) {
-    String sql = "SELECT * FROM PaymentTransaction WHERE OrderCode = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, orderCode);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            PaymentTransaction transaction = new PaymentTransaction();
-            transaction.setTransactionId(rs.getInt("TransactionId"));
-            transaction.setUserId(rs.getInt("UserID"));
-            transaction.setCourseId(rs.getInt("CourseID"));
-            transaction.setPackageId(rs.getInt("PackageID"));
-            transaction.setOrderCode(rs.getString("OrderCode"));
-            transaction.setAmount(rs.getDouble("Amount"));
-            transaction.setVnpTransactionNo(rs.getString("Vnp_TransactionNo"));
-            transaction.setVnpResponseCode(rs.getString("Vnp_ResponseCode"));
-            transaction.setVnpOrderInfo(rs.getString("Vnp_OrderInfo"));
-            transaction.setStatus(rs.getString("Status"));
-            transaction.setCreatedAt(rs.getTimestamp("CreatedAt"));
-            transaction.setPaidAt(rs.getTimestamp("PaidAt"));
-            return transaction;
+    public PaymentTransaction getPaymentTransactionByOrderCode(String orderCode) {
+        String sql = "SELECT * FROM PaymentTransaction WHERE OrderCode = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, orderCode);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                PaymentTransaction transaction = new PaymentTransaction();
+                transaction.setTransactionId(rs.getInt("TransactionId"));
+                transaction.setUserId(rs.getInt("UserID"));
+                transaction.setCourseId(rs.getInt("CourseID"));
+                transaction.setPackageId(rs.getInt("PackageID"));
+                transaction.setOrderCode(rs.getString("OrderCode"));
+                transaction.setAmount(rs.getDouble("Amount"));
+                transaction.setVnpTransactionNo(rs.getString("Vnp_TransactionNo"));
+                transaction.setVnpResponseCode(rs.getString("Vnp_ResponseCode"));
+                transaction.setVnpOrderInfo(rs.getString("Vnp_OrderInfo"));
+                transaction.setStatus(rs.getString("Status"));
+                transaction.setCreatedAt(rs.getTimestamp("CreatedAt"));
+                transaction.setPaidAt(rs.getTimestamp("PaidAt"));
+                return transaction;
+            }
+        } catch (SQLException e) {
         }
-    } catch (SQLException e) {
+        return null;
     }
-    return null;
-}
 }
