@@ -128,7 +128,16 @@ public class Quiz {
 
     public Quiz() {
     }
-
+ public Quiz(int quizID, String quizName, String subject, String level, int numQuestions, int durationMinutes, double passRate, String quizType) {
+        this.quizID = quizID;
+        this.quizName = quizName;
+        this.subject = subject;
+        this.level = level;
+        this.numQuestions = numQuestions;
+        this.durationMinutes = durationMinutes;
+        this.passRate = passRate;
+        this.quizType = quizType;
+    }
     public Quiz(int quizID, Integer lessonID, Integer courseID, String quizName, String subject, String level, int numQuestions, int durationMinutes, double passRate, String quizType, Integer questionOrder, Date createdAt, Date updatedAt) {
         this.quizID = quizID;
         this.lessonID = lessonID;

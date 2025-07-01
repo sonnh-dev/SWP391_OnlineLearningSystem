@@ -188,7 +188,7 @@ public class QuizController extends HttpServlet {
         if (quizIdStr != null && !quizIdStr.isEmpty()) {
             try {
                 int quizId = Integer.parseInt(quizIdStr);
-                quiz = quizDAO.getQuizById(quizId);
+                quiz = quizDAO.getQuizById1(quizId);
 
                 if (quiz != null) {
                     canEdit = !quizDAO.hasAttempts(quizId); 
@@ -262,7 +262,7 @@ public class QuizController extends HttpServlet {
             if (quizDAO.hasAttempts(quiz.getQuizID())) {
                 request.setAttribute("errorMessage", "Không thể cập nhật Quiz này vì đã có lượt làm bài.");
                 
-                request.setAttribute("quiz", quizDAO.getQuizById(quiz.getQuizID()));
+                request.setAttribute("quiz", quizDAO.getQuizById1(quiz.getQuizID()));
                 request.setAttribute("canEdit", false); // Not editable
                 request.getRequestDispatcher("views/quizDetail.jsp").forward(request, response);
             } else {
@@ -273,7 +273,7 @@ public class QuizController extends HttpServlet {
                     request.setAttribute("errorMessage", "Cập nhật Quiz thất bại.");
                 }
                 // Load the updated quiz data (or original if update failed)
-                request.setAttribute("quiz", quizDAO.getQuizById(quiz.getQuizID()));
+                request.setAttribute("quiz", quizDAO.getQuizById1(quiz.getQuizID()));
                 request.setAttribute("canEdit", !quizDAO.hasAttempts(quiz.getQuizID()));
                 request.getRequestDispatcher("views/quizDetail.jsp").forward(request, response);
             }

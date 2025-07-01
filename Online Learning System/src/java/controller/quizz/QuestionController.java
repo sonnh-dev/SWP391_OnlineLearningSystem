@@ -33,7 +33,7 @@ public class QuestionController extends HttpServlet {
             Quiz parentQuiz = null;
             if (quizIdStr != null && !quizIdStr.isEmpty()) {
                 int quizId = Integer.parseInt(quizIdStr);
-                parentQuiz = quizDAO.getQuizById(quizId);
+                parentQuiz = quizDAO.getQuizById1(quizId);
                
                 if (parentQuiz != null && !quizDAO.hasAttempts(quizId)) {
                     request.setAttribute("parentQuiz", parentQuiz);
