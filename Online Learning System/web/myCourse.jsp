@@ -49,7 +49,13 @@
                     </div>
                 </div>
             </div>
-
+            <!-- No course Message -->
+            <div id="noCourseMessage" class="text-center my-4" style="display: none">
+                <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png" alt="No Courses" style="width: 120px; opacity: 0.7;" class="mb-3">
+                <div class="alert alert-warning d-inline-block px-4 py-2">
+                    There're nothing to show with Course displayed with the display/ filter.
+                </div>
+            </div>
             <!-- Course List -->
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 <c:forEach var="uc" items="${userCourse}">
@@ -124,58 +130,46 @@
         </div>
         <%@include file="includes/foot.jsp" %>
         <script>
-            // Filter courses
-            document.addEventListener('DOMContentLoaded', function () {
-                const filterButtons = document.querySelectorAll('.btn-check');
-                const courseItems = document.querySelectorAll('.course-item');
+            document.addEventListener('DOMContentLoaded', () => {
+                const items = document.querySelectorAll('.course-item');
+                const msg = document.getElementById('noCourseMessage');
+                const input = document.querySelector('input[type="text"]');
+                const searchBtn = document.querySelector('.btn-primary');
 
-                filterButtons.forEach(button => {
-                    button.addEventListener('change', function () {
-                        const filter = this.id;
+                const updateVisibility = () => {
+                    const visible = [...items].some(i => i.style.display !== 'none');
+                    msg.style.display = visible ? 'none' : 'block';
+                };
 
-                        courseItems.forEach(item => {
-                            if (filter === 'allCourses') {
-                                item.style.display = 'block';
-                            } else if (filter === 'inProgress' && item.classList.contains('in-progress')) {
-                                item.style.display = 'block';
-                            } else if (filter === 'notStarted' && item.classList.contains('not-started')) {
-                                item.style.display = 'block';
-                            } else if (filter === 'completed' && item.classList.contains('completed')) {
-                                item.style.display = 'block';
-                            } else {
-                                item.style.display = 'none';
-                            }
-                        });
+                const applyFilter = (filter) => {
+                    items.forEach(i => {
+                        const show =
+                                filter === 'allCourses' ||
+                                (filter === 'inProgress' && i.classList.contains('in-progress')) ||
+                                (filter === 'notStarted' && i.classList.contains('not-started')) ||
+                                (filter === 'completed' && i.classList.contains('completed'));
+                        i.style.display = show ? 'block' : 'none';
                     });
-                });
+                    updateVisibility();
+                };
 
-                // Search functionality
-                const searchInput = document.querySelector('input[type="text"]');
-                const searchButton = document.querySelector('.btn-primary');
-
-                function performSearch() {
-                    const searchTerm = searchInput.value.toLowerCase();
-
-                    courseItems.forEach(item => {
-                        const title = item.querySelector('.card-title').textContent.toLowerCase();
-                        const description = item.querySelector('.card-text').textContent.toLowerCase();
-
-                        if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                            item.style.display = 'block';
-                        } else {
-                            item.style.display = 'none';
-                        }
+                const applySearch = () => {
+                    const term = input.value.toLowerCase();
+                    items.forEach(i => {
+                        const t = i.querySelector('.card-title').textContent.toLowerCase();
+                        const d = i.querySelector('.card-text').textContent.toLowerCase();
+                        i.style.display = t.includes(term) || d.includes(term) ? 'block' : 'none';
                     });
-                }
+                    updateVisibility();
+                };
 
-                searchButton.addEventListener('click', performSearch);
-                searchInput.addEventListener('keyup', function (e) {
-                    if (e.key === 'Enter') {
-                        performSearch();
-                    }
-                });
+                document.querySelectorAll('.btn-check').forEach(btn =>
+                    btn.addEventListener('change', () => applyFilter(btn.id))
+                );
+                searchBtn.addEventListener('click', applySearch);
+                input.addEventListener('keyup', e => e.key === 'Enter' && applySearch());
+                updateVisibility();
             });
         </script>
-
     </body>
 </html>
