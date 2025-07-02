@@ -62,7 +62,14 @@ INSERT INTO CourseReview (UserID, CourseID, IsRecommended, Comment, CreatedAt) V
 (1, 9, 1, 'Excellent delivery by the instructor.', '2025-05-20 02:42:24'),
 (5, 9, 0, 'Could use more real-world examples, but overall helpful.', '2024-08-28 02:42:24'),
 (9, 9, 1, 'Great course with practical insights.', '2024-12-01 02:42:24'),
-(7, 9, 0, 'Well-structured and easy to follow.', '2025-01-07 02:42:24');
+(7, 9, 0, 'Well-structured and easy to follow.', '2025-01-07 02:42:24'),
+
+(4, 10, 1, 'Loved the interactivity and exercises.', '2025-03-09 02:42:24'),
+(8, 10, 1, 'Informative and engaging from start to finish.', '2024-07-17 02:42:24'),
+(1, 10, 1, 'Excellent delivery by the instructor.', '2025-05-20 02:42:24'),
+(5, 10, 0, 'Could use more real-world examples, but overall helpful.', '2024-08-28 02:42:24'),
+(9, 10, 1, 'Great course with practical insights.', '2024-12-01 02:42:24'),
+(7, 10, 0, 'Well-structured and easy to follow.', '2025-01-07 02:42:24');
 
 INSERT INTO CourseReviewMedia (ReviewID, MediaURL, IsVideo, Caption) VALUES
 (1, 'media/courseReview/course_img1.png', 0, 'Overview of the first lecture slide.'),
