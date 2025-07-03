@@ -21,6 +21,7 @@ import model.Option;
 import model.Question;
 import model.QuestionOption;
 import model.QuizAttempt;
+import model.QuizAttemptDetail;
 
 /**
  *
@@ -224,7 +225,35 @@ public class QuizDAO extends DBContextF {
             Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-
+// Trong QuizDAO.java
+public QuizAttempt getQuizAttemptById(int attemptId) throws SQLException, ClassNotFoundException {
+    Connection con = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    QuizAttempt attempt = null;
+    String sql = "SELECT AttemptID, UserID, QuizID, StartTime, EndTime, Score, IsPassed " +
+                 "FROM QuizAttempts WHERE AttemptID = ?";
+    try {
+        con = dbContext.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, attemptId);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            attempt = new QuizAttempt(
+                rs.getInt("AttemptID"),
+                rs.getInt("UserID"),
+                rs.getInt("QuizID"),
+                rs.getTimestamp("StartTime"),
+                rs.getTimestamp("EndTime"),
+                rs.getDouble("Score"),
+                rs.getBoolean("IsPassed")
+            );
+        }
+    } finally {
+        closeResources(rs, ps, con);
+    }
+    return attempt;
+}
     public Quiz getQuizById1(int quizId) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -368,45 +397,132 @@ public class QuizDAO extends DBContextF {
         return attempt;
     }
 
-    public List<Question> getQuestionsForQuiz(int quizId) throws SQLException, ClassNotFoundException {
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Question> questions = new ArrayList<>();
-        String sql = "SELECT q.QuestionID, q.QuestionContent, q.QuestionType, qo.OptionID, qo.OptionContent, qo.IsCorrect "
-                + "FROM Questions q JOIN QuestionOptions qo ON q.QuestionID = qo.QuestionID "
-                + "WHERE q.QuizID = ? ORDER BY q.QuestionID, qo.OptionID";
-        try {
-            con = dbContext.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, quizId);
-            rs = ps.executeQuery();
 
-            Question currentQuestion = null;
-            while (rs.next()) {
-                int qid = rs.getInt("QuestionID");
-                if (currentQuestion == null || currentQuestion.getQuestionID() != qid) {
-                    currentQuestion = new Question(
-                            qid,
-                            rs.getString("QuestionContent"),
-                            rs.getString("QuestionType")
-                    );
-                    questions.add(currentQuestion);
-                }
-                currentQuestion.addOption(new QuestionOption(
+// ...
+public List<Question> getQuestionsForQuiz(int quizId) throws SQLException, ClassNotFoundException {
+    Connection con = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    List<Question> questions = new ArrayList<>();
+    String sql = "SELECT q.QuestionID, q.QuestionContent, q.QuestionType, q.AnswerKey, qo.OptionID, qo.OptionContent, qo.IsCorrect " + // Thêm q.AnswerKey
+                 "FROM Questions q LEFT JOIN QuestionOptions qo ON q.QuestionID = qo.QuestionID " + // Dùng LEFT JOIN để lấy cả câu tự luận không có options
+                 "WHERE q.QuizID = ? ORDER BY q.QuestionID, qo.OptionID"; // Sắp xếp để nhóm câu hỏi
+    try {
+        con = dbContext.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, quizId);
+        rs = ps.executeQuery();
+
+        Question currentQuestion = null;
+        while (rs.next()) {
+            int qid = rs.getInt("QuestionID");
+              if (currentQuestion == null || currentQuestion.getQuestionID() != qid) {
+                // Tạo câu hỏi mới khi chuyển sang câu hỏi khác
+                currentQuestion = new Question(
+                    qid,
+                    rs.getString("QuestionContent"),
+                    rs.getString("QuestionType"),
+                    rs.getString("AnswerKey") // Lấy AnswerKey
+                );
+                questions.add(currentQuestion);
+            }
+            
+            // Chỉ thêm Option nếu đây là câu hỏi trắc nghiệm và có Option
+            currentQuestion.addOption(new QuestionOption(
                         rs.getInt("OptionID"),
                         rs.getInt("QuestionID"), // Thêm dòng này
                         rs.getString("OptionContent"),
                         rs.getBoolean("IsCorrect")
                 ));
-
-            }
-        } finally {
-            closeResources(rs, ps, con);
         }
-        return questions;
+    } finally {
+        closeResources(rs, ps, con);
     }
+    return questions;
+}
+// src/com/yourcompany/dao/QuizDAO.java
+// ...
+// Phương thức này hiện tại chỉ trả về SelectedOptionID.
+// Để hỗ trợ tự luận, bạn có thể tạo một phương thức trả về List<QuizAttemptDetail>
+// Hoặc thay đổi Map này để chứa cả text. Ví dụ:
+public List<QuizAttemptDetail> getQuizAttemptDetailsForAttempt(int attemptId) throws SQLException, ClassNotFoundException {
+    Connection con = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    List<QuizAttemptDetail> details = new ArrayList<>();
+    String sql = "SELECT AttemptDetailID, AttemptID, QuestionID, SelectedOptionID, UserAnswerText, IsMarked " +
+                 "FROM QuizAttemptDetails WHERE AttemptID = ?";
+    try {
+        con = dbContext.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, attemptId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            QuizAttemptDetail detail = new QuizAttemptDetail(
+                rs.getInt("AttemptDetailID"),
+                rs.getInt("AttemptID"),
+                rs.getInt("QuestionID"),
+                rs.getObject("SelectedOptionID") != null ? rs.getInt("SelectedOptionID") : null, // Lấy Integer, có thể null
+                rs.getString("UserAnswerText"),
+                rs.getBoolean("IsMarked")
+            );
+            details.add(detail);
+        }
+    } finally {
+        closeResources(rs, ps, con);
+    }
+    return details;
+}
+// src/com/yourcompany/dao/QuizDAO.java
+// ...
+public void saveUserAnswers(int attemptId, int questionId, List<Integer> selectedOptionIds, String userAnswerText) throws SQLException, ClassNotFoundException {
+    Connection con = null;
+    PreparedStatement deletePs = null;
+    PreparedStatement insertPs = null;
+    try {
+        con = dbContext.getConnection();
+        con.setAutoCommit(false); // Bắt đầu transaction
 
+        // Xóa câu trả lời cũ của câu hỏi này trong attempt hiện tại
+        String deleteSql = "DELETE FROM QuizAttemptDetails WHERE AttemptID = ? AND QuestionID = ?";
+        deletePs = con.prepareStatement(deleteSql);
+        deletePs.setInt(1, attemptId);
+        deletePs.setInt(2, questionId);
+        deletePs.executeUpdate();
+
+        // Lưu câu trả lời mới
+        if (selectedOptionIds != null && !selectedOptionIds.isEmpty()) {
+            // Lưu cho câu hỏi trắc nghiệm
+            String insertOptionSql = "INSERT INTO QuizAttemptDetails (AttemptID, QuestionID, SelectedOptionID) VALUES (?, ?, ?)";
+            insertPs = con.prepareStatement(insertOptionSql);
+            for (Integer optionId : selectedOptionIds) {
+                insertPs.setInt(1, attemptId);
+                insertPs.setInt(2, questionId);
+                insertPs.setInt(3, optionId);
+                insertPs.addBatch();
+            }
+            insertPs.executeBatch();
+        } else if (userAnswerText != null && !userAnswerText.trim().isEmpty()) {
+            // Lưu cho câu hỏi tự luận
+            String insertTextSql = "INSERT INTO QuizAttemptDetails (AttemptID, QuestionID, UserAnswerText) VALUES (?, ?, ?)";
+            insertPs = con.prepareStatement(insertTextSql);
+            insertPs.setInt(1, attemptId);
+            insertPs.setInt(2, questionId);
+            insertPs.setString(3, userAnswerText.trim());
+            insertPs.executeUpdate(); // Không dùng batch nếu chỉ có 1 dòng
+        }
+        con.commit(); // Hoàn tất transaction
+    } catch (SQLException e) {
+        if (con != null) {
+            con.rollback(); // Rollback nếu có lỗi
+        }
+        throw e;
+    } finally {
+        if (con != null) con.setAutoCommit(true); // Trở về auto-commit mặc định
+        closeResources(null, deletePs, null);
+        closeResources(null, insertPs, con);
+    }
+}
     public int createNewQuizAttempt(int userId, int quizId) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement ps = null;

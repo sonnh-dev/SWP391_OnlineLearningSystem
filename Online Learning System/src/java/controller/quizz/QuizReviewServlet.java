@@ -1,25 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package controller.quizz;
-
+// src/com/yourcompany/controller/QuizReviewServlet.java
+package controller.quizz; // Ensure this matches your actual package structure
 
 import dao.QuizDAO;
 import model.Question;
 import model.Quiz;
 import model.QuizAttempt;
+import model.QuizAttemptDetail; // Import QuizAttemptDetail for detailed user answers
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections; // Needed for Collections.emptyList()
 import java.util.List;
 import java.util.Map;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 
 @WebServlet(name = "QuizReviewServlet", urlPatterns = {"/quizReview"})
 public class QuizReviewServlet extends HttpServlet {
@@ -29,49 +28,107 @@ public class QuizReviewServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         Integer userID = (Integer) session.getAttribute("userID");
-        // Giả lập userID
+        // Simulate userID for testing. In production, always redirect if null.
         if (userID == null) {
-            userID = 1;
+            userID = 1; // Simulate userID 1
             session.setAttribute("userID", userID);
+            System.out.println("DEBUG: UserID is null, set to 1 for testing.");
         }
 
-        int attemptId = Integer.parseInt(request.getParameter("attemptId"));
+        // --- Start processing attemptId parameter ---
+        String attemptIdStr = request.getParameter("attemptId");
+        int attemptId;
+
+        if (attemptIdStr != null && !attemptIdStr.trim().isEmpty()) {
+            try {
+                attemptId = Integer.parseInt(attemptIdStr);
+            } catch (NumberFormatException e) {
+                request.setAttribute("errorMessage", "ID bài làm không hợp lệ. Vui lòng cung cấp một số nguyên.");
+                // Ensure this path is correct for your error.jsp
+                request.getRequestDispatcher("/views/error.jsp").forward(request, response);
+                System.err.println("ERROR: NumberFormatException for attemptId: " + attemptIdStr);
+                return;
+            }
+        } else {
+            request.setAttribute("errorMessage", "Không tìm thấy ID bài làm. Vui lòng cung cấp ID bài làm.");
+            // Ensure this path is correct for your error.jsp
+            request.getRequestDispatcher("/views/error.jsp").forward(request, response);
+            System.err.println("ERROR: Missing attemptId parameter.");
+            return;
+        }
+        // --- End processing attemptId parameter ---
+
         QuizDAO quizDAO = new QuizDAO();
 
         try {
-            QuizAttempt attempt = quizDAO.getLastQuizAttempt(userID, attemptId); // Cần sửa DAO để lấy theo attemptId
+            // Corrected: Call the right DAO method to get QuizAttempt by attemptId
+            QuizAttempt attempt = quizDAO.getQuizAttemptById(attemptId);
+            
             if (attempt == null) {
-                // Nếu attemptId không hợp lệ hoặc không thuộc về user này
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Không tìm thấy kết quả bài làm.");
+                request.setAttribute("errorMessage", "Không tìm thấy kết quả bài làm với ID: " + attemptId + " hoặc không thuộc về người dùng này.");
+                request.getRequestDispatcher("/views/error.jsp").forward(request, response);
+                System.err.println("ERROR: QuizAttempt not found for attemptId=" + attemptId + " and userID=" + userID);
                 return;
             }
             
-            Quiz quiz = quizDAO.getQuizById2(attempt.getQuizId());
+            // Corrected: Use getQuizById (assuming you've refactored your DAO to remove getQuizById2)
+            // Use quiz.getQuizId() for the getter
+            Quiz quiz = quizDAO.getQuizById2(attempt.getQuizId()); 
             if (quiz == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Không tìm thấy thông tin Quiz.");
+                request.setAttribute("errorMessage", "Không tìm thấy thông tin Quiz liên quan đến bài làm.");
+                request.getRequestDispatcher("/views/error.jsp").forward(request, response);
+                System.err.println("ERROR: Quiz not found for quizId=" + attempt.getQuizId() + " from attemptId=" + attemptId);
                 return;
             }
 
+            // Corrected: Use quiz.getQuizId() for the getter
             List<Question> questions = quizDAO.getQuestionsForQuiz(quiz.getQuizID());
-            Map<Integer, List<Integer>> userAnswers = quizDAO.getUserAnswersForAttempt(attemptId);
+            if (questions == null || questions.isEmpty()) {
+                request.setAttribute("errorMessage", "Không tìm thấy câu hỏi cho Quiz này.");
+                request.getRequestDispatcher("/views/error.jsp").forward(request, response);
+                System.err.println("ERROR: No questions found for quizId=" + quiz.getQuizID());
+                return;
+            }
+
+            // Load detailed user answers from DB
+            List<QuizAttemptDetail> userAttemptDetails = quizDAO.getQuizAttemptDetailsForAttempt(attemptId);
+            // Get correct answers for the quiz
+            // Corrected: Use quiz.getQuizId() for the getter
             Map<Integer, List<Integer>> correctAnswers = quizDAO.getCorrectAnswersForQuiz(quiz.getQuizID());
 
-            // Gán câu trả lời của người dùng và đáp án đúng vào từng Question object
+            // Assign user answers (both selected options and text) to each Question object
             for (Question q : questions) {
-                q.setUserSelectedOptionIds(userAnswers.getOrDefault(q.getQuestionID(), new ArrayList<>()));
-                // Bạn có thể thêm List<Integer> correctOptionIds vào Question POJO để dễ hiển thị
-                // Hoặc đơn giản hóa bằng cách kiểm tra trực tiếp trong JSP
+                // Initialize/reset answers for the current question object
+                q.setUserSelectedOptionIds(new ArrayList<>()); 
+                q.setUserAnswerText(null); // Reset text answer
+
+                // Find and assign the correct attempt details for this question
+                for (QuizAttemptDetail detail : userAttemptDetails) {
+                    // Corrected: Use q.getQuestionId() for the getter
+                    if (detail.getQuestionId() == q.getQuestionID()) {
+                        if (detail.getSelectedOptionId() != null) {
+                            q.addUserSelectedOptionId(detail.getSelectedOptionId());
+                        }
+                        if (detail.getUserAnswerText() != null) {
+                            q.setUserAnswerText(detail.getUserAnswerText());
+                        }
+                        // You can also load isMarked here if you implement it for review
+                        break; // Found details for this question, move to the next question object
+                    }
+                }
             }
 
             request.setAttribute("quiz", quiz);
             request.setAttribute("attempt", attempt);
             request.setAttribute("questions", questions);
-            request.setAttribute("correctAnswers", correctAnswers); // Gửi đáp án đúng để so sánh trong JSP
+            request.setAttribute("correctAnswers", correctAnswers); // Pass correct answers for comparison in JSP
             
-            request.getRequestDispatcher("quizReview.jsp").forward(request, response);
+            // Ensure this path is correct for your quizReview.jsp
+            request.getRequestDispatcher("/views/quizReview.jsp").forward(request, response);
 
         } catch (ClassNotFoundException | SQLException e) {
-            throw new ServletException("Error accessing database for Quiz Review", e);
+            e.printStackTrace(); // Print stack trace to server console for debugging
+            throw new ServletException("Lỗi truy cập cơ sở dữ liệu khi xem lại Quiz: " + e.getMessage(), e);
         }
     }
 

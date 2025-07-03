@@ -2,14 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package controller.quizz;
-
+package controller.quizz; // Ensure this package name matches your folder structure
 
 import dao.QuizDAO;
 import model.Question;
 import model.Quiz;
 import model.QuizAttempt;
-
+import model.QuizAttemptDetail; // Make sure this is correctly imported
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,162 +30,262 @@ public class QuizHandleServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         Integer userID = (Integer) session.getAttribute("userID");
-        // Giả lập userID nếu chưa có session
+        // Simulate userID if not logged in (in a real app, redirect to login)
         if (userID == null) {
-            userID = 1;
+            userID = 1; // Simulate userID 1 for testing
             session.setAttribute("userID", userID);
         }
 
-        int quizId = Integer.parseInt(request.getParameter("quizId"));
-        int currentQuestionIndex = 0; // Mặc định là câu hỏi đầu tiên
+        String quizIdStr = request.getParameter("quizId");
+        int quizId;
+        if (quizIdStr != null && !quizIdStr.trim().isEmpty()) {
+            try {
+                quizId = Integer.parseInt(quizIdStr);
+            } catch (NumberFormatException e) {
+                request.setAttribute("errorMessage", "ID Quiz không hợp lệ.");
+                request.getRequestDispatcher("/views/error.jsp").forward(request, response);
+                return;
+            }
+        } else {
+            request.setAttribute("errorMessage", "ID Quiz bị thiếu.");
+            request.getRequestDispatcher("/views/error.jsp").forward(request, response);
+            return;
+        }
+
+        int currentQuestionIndex = 0;
         if (request.getParameter("qIndex") != null) {
-            currentQuestionIndex = Integer.parseInt(request.getParameter("qIndex"));
+            try {
+                currentQuestionIndex = Integer.parseInt(request.getParameter("qIndex"));
+            } catch (NumberFormatException e) {
+                // If qIndex is invalid, default to 0
+                currentQuestionIndex = 0;
+            }
         }
 
         QuizDAO quizDAO = new QuizDAO();
-        
+
         try {
-            Quiz quiz = quizDAO.getQuizById2(quizId);
+            // Corrected: Use getQuizById (assuming you've refactored your DAO)
+          Quiz quiz = quizDAO.getQuizById2(quizId); // Changed from getQuizById2
             if (quiz == null) {
                 request.setAttribute("errorMessage", "Quiz không tồn tại.");
-                request.getRequestDispatcher("error.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/error.jsp").forward(request, response);
                 return;
             }
 
-            // Lấy hoặc tạo QuizAttempt mới
             Integer attemptId = (Integer) session.getAttribute("currentAttemptId_" + quizId + "_" + userID);
             Long quizStartTimeMillis = (Long) session.getAttribute("quizStartTimeMillis_" + quizId + "_" + userID);
-            
-            // Lấy danh sách câu hỏi và đáp án đã chọn từ session hoặc DB
             List<Question> questions = (List<Question>) session.getAttribute("quizQuestions_" + quizId + "_" + userID);
 
-            if (attemptId == null) { // Bắt đầu làm bài mới
-                attemptId = quizDAO.createNewQuizAttempt(userID, quizId);
-                session.setAttribute("currentAttemptId_" + quizId + "_" + userID, attemptId);
-                
-                // Lấy tất cả câu hỏi cho quiz này và lưu vào session
-                questions = quizDAO.getQuestionsForQuiz(quizId);
+            // --- Logic to load or initialize questions and attempt details ---
+            // If questions list is NOT in session, or if attemptId is null (new attempt)
+            // or if quizStartTimeMillis is null (session expired for timer)
+            if (questions == null || attemptId == null || quizStartTimeMillis == null) {
+                // This block covers new attempts or scenarios where session data is incomplete/missing
+                System.out.println("DEBUG: (Re)initializing quiz state for QuizID=" + quizId + ", UserID=" + userID);
+
+                // 1. Fetch questions from DB
+                List<Question> fetchedQuestions = quizDAO.getQuestionsForQuiz(quizId);
+                if (fetchedQuestions == null || fetchedQuestions.isEmpty()) {
+                    request.setAttribute("errorMessage", "Không tìm thấy câu hỏi nào cho bài Quiz này.");
+                    request.getRequestDispatcher("/views/error.jsp").forward(request, response);
+                    return;
+                }
+                questions = fetchedQuestions;
                 session.setAttribute("quizQuestions_" + quizId + "_" + userID, questions);
 
-                // Lưu thời gian bắt đầu vào session
-                quizStartTimeMillis = System.currentTimeMillis();
-                session.setAttribute("quizStartTimeMillis_" + quizId + "_" + userID, quizStartTimeMillis);
+                // 2. Initialize or retrieve current attempt
+                if (attemptId == null) {
+                    attemptId = quizDAO.createNewQuizAttempt(userID, quizId);
+                    session.setAttribute("currentAttemptId_" + quizId + "_" + userID, attemptId);
+                    quizStartTimeMillis = System.currentTimeMillis();
+                    session.setAttribute("quizStartTimeMillis_" + quizId + "_" + userID, quizStartTimeMillis);
+                }
+                // If attemptId was null, new attempt created. If it was not null but quizStartTimeMillis was, we proceed.
 
-            } else { // Tiếp tục làm bài (có thể do refresh hoặc quay lại từ Review Progress)
-                // Tải lại câu trả lời đã lưu từ DB và cập nhật vào list questions trong session
-                Map<Integer, List<Integer>> userAnswers = quizDAO.getUserAnswersForAttempt(attemptId);
-                if (questions != null) {
-                    for (Question q : questions) {
-                        q.setUserSelectedOptionIds(userAnswers.getOrDefault(q.getQuestionID(), Collections.emptyList()));
+                // 3. Load user answers for current questions from DB (for both new/resumed attempts)
+                List<QuizAttemptDetail> userAttemptDetails = quizDAO.getQuizAttemptDetailsForAttempt(attemptId);
+                for (Question q : questions) {
+                    q.setUserSelectedOptionIds(new ArrayList<>()); // Reset before loading
+                    q.setUserAnswerText(null); // Reset before loading
+
+                    for (QuizAttemptDetail detail : userAttemptDetails) {
+                        if (detail.getQuestionId() == q.getQuestionID()) { // Corrected: use getQuestionId()
+                            if (detail.getSelectedOptionId() != null) {
+                                q.addUserSelectedOptionId(detail.getSelectedOptionId());
+                            }
+                            if (detail.getUserAnswerText() != null) {
+                                q.setUserAnswerText(detail.getUserAnswerText());
+                            }
+                            break; // Found answers for this question, move to next question
+                        }
+                    }
+                }
+
+            } else { // 'questions' list, attemptId, and quizStartTimeMillis were all found in session
+                // This is a navigation within an active quiz session (Next/Previous/Refresh)
+                // Load user answers from DB to ensure they are up-to-date (important for persistence across page loads)
+                List<QuizAttemptDetail> userAttemptDetails = quizDAO.getQuizAttemptDetailsForAttempt(attemptId);
+                for (Question q : questions) {
+                    q.setUserSelectedOptionIds(new ArrayList<>()); // Reset current answers in POJO
+                    q.setUserAnswerText(null);
+
+                    for (QuizAttemptDetail detail : userAttemptDetails) {
+                        if (detail.getQuestionId() == q.getQuestionID()) { // Corrected: use getQuestionId()
+                            if (detail.getSelectedOptionId() != null) {
+                                q.addUserSelectedOptionId(detail.getSelectedOptionId());
+                            }
+                            if (detail.getUserAnswerText() != null) {
+                                q.setUserAnswerText(detail.getUserAnswerText());
+                            }
+                            break;
+                        }
                     }
                 }
             }
+            // 'questions' is now guaranteed not to be null if we reached this point.
+            // 'attemptId' and 'quizStartTimeMillis' are also guaranteed to be set.
             
-            // Xử lý lưu câu trả lời từ POST request (khi nhấn Next/Previous/Score Exam)
+          // --- Handle saving answers from POST request (when clicking Next/Previous/Score Exam) ---
             if ("POST".equalsIgnoreCase(request.getMethod())) {
-                String questionIdStr = request.getParameter("questionId");
-                if (questionIdStr != null) {
-                    int submittedQuestionId = Integer.parseInt(questionIdStr);
-                    String[] selectedOptions = request.getParameterValues("option_" + submittedQuestionId);
+                String questionIdParam = request.getParameter("questionId");
+                if (questionIdParam != null) {
+                    int submittedQuestionId = Integer.parseInt(questionIdParam);
                     
-                    List<Integer> selectedOptionIds = new ArrayList<>();
-                    if (selectedOptions != null) {
-                        for (String optId : selectedOptions) {
-                            selectedOptionIds.add(Integer.parseInt(optId));
+                    Question submittedQuestion = null;
+                    if (questions != null) { // Defensive check, though 'questions' should not be null here
+                        for(Question q : questions) {
+                            if (q.getQuestionID() == submittedQuestionId) { // Corrected: use getQuestionId()
+                                submittedQuestion = q;
+                                break;
+                            }
                         }
                     }
-                    // Lưu câu trả lời vào DB
-                    quizDAO.saveUserAnswers(attemptId, submittedQuestionId, selectedOptionIds);
                     
-                    // Cập nhật câu trả lời vào đối tượng Question trong session
-                    if (questions != null) {
-                        for (Question q : questions) {
-                            if (q.getQuestionID() == submittedQuestionId) {
-                                q.setUserSelectedOptionIds(selectedOptionIds);
-                                break;
+                    if (submittedQuestion != null) {
+                        List<Integer> selectedOptionIds = null;
+                        String userAnswerText = null;
+
+                        // Determine question type and retrieve appropriate answer
+                        if ("Multiple Choice".equals(submittedQuestion.getQuestionType()) || "True/False".equals(submittedQuestion.getQuestionType())) {
+                            String[] options = request.getParameterValues("option_" + submittedQuestionId);
+                            if (options != null) {
+                                selectedOptionIds = new ArrayList<>();
+                                for (String optId : options) {
+                                    selectedOptionIds.add(Integer.parseInt(optId));
+                                }
+                            } else {
+                                selectedOptionIds = new ArrayList<>(); // No options selected
+                            }
+                        } else if ("Short Answer".equals(submittedQuestion.getQuestionType()) || "Essay".equals(submittedQuestion.getQuestionType())) {
+                            userAnswerText = request.getParameter("text_answer_" + submittedQuestionId);
+                        }
+
+                        // Save the answer to DB using the updated DAO method
+                        quizDAO.saveUserAnswers(attemptId, submittedQuestionId, selectedOptionIds, userAnswerText);
+
+                        // Update the answer in the Question object in session for consistency
+                        if (questions != null) { // Defensive check
+                            for (Question q : questions) {
+                                if (q.getQuestionID() == submittedQuestionId) { // Corrected: use getQuestionId()
+                                    q.setUserSelectedOptionIds(selectedOptionIds != null ? selectedOptionIds : new ArrayList<>());
+                                    q.setUserAnswerText(userAnswerText);
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
-            
-            // Xử lý nút "Score Exam"
+
+            // --- Handle "Score Exam" button ---
             String action = request.getParameter("action");
             if ("scoreExam".equals(action)) {
-                // Chấm điểm
-                int totalAnswered = 0;
-                if (questions != null) {
-                    for (Question q : questions) {
-                        if (!q.getUserSelectedOptionIds().isEmpty()) {
-                            totalAnswered++;
-                        }
-                    }
-                }
-                
-                // Logic xác nhận nộp bài phức tạp (bây giờ đơn giản hóa)
-                // Nếu chưa trả lời câu nào: yêu cầu tiếp tục hoặc về trang Lesson (SubForm 1)
-                // Nếu có câu chưa trả lời: yêu cầu tiếp tục hoặc nộp (về SubForm 2)
-                // Nếu tất cả đã trả lời: yêu cầu tiếp tục hoặc nộp (về SubForm 2)
-                
-                // Ở đây, chúng ta sẽ chấm điểm và lưu kết quả ngay
-                double score = calculateScore(quizDAO, attemptId, questions);
+                // Corrected: Use quiz.getQuizId() for the getter
+                double score = calculateScore(quizDAO, attemptId, questions, quiz.getQuizID());
                 boolean isPassed = score >= quiz.getPassRate();
                 quizDAO.updateQuizAttemptResult(attemptId, score, isPassed);
 
-                // Xóa trạng thái quiz khỏi session sau khi nộp
+                // Clear quiz state from session after submission
                 session.removeAttribute("currentAttemptId_" + quizId + "_" + userID);
                 session.removeAttribute("quizStartTimeMillis_" + quizId + "_" + userID);
                 session.removeAttribute("quizQuestions_" + quizId + "_" + userID);
-                
-                response.sendRedirect("quizLesson?quizId=" + quizId); // Quay về SubForm 2
+
+                response.sendRedirect("quizLesson?quizId=" + quizId); // Redirect to Quiz Lesson (SubForm 2)
                 return;
             }
 
             request.setAttribute("quizId", quizId);
             request.setAttribute("currentQuestionIndex", currentQuestionIndex);
-            request.setAttribute("questions", questions); // Gửi list questions đã có câu trả lời của user
+            request.setAttribute("questions", questions); // Send questions list with user answers
             request.setAttribute("totalQuestions", questions.size());
-            request.setAttribute("attemptId", attemptId); // Dùng cho JavaScript và form submit
-            
-            // Tính thời gian còn lại
+            request.setAttribute("attemptId", attemptId);
+
+            // Calculate remaining time
             long elapsedMillis = System.currentTimeMillis() - quizStartTimeMillis;
-            long remainingTimeMillis = (long)quiz.getDurationMinutes() * 60 * 1000 - elapsedMillis;
+            long remainingTimeMillis = (long) quiz.getDurationMinutes() * 60 * 1000 - elapsedMillis;
             if (remainingTimeMillis < 0) remainingTimeMillis = 0;
             request.setAttribute("remainingTimeMillis", remainingTimeMillis);
 
+            // Forward to JSP
             request.getRequestDispatcher("/views/quizHandle.jsp").forward(request, response);
 
         } catch (ClassNotFoundException | SQLException e) {
-            throw new ServletException("Error handling Quiz", e);
+            e.printStackTrace(); // Print to server console for debugging
+            throw new ServletException("Error handling Quiz: " + e.getMessage(), e);
         }
     }
 
-    private double calculateScore(QuizDAO quizDAO, int attemptId, List<Question> questions) throws SQLException, ClassNotFoundException {
+    // --- calculateScore method (updated for camelCase consistency) ---
+    private double calculateScore(QuizDAO quizDAO, int attemptId, List<Question> questions, int quizId) throws SQLException, ClassNotFoundException {
         if (questions == null || questions.isEmpty()) {
             return 0.0;
         }
-        
+
         int correctCount = 0;
-        // Lấy tất cả đáp án đúng của quiz
-       Map<Integer, List<Integer>> correctOptionsMap = quizDAO.getCorrectAnswersForQuiz(questions.get(0).getQuestionID()); // Lấy quizId từ câu hỏi đầu tiên
-        // Lấy tất cả câu trả lời của người dùng
-        Map<Integer, List<Integer>> userAnswersMap = quizDAO.getUserAnswersForAttempt(attemptId);
+        int scoredQuestionsCount = 0; // Count only questions that can be auto-scored
+
+        // Get all correct answers for the quiz
+        Map<Integer, List<Integer>> correctOptionsMap = quizDAO.getCorrectAnswersForQuiz(quizId);
+        // Get all user answers for this attempt
+        List<QuizAttemptDetail> userAttemptDetails = quizDAO.getQuizAttemptDetailsForAttempt(attemptId);
+        
+        // Convert userAttemptDetails to maps for easy lookup
+        Map<Integer, List<Integer>> userSelectedOptionsMap = new java.util.HashMap<>();
+        // No need for userAnswerTextMap here as short answers are not auto-scored
+
+        for(QuizAttemptDetail detail : userAttemptDetails){
+            if(detail.getSelectedOptionId() != null){
+                // Corrected: use getQuestionId()
+                userSelectedOptionsMap.computeIfAbsent(detail.getQuestionId(), k -> new ArrayList<>()).add(detail.getSelectedOptionId());
+            }
+            // userAnswerText details are not needed for this auto-scoring logic
+        }
 
         for (Question q : questions) {
-            List<Integer> userSelected = userAnswersMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
-            List<Integer> correct = correctOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
+            // Only score Multiple Choice / True/False questions automatically
+            if ("Multiple Choice".equals(q.getQuestionType()) || "True/False".equals(q.getQuestionType())) {
+                // Corrected: use getQuestionId()
+                List<Integer> userSelected = userSelectedOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
+                List<Integer> correct = correctOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
+           // Sort lists to ensure correct comparison for multiple correct options
+                Collections.sort(userSelected);
+                Collections.sort(correct);
 
-            // So sánh danh sách các lựa chọn đã chọn của người dùng với danh sách đáp án đúng
-            // Cần sắp xếp để so sánh chính xác nếu có nhiều đáp án đúng
-            Collections.sort(userSelected);
-            Collections.sort(correct);
-
-            if (userSelected.equals(correct)) {
-                correctCount++;
+                if (userSelected.equals(correct)) {
+                    correctCount++;
+                }
+                scoredQuestionsCount++; // Increment count only for scored questions
             }
+            // Short Answer/Essay questions are not automatically scored here
         }
         
-        return (double) correctCount / questions.size() * 100;
+        // Avoid division by zero if there are no auto-scorable questions
+        if (scoredQuestionsCount == 0) {
+            return 0.0;
+        }
+
+        return (double) correctCount / scoredQuestionsCount * 100;
     }
 
     @Override

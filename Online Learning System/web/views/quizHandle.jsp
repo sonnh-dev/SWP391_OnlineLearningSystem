@@ -2,98 +2,261 @@
 <%@page import="model.QuestionOption"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.Question" %>
-<%@page import="model.Option" %>
+<%@page import="model.Option" %> <%-- Assuming model.Option is your class for quiz options --%>
 <%@page import="java.util.List" %>
 <%@page import="java.util.concurrent.TimeUnit" %>
+<%@page import="java.util.Collections" %> <%-- Added for Collections.emptyList() --%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Quiz Handle</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Basic styling for quiz handle */
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .quiz-container { max-width: 800px; margin: auto; border: 1px solid #ddd; padding: 20px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .question-card { border: 1px solid #ccc; padding: 20px; margin-bottom: 20px; background-color: #f9f9f9; }
-        .options label { display: block; margin-bottom: 10px; cursor: pointer; }
-        .footer { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-top: 1px solid #eee; background-color: #f0f0f0; margin-top: 20px; }
-        .timer { font-size: 1.2em; font-weight: bold; color: #d9534f; }
-        .navigation-buttons button { padding: 10px 20px; margin-left: 10px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; }
-        .navigation-buttons button:hover { opacity: 0.9; }
+        /* Your existing CSS for quiz-container, header, timer, question-card, etc. */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: #f4f7fa;
+            color: #333;
+        }
 
-        /* Pop-up styles */
-        .popup-overlay {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 0;
-            left: 0;
+        .quiz-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e2a38;
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: 600;
+            color: #d9534f;
+        }
+
+        .question-card {
+            background-color: #f9fafc;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid #e0e6ed;
+        }
+
+        .question-card h3 {
+            margin-top: 0;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .options label {
+            display: block;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            background-color: #fff;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .options input[type="radio"],
+        .options input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .options label:hover {
+            background-color: #f0f8ff;
+            border-color: #007bff;
+        }
+
+        /* Added style for textarea */
+        textarea {
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            box-sizing: border-box; /* Include padding in width */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical; /* Allow vertical resizing */
+            font-family: 'Inter', sans-serif; /* Use Inter font */
+            font-size: 1em;
+            min-height: 100px; /* Minimum height for better appearance */
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        .navigation-buttons button,
+        .footer button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .navigation-buttons button:hover,
+        .footer button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Popup */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
             z-index: 99;
             justify-content: center;
             align-items: center;
         }
+
         .popup-content {
             background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
             text-align: center;
             position: relative;
-            min-width: 300px;
+            min-width: 350px;
+            max-width: 90%;
         }
+
         .popup-close {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 1.5em;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: #888;
             cursor: pointer;
-            color: #aaa;
         }
+
         .popup-options button {
             margin: 10px;
-            padding: 10px 20px;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            border: none;
             cursor: pointer;
         }
+
+        .popup-options button:first-child {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .popup-options button:last-child {
+            background-color: #28a745;
+            color: white;
+        }
+
         .question-numbers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
             gap: 10px;
-            margin-top: 20px;
             max-height: 300px;
             overflow-y: auto;
-            border: 1px solid #eee;
+            margin-top: 20px;
             padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+            background-color: #fafafa;
         }
+
         .question-numbers-grid a {
             display: block;
-            padding: 8px;
+            padding: 8px 0;
             text-align: center;
             text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
             color: #333;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f0f0f0;
+            background-color: #e2e6ea;
+            transition: all 0.2s;
         }
-        .question-numbers-grid a.answered { background-color: #d4edda; border-color: #28a745; } /* Green */
-        .question-numbers-grid a.unanswered { background-color: #f8d7da; border-color: #dc3545; } /* Red */
-        .question-numbers-grid a.marked { background-color: #ffeeba; border-color: #ffc107; } /* Yellow */
-        .question-numbers-grid a.current { background-color: #007bff; color: white; }
+
+        .question-numbers-grid a:hover {
+            background-color: #d6d8db;
+        }
+
+        .question-numbers-grid a.answered {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .question-numbers-grid a.unanswered {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .question-numbers-grid a.marked {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .question-numbers-grid a.current {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .filter-options {
+            margin-bottom: 15px;
+        }
+
+        .filter-options button {
+            margin: 5px;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            background-color: #f0f0f0;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .filter-options button:hover {
+            background-color: #ddd;
+        }
     </style>
 </head>
 <body>
     <%
+        // Corrected: Ensure questions list is not null when accessed
         List<Question> questions = (List<Question>) request.getAttribute("questions");
+        if (questions == null) {
+            questions = Collections.emptyList(); // Initialize as empty list to prevent NPE in JSP
+        }
+
         int currentQuestionIndex = (Integer) request.getAttribute("currentQuestionIndex");
-        int totalQuestions = (Integer) request.getAttribute("totalQuestions");
+        int totalQuestions = questions.size(); // Use questions.size() directly
         int quizId = (Integer) request.getAttribute("quizId");
         long remainingTimeMillis = (Long) request.getAttribute("remainingTimeMillis");
         
         Question currentQuestion = null;
-        if (questions != null && !questions.isEmpty() && currentQuestionIndex >= 0 && currentQuestionIndex < totalQuestions) {
+        if (!questions.isEmpty() && currentQuestionIndex >= 0 && currentQuestionIndex < totalQuestions) {
             currentQuestion = questions.get(currentQuestionIndex);
         }
     %>
@@ -107,26 +270,48 @@
             <form id="quizForm" action="quizHandle" method="POST">
                 <input type="hidden" name="quizId" value="<%= quizId %>">
                 <input type="hidden" name="qIndex" value="<%= currentQuestionIndex %>">
-                <input type="hidden" name="questionId" value="<%= currentQuestion.getQuestionID() %>">
+                <input type="hidden" name="questionId" value="<%= currentQuestion.getQuestionID() %>"> <%-- Corrected: getQuestionId() --%>
+                <input type="hidden" name="questionType" value="<%= currentQuestion.getQuestionType() %>"> <%-- Added: To send question type --%>
                 
                 <div class="question-card">
                     <h3>Câu hỏi <%= currentQuestionIndex + 1 %> / <%= totalQuestions %>:</h3>
                     <p><%= currentQuestion.getQuestionContent() %></p>
                     <div class="options">
-                        <% for (QuestionOption option : currentQuestion.getOptions()) { %>
-                            <label>
-                                <% if ("Multiple Choice".equals(currentQuestion.getQuestionType())) { %>
-                                    <input type="checkbox" name="option_<%= currentQuestion.getQuestionID() %>" 
-                                           value="<%= option.getOptionID() %>" 
-                                           <%= currentQuestion.isUserSelected(option.getOptionID()) ? "checked" : "" %>>
-                                <% } else { %>
-                                    <input type="radio" name="option_<%= currentQuestion.getQuestionID() %>" 
-                                           value="<%= option.getOptionID() %>" 
-                                           <%= currentQuestion.isUserSelected(option.getOptionID()) ? "checked" : "" %>>
-                                <% } %>
-                                <%= option.getOptionContent() %>
-                            </label>
-                        <% } %>
+                        <%
+                            // Check question type to render appropriate input
+                            String questionType = currentQuestion.getQuestionType();
+                            if ("Multiple Choice".equals(questionType) || "True/False".equals(questionType)) {
+                                // Display multiple choice / true-false options
+                                // Make sure currentQuestion.getOptions() returns List<Option>
+                                for (QuestionOption option : currentQuestion.getOptions()) {
+                        %>
+                                    <label>
+                                        <% if ("Multiple Choice".equals(questionType)) { %>
+                                            <input type="checkbox" name="option_<%= currentQuestion.getQuestionID() %>" <%-- Corrected: getQuestionId() --%>
+                                                   value="<%= option.getOptionID() %>" <%-- Corrected: getOptionId() --%>
+                                                   <%= currentQuestion.isUserSelected(option.getOptionID()) ? "checked" : "" %>> <%-- Corrected: getOptionId() --%>
+                                        <% } else { %>
+                                            <input type="radio" name="option_<%= currentQuestion.getQuestionID() %>" <%-- Corrected: getQuestionId() --%>
+                                                   value="<%= option.getOptionID() %>" <%-- Corrected: getOptionId() --%>
+                                                   <%= currentQuestion.isUserSelected(option.getOptionID()) ? "checked" : "" %>> <%-- Corrected: getOptionId() --%>
+                                        <% } %>
+                                        <%= option.getOptionContent() %>
+                                    </label>
+                        <%
+                                }
+                            } else if ("Short Answer".equals(questionType) || "Essay".equals(questionType)) {
+                                // Display textarea for short answer/essay questions
+                        %>
+                                <textarea name="text_answer_<%= currentQuestion.getQuestionID() %>" rows="5" cols="50" <%-- Corrected: getQuestionId() --%>
+                                          placeholder="Nhập câu trả lời của bạn ở đây..."><%= (currentQuestion.getUserAnswerText() != null ? currentQuestion.getUserAnswerText() : "") %></textarea>
+                        <%
+                            } else {
+                                // Fallback for unsupported question types
+                        %>
+                                <p>Loại câu hỏi không được hỗ trợ.</p>
+                        <%
+                            }
+                        %>
                     </div>
                 </div>
 
@@ -160,17 +345,29 @@
                 <button onclick="filterQuestions('marked')">Đánh dấu</button>
             </div>
             <div id="questionNumbers" class="question-numbers-grid">
-                <% for(int i=0; i<totalQuestions; i++) {
-                    Question q = questions.get(i);
-                    String statusClass = "";
-                    if (!q.getUserSelectedOptionIds().isEmpty()) {
-                        statusClass = "answered";
-                    } else {
-                        statusClass = "unanswered";
-                    }
-                    if (i == currentQuestionIndex) {
-                        statusClass += " current";
-                    }
+                <%
+                    // Loop through questions list (guaranteed not null by now)
+                    for(int i=0; i<totalQuestions; i++) {
+                        Question q = questions.get(i);
+                        String statusClass = "";
+                        String qType = q.getQuestionType(); // Get question type for accurate checking
+
+                        boolean isAnswered = false;
+                        if ("Multiple Choice".equals(qType) || "True/False".equals(qType)) {
+                            isAnswered = !q.getUserSelectedOptionIds().isEmpty();
+                        } else if ("Short Answer".equals(qType) || "Essay".equals(qType)) {
+                            isAnswered = (q.getUserAnswerText() != null && !q.getUserAnswerText().trim().isEmpty());
+                        }
+
+                        if (isAnswered) {
+                            statusClass = "answered";
+                        } else {
+                            statusClass = "unanswered";
+                        }
+                        // Add 'marked' if you implement that in your Question POJO and logic
+                        if (i == currentQuestionIndex) {
+                            statusClass += " current";
+                        }
                 %>
                     <a href="quizHandle?quizId=<%= quizId %>&qIndex=<%= i %>" class="<%= statusClass %>" data-status="<%= statusClass %>"><%= i + 1 %></a>
                 <% } %>
@@ -203,22 +400,21 @@
             if (remainingTime <= 0) {
                 document.getElementById('countdownTimer').innerText = "00:00";
                 alert("Thời gian đã hết! Bài làm sẽ tự động nộp.");
-                submitExamImmediately(); // Tự động nộp
+                submitExamImmediately(); // Auto submit
                 return;
             }
 
             let minutes = Math.floor(remainingTime / 60000);
             let seconds = Math.floor((remainingTime % 60000) / 1000);
 
-            document.getElementById('countdownTimer').innerText = 
+            document.getElementById('countdownTimer').innerText =
                 (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
             
             remainingTime -= 1000;
-           
         }
 
         setInterval(updateTimer, 1000);
-        updateTimer(); // Gọi lần đầu để hiển thị ngay lập tức
+        updateTimer(); // Call initially
 
         // Show/Hide Pop-ups
         function showReviewProgress() {
@@ -249,36 +445,54 @@
 
         // Confirmation Logic for Scoring Exam
         function confirmScoreExam() {
-            // Đây là phần cần AJAX để kiểm tra số câu đã trả lời từ server
-            // Để đơn giản, ta sẽ đếm trên client-side dựa vào DOM
             let answeredCount = 0;
-            const allQuestions = Array.from({length: totalQuestions}, (v, i) => i);
-            const currentQuestionId = document.querySelector('input[name="questionId"]').value;
+            
+            // Generate JSON-like data for questions on the client side
+            // This avoids issues with org.json and ensures data is always available if questions is not null
+            let questionsData = [
+                <%
+                    // Use a loop to manually construct the JSON array
+                    if (questions != null) {
+                        for (int i = 0; i < questions.size(); i++) {
+                            Question q = questions.get(i);
+                            // Escape single quotes in strings for valid JavaScript JSON
+                            String userAnsText = (q.getUserAnswerText() != null) ? q.getUserAnswerText().replace("'", "\\'") : "";
+                            String qType = q.getQuestionType();
+                            List<Integer> selectedIds = (q.getUserSelectedOptionIds() != null) ? q.getUserSelectedOptionIds() : Collections.emptyList();
 
-            // Lấy câu trả lời hiện tại trước khi hiển thị popup
-            const currentSelectedOptions = Array.from(document.querySelectorAll(`input[name="option_${currentQuestionId}"]:checked`))
-                                            .map(el => el.value);
-            // Cần một cách để đồng bộ trạng thái của tất cả các câu hỏi trên client
-            // Đối với ví dụ này, chúng ta giả định đã có thông tin về câu trả lời
-            // từ backend khi trang được tải.
+                            out.print("{");
+                            out.print("id: " + q.getQuestionID() + ","); // Corrected: getQuestionId()
+                            out.print("type: '" + qType + "',");
+                            out.print("userSelectedOptionIds: " + selectedIds.toString() + ","); // Direct toString() for List<Integer>
+                            out.print("userAnswerText: '" + userAnsText + "'"); // Wrap in single quotes and escape
+                            out.print("}");
+                            if (i < questions.size() - 1) {
+                                out.print(",");
+                            }
+                        }
+                    }
+                %>
+            ];
 
-            // Tạm thời, giả định có 1 vài câu đã trả lời
-            answeredCount = Array.from(document.querySelectorAll('[name^="option_"]:checked')).length > 0 ? 1 : 0;
-            // Thực tế: bạn cần một cơ chế backend để trả về số lượng câu đã trả lời
-            // hoặc đếm dựa trên `questions` object được truyền từ backend (phức tạp hơn)
-            // Ví dụ: var answeredQuestions = <%= questions.stream().filter(q -> !q.getUserSelectedOptionIds().isEmpty()).count() %>;
-            // Dòng trên không hoạt động trực tiếp trong JS mà cần JSP expression
+            // Re-calculate answered count accurately on client-side from questionsData
+            answeredCount = questionsData.filter(q => {
+                if (q.type === 'Multiple Choice' || q.type === 'True/False') {
+                    return q.userSelectedOptionIds && q.userSelectedOptionIds.length > 0;
+                } else if (q.type === 'Short Answer' || q.type === 'Essay') {
+                    return q.userAnswerText && q.userAnswerText.trim() !== '';
+                }
+                return false;
+            }).length;
+
+
             let confirmationMessage = "";
-            let allAnswered = false; // Flag cho tình trạng tất cả câu hỏi đã được trả lời
-
-            // Logic đơn giản để test popup
+            
             if (answeredCount === 0) {
                 confirmationMessage = "Bạn chưa trả lời câu nào. Bạn có muốn tiếp tục làm bài hay về trang mô tả Quiz?";
             } else if (answeredCount < totalQuestions) {
                 confirmationMessage = "Bạn có một số câu hỏi chưa trả lời. Bạn có muốn tiếp tục làm bài hay nộp bài?";
             } else {
                 confirmationMessage = "Bạn đã trả lời tất cả các câu hỏi. Bạn có muốn tiếp tục làm bài hay nộp bài?";
-                allAnswered = true;
             }
             
             document.getElementById('confirmationMessage').innerText = confirmationMessage;
@@ -290,13 +504,11 @@
         }
 
         function submitExam() {
-            // Gửi form với action 'scoreExam'
             quizForm.action = `quizHandle?action=scoreExam&quizId=${quizId}`;
             quizForm.submit();
         }
 
         function submitExamImmediately() {
-            // Hàm này được gọi khi hết giờ hoặc nhấn 'Nộp bài ngay' trong pop-up
             quizForm.action = `quizHandle?action=scoreExam&quizId=${quizId}`;
             quizForm.submit();
         }

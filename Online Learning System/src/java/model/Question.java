@@ -16,33 +16,25 @@ public class Question {
     private List<QuestionOption> options;
 //    private List<Option> options;
     private List<Integer> userSelectedOptionIds;
+    private String userAnswerText;
+    private String answerKey;
 
-    public Question() {
-        this.options = new ArrayList<>();
-        this.userSelectedOptionIds = new ArrayList<>();
+    
+    
+    public String getUserAnswerText() {
+        return userAnswerText;
     }
 
-    public Question(int questionId, String questionContent, String questionType) {
-        this();
-        this.questionID = questionId;
-        this.questionContent = questionContent;
-        this.questionType = questionType;
+    public void setUserAnswerText(String userAnswerText) {
+        this.userAnswerText = userAnswerText;
     }
 
-    // Methods to manage options and user answers
-//    public void addOption(Option option) {
-//        this.options.add(option);
-//    }
-    public void addOption(QuestionOption option) {
-        this.options.add(option);
+    public String getAnswerKey() {
+        return answerKey;
     }
 
-    public List<QuestionOption> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<QuestionOption> options) {
-        this.options = options;
+    public void setAnswerKey(String answerKey) {
+        this.answerKey = answerKey;
     }
 
     public void addUserSelectedOptionId(int optionId) {
@@ -59,6 +51,45 @@ public class Question {
     public boolean isUserSelected(int optionId) {
         return userSelectedOptionIds.contains(optionId);
     }
+
+    public Question() {
+        this.options = new ArrayList<>();
+        this.userSelectedOptionIds = new ArrayList<>();
+    }
+
+    public Question(String questionContent, String questionType, String answerKey) {
+        this.questionContent = questionContent;
+        this.questionType = questionType;
+        this.answerKey = answerKey;
+    }
+    public Question(int questionId, String questionContent, String questionType) {
+        this();
+        this.questionID = questionId;
+        this.questionContent = questionContent;
+        this.questionType = questionType;
+    }
+    
+    // Constructor đầy đủ hơn
+        public Question(int questionId, String questionContent, String questionType, String answerKey) {
+        this(); // Gọi constructor mặc định để khởi tạo List
+        this.questionID = questionId;
+        this.questionContent = questionContent;
+        this.questionType = questionType;
+        this.answerKey = answerKey;
+    }
+
+    public void addOption(QuestionOption option) {
+        this.options.add(option);
+    }
+
+    public List<QuestionOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<QuestionOption> options) {
+        this.options = options;
+    }
+
 
     // Constructor, Getters, Setters
     public Question(int questionID, int quizID, String questionContent, String questionType) {
@@ -100,11 +131,4 @@ public class Question {
         this.questionType = questionType;
     }
 
-//    public List<QuestionOption> getOptions() {
-//        return options;
-//    }
-//
-//    public void setOptions(List<QuestionOption> options) {
-//        this.options = options;
-//    }
 }
