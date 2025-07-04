@@ -169,11 +169,14 @@ CREATE TABLE Questions (
     QuizID INT NOT NULL,
     QuestionContent TEXT NOT NULL, -- Nội dung câu hỏi
     QuestionType NVARCHAR(50), -- Ví dụ: 'Multiple Choice', 'True/False', 'Short Answer'
-    FOREIGN KEY (QuizID) REFERENCES Quizzes(QuizID)
+    FOREIGN KEY (QuizID) REFERENCES Quizzes(QuizID),
+	AnswerKey TEXT NULL
 );
 
   ALTER TABLE Questions
 ADD AnswerKey TEXT NULL;
+ALTER TABLE Questions
+ADD Explanation TEXT NULL;
 -- Bảng QuestionOptions (thay thế AnswerQuiz, chứa các lựa chọn/đáp án cho từng câu hỏi)
 CREATE TABLE QuestionOptions (
     OptionID INT PRIMARY KEY IDENTITY(1,1),
