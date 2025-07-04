@@ -172,7 +172,8 @@ CREATE TABLE Questions (
     FOREIGN KEY (QuizID) REFERENCES Quizzes(QuizID)
 );
 
-
+  ALTER TABLE Questions
+ADD AnswerKey TEXT NULL;
 -- Bảng QuestionOptions (thay thế AnswerQuiz, chứa các lựa chọn/đáp án cho từng câu hỏi)
 CREATE TABLE QuestionOptions (
     OptionID INT PRIMARY KEY IDENTITY(1,1),
