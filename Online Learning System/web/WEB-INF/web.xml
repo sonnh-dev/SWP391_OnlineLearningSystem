@@ -36,7 +36,20 @@
         <servlet-name>EditPostServlet</servlet-name>
         <servlet-class>controller.post.EditPostServlet</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>ToggleLessonStatusServlet</servlet-name>
+        <servlet-class>controller.subjectLesson.ToggleLessonStatusServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LessonHierarchyServlet</servlet-name>
+        <servlet-class>controller.subjectLesson.LessonHierarchyServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LessonListServlet</servlet-name>
+        <servlet-class>controller.subjectLesson.LessonListServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
+        
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/Login</url-pattern>
     </servlet-mapping>
@@ -71,5 +84,17 @@
         <servlet-mapping>
         <servlet-name>EditPostServlet</servlet-name>
         <url-pattern>/EditPostServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ToggleLessonStatusServlet</servlet-name>
+        <url-pattern>/ToggleLessonStatusServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LessonHierarchyServlet</servlet-name>
+        <url-pattern>/lesson-hierarchy</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LessonListServlet</servlet-name>
+        <url-pattern>/LessonListServlet</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -21,6 +21,16 @@ public class Quiz {
     private String quizType;
     private Integer questionOrder; // Có thể NULL
     private Date createdAt;
+    private Date updatedAt;
+    private Boolean status;
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     public int getQuizID() {
         return quizID;
@@ -128,6 +138,7 @@ public class Quiz {
 
     public Quiz() {
     }
+    
  public Quiz(int quizID, String quizName, String subject, String level, int numQuestions, int durationMinutes, double passRate, String quizType) {
         this.quizID = quizID;
         this.quizName = quizName;
@@ -153,5 +164,4 @@ public class Quiz {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-    private Date updatedAt;
-}
+} 

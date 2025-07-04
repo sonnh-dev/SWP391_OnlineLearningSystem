@@ -127,6 +127,7 @@ CREATE TABLE Lesson (
     Title NVARCHAR(255),
     IsFree BIT,
     LessonOrder INT,
+	 Status BIT DEFAULT 1,
     FOREIGN KEY (ChapterID) REFERENCES Chapter(ChapterID)
 );
 
@@ -163,7 +164,8 @@ CREATE TABLE Quizzes (
     QuizType NVARCHAR(50), -- Loại quiz (ví dụ: "Luyện tập", "Kiểm tra", "Thi cuối khóa")
     QuestionOrder INT, -- Thứ tự của quiz trong bài học (nếu có)
     CreatedAt DATETIME DEFAULT GETDATE(), -- Thời điểm tạo quiz
-    UpdatedAt DATETIME DEFAULT GETDATE(), -- Thời điểm cập nhật cuối cùng
+    UpdatedAt DATETIME DEFAULT GETDATE(),
+	 Status BIT DEFAULT 1,-- Thời điểm cập nhật cuối cùng
     FOREIGN KEY (LessonID) REFERENCES Lesson(LessonID),
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
@@ -278,6 +280,8 @@ INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions,
 (NULL, NULL, N'Thực hành Giải quyết Vấn đề', N'Problem Solving', N'Khó', 8, 15, 65.00, N'Luyện tập', NULL, GETDATE(), GETDATE()),
 (NULL, NULL, N'Đánh giá Trí tuệ Cảm xúc', N'Emotional Intelligence', N'Trung bình', 12, 25, 75.00, N'Kiểm tra', NULL, GETDATE(), GETDATE()),
 (NULL, NULL, N'Kỹ năng Giao tiếp Hiệu quả', N'Communication', N'Dễ', 7, 10, 60.00, N'Luyện tập', NULL, GETDATE(), GETDATE());
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, Status)
+VALUES (3, 1, N'Chiến lược và mục tiêu', N'Leadership', N'Trung bình', 5, 20, 70.00, N'Luyện tập', 1, 1);
 
 
 INSERT INTO Chapter (CourseID, Title, ChapterOrder) VALUES
