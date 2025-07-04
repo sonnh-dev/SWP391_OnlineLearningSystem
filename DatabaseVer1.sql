@@ -1310,3 +1310,201 @@ BEGIN
     FROM Course c
     INNER JOIN inserted i ON c.CourseID = i.CourseID;
 END;
+
+
+PRINT '2. Xóa dữ liệu cũ...';
+
+DELETE FROM QuizAttemptDetails;
+PRINT ' - Đã xóa dữ liệu từ QuizAttemptDetails.';
+DELETE FROM QuestionOptions;
+PRINT ' - Đã xóa dữ liệu từ QuestionOptions.';
+DELETE FROM QuizAttempts;
+PRINT ' - Đã xóa dữ liệu từ QuizAttempts.';
+DELETE FROM Questions;
+PRINT ' - Đã xóa dữ liệu từ Questions.';
+DELETE FROM Quizzes;
+PRINT ' - Đã xóa dữ liệu từ Quizzes.';
+
+-- Reset IDENTITY (auto-increment) để ID bắt đầu từ 1 lại cho các bảng quan trọng
+DBCC CHECKIDENT ('QuizAttemptDetails', RESEED, 0);
+DBCC CHECKIDENT ('QuestionOptions', RESEED, 0);
+DBCC CHECKIDENT ('QuizAttempts', RESEED, 0);
+DBCC CHECKIDENT ('Questions', RESEED, 0);
+DBCC CHECKIDENT ('Quizzes', RESEED, 0);
+PRINT ' - Đã reset IDENTITY cho các bảng liên quan đến Quiz.';
+
+PRINT '3. Chèn dữ liệu Quizzes mới...';
+
+-- Giả định UserID = 1, LessonID = 1001/1002, CourseID = 1/2 đã tồn tại.
+-- Nếu chưa, hãy thêm chúng vào bảng Users, Lesson, Course trước đó.
+
+-- Chèn Quiz 1: SQL Basics Quiz
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, CreatedAt, UpdatedAt) VALUES
+(
+    1001, -- Thay thế bằng LessonID hợp lệ nếu khác
+    1,    -- Thay thế bằng CourseID hợp lệ nếu khác
+    N'SQL Basics Quiz',
+    N'Database',
+    N'Beginner',
+    0, -- Sẽ cập nhật sau khi thêm câu hỏi
+    15,
+    70.00,
+    N'Practice',
+    GETDATE(),
+    GETDATE()
+);
+DECLARE @QuizID_SQL_Basics INT = SCOPE_IDENTITY();
+PRINT ' - Đã chèn Quiz: SQL Basics Quiz (ID: ' + CAST(@QuizID_SQL_Basics AS NVARCHAR(10)) + ').';
+
+-- Chèn Quiz 2: Java Fundamentals
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, CreatedAt, UpdatedAt) VALUES
+(
+    1001, -- Thay thế bằng LessonID hợp lệ nếu khác
+    1,    -- Thay thế bằng CourseID hợp lệ nếu khác
+    N'Java Fundamentals',
+    N'Programming',
+    N'Intermediate',
+    0, -- Sẽ cập nhật sau khi thêm câu hỏi
+    20,
+    75.00,
+    N'Assessment',
+    GETDATE(),
+    GETDATE()
+);
+DECLARE @QuizID_Java_Fundamentals INT = SCOPE_IDENTITY();
+PRINT ' - Đã chèn Quiz: Java Fundamentals (ID: ' + CAST(@QuizID_Java_Fundamentals AS NVARCHAR(10)) + ').';
+
+-- Chèn Quiz 3: Database Normalization
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, CreatedAt, UpdatedAt) VALUES
+(
+    1002, -- Thay thế bằng LessonID hợp lệ nếu khác
+    2,    -- Thay thế bằng CourseID hợp lệ nếu khác
+    N'Database Normalization Quiz',
+    N'Database',
+    N'Intermediate',
+    0, -- Sẽ cập nhật sau khi thêm câu hỏi
+    25,
+    70.00,
+    N'Assessment',
+    GETDATE(),
+    GETDATE()
+);
+DECLARE @QuizID_DB_Normalization INT = SCOPE_IDENTITY();
+PRINT ' - Đã chèn Quiz: Database Normalization Quiz (ID: ' + CAST(@QuizID_DB_Normalization AS NVARCHAR(10)) + ').';
+
+---
+### **4. Chèn Questions và Question Options**
+---
+
+PRINT '4. Chèn dữ liệu Questions và QuestionOptions...';
+
+-- --- Câu hỏi cho 'SQL Basics Quiz' (QuizID: @QuizID_SQL_Basics) ---
+
+PRINT '   - Bắt đầu chèn câu hỏi cho SQL Basics Quiz...';
+
+-- Q1 (MC): What SQL keyword is used to extract data?
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
+(1, N'What SQL keyword is used to extract data from a database?', N'Multiple Choice', N'The SELECT statement is used to select data from a database.', NULL);
+DECLARE @Q1_SQL_ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(1, N'UPDATE', 0), (@Q1_SQL_ID, N'INSERT', 0), (@Q1_SQL_ID, N'SELECT', 1), (@Q1_SQL_ID, N'DELETE', 0);
+PRINT '     - Đã thêm Q1 (MC) và options.';
+
+-- Q2 (MC): Which SQL command is used to update data?
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
+(1, N'Which SQL command is used to update data in a database?', N'Multiple Choice', N'The UPDATE statement is used to modify existing records in a table.', NULL);
+DECLARE @Q2_SQL_ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(2, N'SELECT', 0), (@Q2_SQL_ID, N'UPDATE', 1), (@Q2_SQL_ID, N'CREATE', 0), (@Q2_SQL_ID, N'DROP', 0);
+PRINT '     - Đã thêm Q2 (MC) và options.';
+
+-- Q3 (SA): Explain PRIMARY KEY
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
+(1, N'Briefly explain the purpose of a PRIMARY KEY in a relational database.', N'Short Answer', N'A primary key uniquely identifies each record in a table, ensuring entity integrity and serving as a basis for establishing relationships with other tables via foreign keys.', N'A primary key uniquely identifies each record in a table, ensuring entity integrity and serving as a basis for establishing relationships with other tables via foreign keys.');
+PRINT '     - Đã thêm Q3 (Tự luận).';
+
+-- Q4 (MC): Filter records
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
+(1, N'Which clause is used to filter records based on a condition in a SELECT statement?', N'Multiple Choice', N'The WHERE clause is used to extract only those records that fulfill a specified condition.', NULL);
+DECLARE @Q4_SQL_ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(4, N'GROUP BY', 0), (@Q4_SQL_ID, N'ORDER BY', 0), (@Q4_SQL_ID, N'HAVING', 0), (@Q4_SQL_ID, N'WHERE', 1);
+PRINT '     - Đã thêm Q4 (MC) và options.';
+
+
+-- --- Câu hỏi cho 'Java Fundamentals' (QuizID: @QuizID_Java_Fundamentals) ---
+
+PRINT '   - Bắt đầu chèn câu hỏi cho Java Fundamentals...';
+
+-- Q1 (MC): Keyword for class
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
+(@QuizID_Java_Fundamentals, N'Which keyword is used to define a class in Java?', N'Multiple Choice', N'In Java, the `class` keyword is used to declare a class.', NULL);
+DECLARE @Q1_Java_ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@Q1_Java_ID, N'interface', 0), (@Q1_Java_ID, N'public', 0), (@Q1_Java_ID, N'class', 1), (@Q1_Java_ID, N'void', 0);
+PRINT ' - Đã thêm Q1 (MC) và options.';
+
+-- Q2 (MC): Largest non-negative integer type
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
+(@QuizID_Java_Fundamentals, N'Which primitive data type in Java is used to store the largest non-negative integers?', N'Multiple Choice', N'The `long` data type is a 64-bit two''s complement integer, providing the largest range among integer primitive types.', NULL);
+DECLARE @Q2_Java_ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@Q2_Java_ID, N'int', 0), (@Q2_Java_ID, N'long', 1), (@Q2_Java_ID, N'short', 0), (@Q2_Java_ID, N'byte', 0);
+PRINT ' - Đã thêm Q2 (MC) và options.';
+
+-- Q3 (Essay): Abstract Class vs Interface
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
+(@QuizID_Java_Fundamentals, N'What is the difference between an Abstract Class and an Interface in Java?', N'Essay', N'An abstract class can have abstract and non-abstract methods, can have constructors, and can contain fields that are not static or final. An interface can only have abstract methods (before Java 8) or default/static methods (Java 8+), cannot have constructors, and all fields are implicitly public static final.', N'An abstract class can have abstract and non-abstract methods, can have constructors, and can contain fields that are not static or final. An interface can only have abstract methods (before Java 8) or default/static methods (Java 8+), cannot have constructors, and all fields are implicitly public static final.');
+PRINT ' - Đã thêm Q3 (Tự luận) cho Java Fundamentals.';
+
+
+-- --- Câu hỏi cho 'Database Normalization Quiz' (QuizID: @QuizID_DB_Normalization) ---
+
+PRINT '   - Bắt đầu chèn câu hỏi cho Database Normalization Quiz...';
+
+-- Q1 (MC): Primary goal of normalization
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
+(@QuizID_DB_Normalization, N'What is the primary goal of database normalization?', N'Multiple Choice', N'Normalization aims to reduce data redundancy and improve data integrity.', NULL);
+DECLARE @Q1_DB_Norm_ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@Q1_DB_Norm_ID, N'To increase data redundancy', 0), (@Q1_DB_Norm_ID, N'To reduce data redundancy and improve data integrity', 1), (@Q1_DB_Norm_ID, N'To speed up data retrieval operations', 0), (@Q1_DB_Norm_ID, N'To encrypt sensitive data', 0);
+PRINT ' - Đã thêm Q1 (MC) và options.';
+
+-- Q2 (MC): Normal form eliminating partial dependencies
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
+(@QuizID_DB_Normalization, N'Which normal form eliminates partial dependencies?', N'Multiple Choice', N'Second Normal Form (2NF) ensures that all non-key attributes are fully functionally dependent on the primary key.', NULL);
+DECLARE @Q2_DB_Norm_ID INT = SCOPE_IDENTITY();
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+(@Q2_DB_Norm_ID, N'First Normal Form (1NF)', 0), (@Q2_DB_Norm_ID, N'Second Normal Form (2NF)', 1), (@Q2_DB_Norm_ID, N'Third Normal Form (3NF)', 0), (@Q2_DB_Norm_ID, N'Boyce-Codd Normal Form (BCNF)', 0);
+PRINT ' - Đã thêm Q2 (MC) và options.';
+
+-- Q3 (SA): Transitive dependency
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
+(@QuizID_DB_Normalization, N'Explain the concept of a transitive dependency in database normalization.', N'Short Answer', N'A transitive dependency occurs when a non-key attribute is dependent on another non-key attribute, which in turn is dependent on the primary key. This violates 3NF.', N'A transitive dependency occurs when a non-key attribute is dependent on another non-key attribute, which in turn is dependent on the primary key. This violates 3NF.');
+PRINT ' - Đã thêm Q3 (Tự luận).';
+
+---
+### **5. Cập nhật Số lượng Câu hỏi trong Bảng Quizzes**
+---
+
+PRINT '5. Cập nhật số lượng câu hỏi trong bảng Quizzes...';
+
+UPDATE Quizzes
+SET NumQuestions = (SELECT COUNT(QuestionID) FROM Questions WHERE QuizID = @QuizID_SQL_Basics)
+WHERE QuizID = @QuizID_SQL_Basics;
+PRINT ' - Đã cập nhật NumQuestions cho SQL Basics Quiz.';
+
+UPDATE Quizzes
+SET NumQuestions = (SELECT COUNT(QuestionID) FROM Questions WHERE QuizID = @QuizID_Java_Fundamentals)
+WHERE QuizID = @QuizID_Java_Fundamentals;
+PRINT ' - Đã cập nhật NumQuestions cho Java Fundamentals.';
+
+UPDATE Quizzes
+SET NumQuestions = (SELECT COUNT(QuestionID) FROM Questions WHERE QuizID = @QuizID_DB_Normalization)
+WHERE QuizID = @QuizID_DB_Normalization;
+PRINT ' - Đã cập nhật NumQuestions cho Database Normalization Quiz.';
+
+-- Xác minh cuối cùng
+SELECT QuizID, QuizName, NumQuestions FROM Quizzes;
+
+PRINT '--- SCRIPT TẠO DỮ LIỆU QUIZ MỚI HOÀN TẤT ---';
