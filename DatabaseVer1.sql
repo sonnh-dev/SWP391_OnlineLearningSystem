@@ -291,142 +291,28 @@ VALUES
 
 -- USE YourDatabaseName; -- Bỏ comment dòng này và thay bằng tên DB của bạn nếu cần
 
-PRINT '--- Inserting Quizzes for Specific Subjects ---';
 
--- ###########################################################
--- 1. Quiz về Lãnh đạo (Leadership)
-PRINT 'Inserting Quiz: Leadership Principles...';
-INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
-(NULL, NULL, N'Nguyên tắc Lãnh đạo', N'Leadership', N'Trung bình', 2, 10, 70.00, N'Kiểm tra', 1, GETDATE(), GETDATE());
-DECLARE @LeadershipQuizID INT = SCOPE_IDENTITY();
 
--- Câu hỏi 1 (Leadership)
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
-(@LeadershipQuizID, N'Phong cách lãnh đạo nào khuyến khích nhân viên tham gia vào quá trình ra quyết định?', N'Multiple Choice');
-DECLARE @LeadershipQ1ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@LeadershipQ1ID, N'Độc đoán', 0),
-(@LeadershipQ1ID, N'Dân chủ', 1),
-(@LeadershipQ1ID, N'Laissez-faire', 0),
-(@LeadershipQ1ID, N'Chuyển đổi', 0);
 
--- Câu hỏi 2 (Leadership)
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
-(@LeadershipQuizID, N'Người lãnh đạo giỏi cần có khả năng lắng nghe chủ động. (True/False)', N'True/False');
-DECLARE @LeadershipQ2ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@LeadershipQ2ID, 'True', 1),
-(@LeadershipQ2ID, 'False', 0);
 
-PRINT 'Leadership Quiz and Questions inserted.';
+
+
 
 
 -- ###########################################################
--- 2. Quiz về Quản lý Thời gian (Time Management)
-PRINT 'Inserting Quiz: Effective Time Management...';
-INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
-(NULL, NULL, N'Quản lý Thời gian Hiệu quả', N'Time Management', N'Dễ', 2, 8, 65.00, N'Luyện tập', NULL, GETDATE(), GETDATE());
-DECLARE @TimeManagementQuizID INT = SCOPE_IDENTITY();
 
--- Câu hỏi 1 (Time Management)
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
-(@TimeManagementQuizID, N'Phương pháp quản lý thời gian nào tập trung vào việc ưu tiên các nhiệm vụ theo mức độ khẩn cấp và quan trọng?', N'Multiple Choice');
-DECLARE @TimeManagementQ1ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@TimeManagementQ1ID, N'Phương pháp Pomodoro', 0),
-(@TimeManagementQ1ID, N'Ma trận Eisenhower', 1),
-(@TimeManagementQ1ID, N'Kỹ thuật Getting Things Done (GTD)', 0),
-(@TimeManagementQ1ID, N'Quy tắc Pareto (80/20)', 0);
 
--- Câu hỏi 2 (Time Management)
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
-(@TimeManagementQuizID, N'Liệt kê ít nhất 2 lợi ích của việc lập kế hoạch hàng ngày.', N'Short Answer');
-DECLARE @TimeManagementQ2ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@TimeManagementQ2ID, N'Giúp xác định ưu tiên, giảm căng thẳng, tăng năng suất.', 1); -- Đáp án ngắn gọn, có thể cần logic kiểm tra linh hoạt hơn trong ứng dụng
-
-PRINT 'Time Management Quiz and Questions inserted.';
 
 
 -- ###########################################################
--- 3. Quiz về Giải quyết Vấn đề (Problem Solving)
-PRINT 'Inserting Quiz: Problem Solving Techniques...';
-INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
-(NULL, NULL, N'Kỹ thuật Giải quyết Vấn đề', N'Problem Solving', N'Trung bình', 2, 12, 75.00, N'Kiểm tra', NULL, GETDATE(), GETDATE());
-DECLARE @ProblemSolvingQuizID INT = SCOPE_IDENTITY();
 
--- Câu hỏi 1 (Problem Solving)
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
-(@ProblemSolvingQuizID, N'Bước đầu tiên trong quy trình giải quyết vấn đề hiệu quả là gì?', N'Multiple Choice');
-DECLARE @ProblemSolvingQ1ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@ProblemSolvingQ1ID, N'Đưa ra các giải pháp khả thi', 0),
-(@ProblemSolvingQ1ID, N'Xác định và phân tích vấn đề', 1),
-(@ProblemSolvingQ1ID, N'Thực hiện giải pháp', 0),
-(@ProblemSolvingQ1ID, N'Đánh giá kết quả', 0);
-
--- Câu hỏi 2 (Problem Solving)
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
-(@ProblemSolvingQuizID, N'Brainstorming là một kỹ thuật hữu ích để tạo ra nhiều ý tưởng giải quyết vấn đề. (True/False)', N'True/False');
-DECLARE @ProblemSolvingQ2ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@ProblemSolvingQ2ID, 'True', 1),
-(@ProblemSolvingQ2ID, 'False', 0);
-
-PRINT 'Problem Solving Quiz and Questions inserted.';
 
 
 -- ###########################################################
--- 4. Quiz về Trí tuệ Cảm xúc (Emotional Intelligence)
-PRINT 'Inserting Quiz: Emotional Intelligence Fundamentals...';
-INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
-(NULL, NULL, N'Cơ sở Trí tuệ Cảm xúc', N'Emotional Intelligence', N'Dễ', 2, 10, 60.00, N'Luyện tập', NULL, GETDATE(), GETDATE());
-DECLARE @EmotionalIntelligenceQuizID INT = SCOPE_IDENTITY();
-
--- Câu hỏi 1 (Emotional Intelligence)
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
-(@EmotionalIntelligenceQuizID, N'Khả năng nhận biết và hiểu cảm xúc của chính mình được gọi là gì?', N'Multiple Choice');
-DECLARE @EmotionalIntelligenceQ1ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@EmotionalIntelligenceQ1ID, N'Đồng cảm', 0),
-(@EmotionalIntelligenceQ1ID, N'Tự nhận thức', 1),
-(@EmotionalIntelligenceQ1ID, N'Động lực', 0),
-(@EmotionalIntelligenceQ1ID, N'Kỹ năng xã hội', 0);
-
--- Câu hỏi 2 (Emotional Intelligence)
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
-(@EmotionalIntelligenceQuizID, N'Người có trí tuệ cảm xúc cao thường dễ dàng kiểm soát cảm xúc tiêu cực. (True/False)', N'True/False');
-DECLARE @EmotionalIntelligenceQ2ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@EmotionalIntelligenceQ2ID, 'True', 1),
-(@EmotionalIntelligenceQ2ID, 'False', 0);
-
-PRINT 'Emotional Intelligence Quiz and Questions inserted.';
 
 
--- ###########################################################
--- 5. Quiz về Giao tiếp (Communication)
-PRINT 'Inserting Quiz: Effective Communication Skills...';
-INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, CreatedAt, UpdatedAt) VALUES
-(NULL, NULL, N'Kỹ năng Giao tiếp Hiệu quả', N'Communication', N'Khó', 2, 15, 70.00, N'Kiểm tra', NULL, GETDATE(), GETDATE());
-DECLARE @CommunicationQuizID INT = SCOPE_IDENTITY();
 
--- Câu hỏi 1 (Communication)
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
-(@CommunicationQuizID, N'Đâu là yếu tố quan trọng nhất để giao tiếp phi ngôn ngữ hiệu quả?', N'Multiple Choice');
-DECLARE @CommunicationQ1ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@CommunicationQ1ID, N'Giọng điệu', 0),
-(@CommunicationQ1ID, N'Ngôn ngữ cơ thể', 1),
-(@CommunicationQ1ID, N'Tốc độ nói', 0),
-(@CommunicationQ1ID, N'Chọn từ ngữ', 0);
 
--- Câu hỏi 2 (Communication)
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType) VALUES
-(@CommunicationQuizID, N'Nêu một ví dụ về rào cản trong giao tiếp.', N'Short Answer');
-DECLARE @CommunicationQ2ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@CommunicationQ2ID, N'Sự khác biệt về ngôn ngữ, văn hóa, hoặc tiếng ồn môi trường.', 1);
 
 PRINT 'Communication Quiz and Questions inserted.';
 
@@ -1392,9 +1278,8 @@ INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions,
 DECLARE @QuizID_DB_Normalization INT = SCOPE_IDENTITY();
 PRINT ' - Đã chèn Quiz: Database Normalization Quiz (ID: ' + CAST(@QuizID_DB_Normalization AS NVARCHAR(10)) + ').';
 
----
-### **4. Chèn Questions và Question Options**
----
+
+
 
 PRINT '4. Chèn dữ liệu Questions và QuestionOptions...';
 
@@ -1432,79 +1317,13 @@ INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
 PRINT '     - Đã thêm Q4 (MC) và options.';
 
 
--- --- Câu hỏi cho 'Java Fundamentals' (QuizID: @QuizID_Java_Fundamentals) ---
 
-PRINT '   - Bắt đầu chèn câu hỏi cho Java Fundamentals...';
-
--- Q1 (MC): Keyword for class
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
-(@QuizID_Java_Fundamentals, N'Which keyword is used to define a class in Java?', N'Multiple Choice', N'In Java, the `class` keyword is used to declare a class.', NULL);
-DECLARE @Q1_Java_ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@Q1_Java_ID, N'interface', 0), (@Q1_Java_ID, N'public', 0), (@Q1_Java_ID, N'class', 1), (@Q1_Java_ID, N'void', 0);
-PRINT ' - Đã thêm Q1 (MC) và options.';
-
--- Q2 (MC): Largest non-negative integer type
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
-(@QuizID_Java_Fundamentals, N'Which primitive data type in Java is used to store the largest non-negative integers?', N'Multiple Choice', N'The `long` data type is a 64-bit two''s complement integer, providing the largest range among integer primitive types.', NULL);
-DECLARE @Q2_Java_ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@Q2_Java_ID, N'int', 0), (@Q2_Java_ID, N'long', 1), (@Q2_Java_ID, N'short', 0), (@Q2_Java_ID, N'byte', 0);
-PRINT ' - Đã thêm Q2 (MC) và options.';
-
--- Q3 (Essay): Abstract Class vs Interface
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
-(@QuizID_Java_Fundamentals, N'What is the difference between an Abstract Class and an Interface in Java?', N'Essay', N'An abstract class can have abstract and non-abstract methods, can have constructors, and can contain fields that are not static or final. An interface can only have abstract methods (before Java 8) or default/static methods (Java 8+), cannot have constructors, and all fields are implicitly public static final.', N'An abstract class can have abstract and non-abstract methods, can have constructors, and can contain fields that are not static or final. An interface can only have abstract methods (before Java 8) or default/static methods (Java 8+), cannot have constructors, and all fields are implicitly public static final.');
-PRINT ' - Đã thêm Q3 (Tự luận) cho Java Fundamentals.';
+;
 
 
--- --- Câu hỏi cho 'Database Normalization Quiz' (QuizID: @QuizID_DB_Normalization) ---
 
-PRINT '   - Bắt đầu chèn câu hỏi cho Database Normalization Quiz...';
 
--- Q1 (MC): Primary goal of normalization
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
-(@QuizID_DB_Normalization, N'What is the primary goal of database normalization?', N'Multiple Choice', N'Normalization aims to reduce data redundancy and improve data integrity.', NULL);
-DECLARE @Q1_DB_Norm_ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@Q1_DB_Norm_ID, N'To increase data redundancy', 0), (@Q1_DB_Norm_ID, N'To reduce data redundancy and improve data integrity', 1), (@Q1_DB_Norm_ID, N'To speed up data retrieval operations', 0), (@Q1_DB_Norm_ID, N'To encrypt sensitive data', 0);
-PRINT ' - Đã thêm Q1 (MC) và options.';
-
--- Q2 (MC): Normal form eliminating partial dependencies
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
-(@QuizID_DB_Normalization, N'Which normal form eliminates partial dependencies?', N'Multiple Choice', N'Second Normal Form (2NF) ensures that all non-key attributes are fully functionally dependent on the primary key.', NULL);
-DECLARE @Q2_DB_Norm_ID INT = SCOPE_IDENTITY();
-INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
-(@Q2_DB_Norm_ID, N'First Normal Form (1NF)', 0), (@Q2_DB_Norm_ID, N'Second Normal Form (2NF)', 1), (@Q2_DB_Norm_ID, N'Third Normal Form (3NF)', 0), (@Q2_DB_Norm_ID, N'Boyce-Codd Normal Form (BCNF)', 0);
-PRINT ' - Đã thêm Q2 (MC) và options.';
-
--- Q3 (SA): Transitive dependency
-INSERT INTO Questions (QuizID, QuestionContent, QuestionType, Explanation, AnswerKey) VALUES
-(@QuizID_DB_Normalization, N'Explain the concept of a transitive dependency in database normalization.', N'Short Answer', N'A transitive dependency occurs when a non-key attribute is dependent on another non-key attribute, which in turn is dependent on the primary key. This violates 3NF.', N'A transitive dependency occurs when a non-key attribute is dependent on another non-key attribute, which in turn is dependent on the primary key. This violates 3NF.');
-PRINT ' - Đã thêm Q3 (Tự luận).';
 
 ---
-### **5. Cập nhật Số lượng Câu hỏi trong Bảng Quizzes**
----
 
-PRINT '5. Cập nhật số lượng câu hỏi trong bảng Quizzes...';
 
-UPDATE Quizzes
-SET NumQuestions = (SELECT COUNT(QuestionID) FROM Questions WHERE QuizID = @QuizID_SQL_Basics)
-WHERE QuizID = @QuizID_SQL_Basics;
-PRINT ' - Đã cập nhật NumQuestions cho SQL Basics Quiz.';
-
-UPDATE Quizzes
-SET NumQuestions = (SELECT COUNT(QuestionID) FROM Questions WHERE QuizID = @QuizID_Java_Fundamentals)
-WHERE QuizID = @QuizID_Java_Fundamentals;
-PRINT ' - Đã cập nhật NumQuestions cho Java Fundamentals.';
-
-UPDATE Quizzes
-SET NumQuestions = (SELECT COUNT(QuestionID) FROM Questions WHERE QuizID = @QuizID_DB_Normalization)
-WHERE QuizID = @QuizID_DB_Normalization;
-PRINT ' - Đã cập nhật NumQuestions cho Database Normalization Quiz.';
-
--- Xác minh cuối cùng
-SELECT QuizID, QuizName, NumQuestions FROM Quizzes;
-
-PRINT '--- SCRIPT TẠO DỮ LIỆU QUIZ MỚI HOÀN TẤT ---';
