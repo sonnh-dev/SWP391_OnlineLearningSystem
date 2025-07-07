@@ -1,5 +1,7 @@
 package model.course;
 
+import java.util.Date;
+
 /**
  *
  * @author sonpk
@@ -12,7 +14,7 @@ public class UserCourse {
     private String title;
     private String imageURL;
     private String description;
-    private String enrollDate;
+    private Date enrollDate;
     private double progress;
     private String status;
     private String validFrom;
@@ -21,7 +23,7 @@ public class UserCourse {
     public UserCourse() {
     }
 
-    public UserCourse(int userID, int courseID, int packageID, String title, String imageURL, String description, String enrollDate, double progress, String status, String validFrom, String validTo) {
+    public UserCourse(int userID, int courseID, int packageID, String title, String imageURL, String description, Date enrollDate, double progress, String status, String validFrom, String validTo) {
         this.userID = userID;
         this.courseID = courseID;
         this.packageID = packageID;
@@ -83,11 +85,11 @@ public class UserCourse {
         this.description = description;
     }
 
-    public String getEnrollDate() {
+    public Date getEnrollDate() {
         return enrollDate;
     }
 
-    public void setEnrollDate(String enrollDate) {
+    public void setEnrollDate(Date enrollDate) {
         this.enrollDate = enrollDate;
     }
 

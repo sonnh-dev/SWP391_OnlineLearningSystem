@@ -31,7 +31,7 @@ public class UserCourseDao extends DBContext {
 
     public List<UserCourse> getUserCoursesByUserID(int userID) {
         List<UserCourse> userCourses = new ArrayList<>();
-        String sql = "SELECT * FROM UserCourse WHERE UserID = ?";
+        String sql = "SELECT uc.*, c.Title FROM UserCourse uc JOIN Course c ON uc.CourseID = c.CourseID WHERE UserID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, userID);
@@ -41,10 +41,12 @@ public class UserCourseDao extends DBContext {
                 userCourse.setUserID(rs.getInt("UserID"));
                 userCourse.setCourseID(rs.getInt("CourseID"));
                 userCourse.setPackageID(rs.getInt("PackageID"));
+                userCourse.setEnrollDate(rs.getDate("EnrollDate"));
                 userCourse.setProgress(rs.getDouble("Progress"));
                 userCourse.setStatus(rs.getString("Status"));
                 userCourse.setValidFrom(rs.getString("ValidFrom"));
                 userCourse.setValidTo(rs.getString("ValidTo"));
+                userCourse.setTitle(rs.getString("Title"));
                 userCourses.add(userCourse);
             }
         } catch (SQLException e) {
@@ -63,6 +65,7 @@ public class UserCourseDao extends DBContext {
                 userCourse.setUserID(rs.getInt("UserID"));
                 userCourse.setCourseID(rs.getInt("CourseID"));
                 userCourse.setPackageID(rs.getInt("PackageID"));
+                userCourse.setEnrollDate(rs.getDate("EnrollDate"));
                 userCourse.setProgress(rs.getDouble("Progress"));
                 userCourse.setStatus(rs.getString("Status"));
                 userCourse.setValidFrom(rs.getString("ValidFrom"));

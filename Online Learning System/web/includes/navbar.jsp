@@ -51,7 +51,7 @@
                                     </form>
                                 </li>
                                 <li>
-                                    <form action="${pageContext.request.contextPath}/myRegistation" method="post" class="dropdown-item p-0">
+                                    <form action="${pageContext.request.contextPath}/myRegistration" method="post" class="dropdown-item p-0">
                                         <input type="hidden" name="userID" value="${user.userId}" />
                                         <button type="submit" class="dropdown-item w-100 text-start">My Registration</button>
                                     </form>
