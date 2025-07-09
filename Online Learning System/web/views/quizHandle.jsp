@@ -240,6 +240,7 @@
             .filter-options button:hover {
                 background-color: #ddd;
             }
+
         </style>
     </head>
     <body>
@@ -267,7 +268,7 @@
             </div>
 
             <% if (currentQuestion != null) {%>
-            <form id="quizForm" action="quizHandle" method="POST">
+            <form id="quizForm" action="quizHandle" method="POST" enctype="multipart/form-data"  >
                 <input type="hidden" name="quizId" value="<%= quizId%>">
                 <input type="hidden" name="qIndex" value="<%= currentQuestionIndex%>">
                 <input type="hidden" name="questionId" value="<%= currentQuestion.getQuestionID()%>"> <%-- Corrected: getQuestionId() --%>
@@ -303,8 +304,20 @@
                         } else if ("Short Answer".equals(questionType) || "Essay".equals(questionType)) {
                             // Display textarea for short answer/essay questions
 %>
-                        <textarea name="text_answer_<%= currentQuestion.getQuestionID()%>" rows="5" cols="50" <%-- Corrected: getQuestionId() --%>
-                                  placeholder="Nhập câu trả lời của bạn ở đây..."><%= (currentQuestion.getUserAnswerText() != null ? currentQuestion.getUserAnswerText() : "")%></textarea>
+                        <textarea name="text_answer_<%= currentQuestion.getQuestionID()%>" rows="5" cols="50"
+                                  placeholder="Nhập câu trả lời..."><%= (currentQuestion.getUserAnswerText() != null ? currentQuestion.getUserAnswerText() : "")%></textarea>
+
+                        <div style="margin-top: 10px;">
+                            <label>Đính kèm tệp hoặc hình ảnh:</label>
+                            <input type="file" name="file_upload_<%= currentQuestion.getQuestionID()%>" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.txt">
+                            <%-- Nếu đã upload file trước đó --%>
+                            <c:if test="${not empty currentQuestion.uploadedFilePath}">
+                                <p>File đã tải lên: 
+                                    <a href="${pageContext.request.contextPath}/uploads/${currentQuestion.uploadedFilePath}" target="_blank">Xem file</a>
+                                </p>
+                            </c:if>
+                        </div>
+
                         <%
                         } else {
                             // Fallback for unsupported question types

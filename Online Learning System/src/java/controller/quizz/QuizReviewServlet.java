@@ -63,17 +63,17 @@ public class QuizReviewServlet extends HttpServlet {
         try {
             // Corrected: Call the right DAO method to get QuizAttempt by attemptId
             QuizAttempt attempt = quizDAO.getQuizAttemptById(attemptId);
-            
+
             if (attempt == null) {
                 request.setAttribute("errorMessage", "Không tìm thấy kết quả bài làm với ID: " + attemptId + " hoặc không thuộc về người dùng này.");
                 request.getRequestDispatcher("/views/error.jsp").forward(request, response);
                 System.err.println("ERROR: QuizAttempt not found for attemptId=" + attemptId + " and userID=" + userID);
                 return;
             }
-            
+
             // Corrected: Use getQuizById (assuming you've refactored your DAO to remove getQuizById2)
             // Use quiz.getQuizId() for the getter
-            Quiz quiz = quizDAO.getQuizById2(attempt.getQuizId()); 
+            Quiz quiz = quizDAO.getQuizById2(attempt.getQuizId());
             if (quiz == null) {
                 request.setAttribute("errorMessage", "Không tìm thấy thông tin Quiz liên quan đến bài làm.");
                 request.getRequestDispatcher("/views/error.jsp").forward(request, response);
@@ -98,13 +98,11 @@ public class QuizReviewServlet extends HttpServlet {
 
             // Assign user answers (both selected options and text) to each Question object
             for (Question q : questions) {
-                // Initialize/reset answers for the current question object
-                q.setUserSelectedOptionIds(new ArrayList<>()); 
-                q.setUserAnswerText(null); // Reset text answer
+                q.setUserSelectedOptionIds(new ArrayList<>());
+                q.setUserAnswerText(null);
+                q.setUploadedFilePath(null); // ✅ reset trước
 
-                // Find and assign the correct attempt details for this question
                 for (QuizAttemptDetail detail : userAttemptDetails) {
-                    // Corrected: Use q.getQuestionId() for the getter
                     if (detail.getQuestionId() == q.getQuestionID()) {
                         if (detail.getSelectedOptionId() != null) {
                             q.addUserSelectedOptionId(detail.getSelectedOptionId());
@@ -112,8 +110,10 @@ public class QuizReviewServlet extends HttpServlet {
                         if (detail.getUserAnswerText() != null) {
                             q.setUserAnswerText(detail.getUserAnswerText());
                         }
-                        // You can also load isMarked here if you implement it for review
-                        break; // Found details for this question, move to the next question object
+                        if (detail.getUploadedFilePath() != null) { // ✅ nếu đã lưu đường dẫn file
+                            q.setUploadedFilePath(detail.getUploadedFilePath());
+                        }
+                        break;
                     }
                 }
             }
@@ -122,7 +122,7 @@ public class QuizReviewServlet extends HttpServlet {
             request.setAttribute("attempt", attempt);
             request.setAttribute("questions", questions);
             request.setAttribute("correctAnswers", correctAnswers); // Pass correct answers for comparison in JSP
-            
+
             // Ensure this path is correct for your quizReview.jsp
             request.getRequestDispatcher("/views/quizReview.jsp").forward(request, response);
 

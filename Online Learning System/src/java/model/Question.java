@@ -19,6 +19,15 @@ public class Question {
     private String userAnswerText;
     private String answerKey;
     private boolean isMarked;
+    private String uploadedFilePath;
+
+    public String getUploadedFilePath() {
+        return uploadedFilePath;
+    }
+
+    public void setUploadedFilePath(String uploadedFilePath) {
+        this.uploadedFilePath = uploadedFilePath;
+    }
 
     public boolean isMarked() { // Getter for boolean isMarked
         return isMarked;

@@ -223,6 +223,7 @@ CREATE TABLE QuizAttemptDetails (
     SelectedOptionID INT NULL, -- NULL nếu chưa trả lời hoặc là câu hỏi tự luận
     UserAnswerText TEXT NULL, -- Nếu là câu hỏi tự luận (nếu cần)
     IsMarked BIT DEFAULT 0, -- Để đánh dấu câu hỏi cần xem lại
+	UploadedFilePath NVARCHAR(255),
     FOREIGN KEY (AttemptID) REFERENCES QuizAttempts(AttemptID),
     FOREIGN KEY (QuestionID) REFERENCES Questions(QuestionID),
     FOREIGN KEY (SelectedOptionID) REFERENCES QuestionOptions(OptionID)

@@ -21,7 +21,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.nio.file.Paths;
 
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024, // 1MB
+        maxFileSize = 10 * 1024 * 1024, // 10MB
+        maxRequestSize = 20 * 1024 * 1024
+)
 @WebServlet(name = "QuizHandleServlet", urlPatterns = {"/quizHandle"})
 public class QuizHandleServlet extends HttpServlet {
 
@@ -165,13 +174,13 @@ public class QuizHandleServlet extends HttpServlet {
                     if (submittedQuestion != null) {
                         List<Integer> selectedOptionIds = null;
                         String userAnswerText = null;
+                        String fileName = null; // ✅ Thêm để lưu tên file (nếu có)
 
                         // ✅ đọc trạng thái đánh dấu
                         String isMarkedStr = request.getParameter("isMarked");
                         boolean isMarked = "true".equals(isMarkedStr);
-                        submittedQuestion.setMarked(isMarked); // cập nhật trạng thái đánh dấu
+                        submittedQuestion.setMarked(isMarked);
 
-                        // Xử lý câu trả lời như cũ
                         if ("Multiple Choice".equals(submittedQuestion.getQuestionType()) || "True/False".equals(submittedQuestion.getQuestionType())) {
                             String[] options = request.getParameterValues("option_" + submittedQuestionId);
                             if (options != null) {
@@ -186,15 +195,32 @@ public class QuizHandleServlet extends HttpServlet {
                             userAnswerText = request.getParameter("text_answer_" + submittedQuestionId);
                         }
 
-                        // Lưu DB
-                        quizDAO.saveUserAnswers(attemptId, submittedQuestionId, selectedOptionIds, userAnswerText);
+                        // ✅ Xử lý file upload (nếu có)
+                        Part filePart = request.getPart("file_upload_" + submittedQuestionId);
+                        if (filePart != null && filePart.getSize() > 0) {
+                            fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                            String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
+                            File uploadDir = new File(uploadPath);
+                            if (!uploadDir.exists()) {
+                                uploadDir.mkdir();
+                            }
 
-                        // Cập nhật session (bao gồm trạng thái đánh dấu)
+                            String filePath = uploadPath + File.separator + fileName;
+                            filePart.write(filePath);
+
+                            submittedQuestion.setUploadedFilePath(fileName); // Gán vào model nếu cần hiển thị
+                        }
+
+                        // ✅ Lưu vào DB
+                        quizDAO.saveUserAnswers(attemptId, submittedQuestionId, selectedOptionIds, userAnswerText, fileName);
+
+                        // ✅ Cập nhật session
                         for (Question q : questions) {
                             if (q.getQuestionID() == submittedQuestionId) {
                                 q.setUserSelectedOptionIds(selectedOptionIds != null ? selectedOptionIds : new ArrayList<>());
                                 q.setUserAnswerText(userAnswerText);
-                                q.setMarked(isMarked); // cập nhật trạng thái đánh dấu trong danh sách session
+                                q.setUploadedFilePath(fileName); // Gán file vào session (nếu cần hiển thị ở Review)
+                                q.setMarked(isMarked);
                                 break;
                             }
                         }

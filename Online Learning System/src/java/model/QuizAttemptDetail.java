@@ -16,6 +16,15 @@ public class QuizAttemptDetail {
     private Integer selectedOptionId; // NULL nếu câu hỏi tự luận hoặc chưa chọn
     private String userAnswerText; // Cho câu hỏi tự luận
     private boolean isMarked; // Đánh dấu để xem lại
+    private String uploadedFilePath;
+
+    public String getUploadedFilePath() {
+        return uploadedFilePath;
+    }
+
+    public void setUploadedFilePath(String uploadedFilePath) {
+        this.uploadedFilePath = uploadedFilePath;
+    }
 
     // Constructors
     public QuizAttemptDetail() {
