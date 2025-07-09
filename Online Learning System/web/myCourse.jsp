@@ -70,7 +70,8 @@
 
                     <div class="col course-item ${statusClass}">
                         <div class="card h-100 shadow-sm course-card">
-                            <img src="${uc.imageURL}" class="card-img-top course-img" alt="${uc.title}" />
+                            <img src="${uc.imageURL}" alt="${uc.title}"
+                                 style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;" />
                             <div class="card-body d-flex flex-column">
 
                                 <c:choose>

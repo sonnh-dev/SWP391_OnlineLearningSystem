@@ -61,7 +61,7 @@ public class UserCourseDao extends DBContext {
                 userCourse.setUserID(rs.getInt("UserID"));
                 userCourse.setCourseID(rs.getInt("CourseID"));
                 userCourse.setPkgName(rs.getString("PackageName"));
-                userCourse.setProgress(rs.getDouble("Price"));
+                userCourse.setPrice(rs.getDouble("Price"));
                 userCourse.setEnrollDate(rs.getDate("EnrollDate"));
                 userCourse.setProgress(rs.getDouble("Progress"));
                 userCourse.setStatus(rs.getString("Status"));
@@ -73,6 +73,31 @@ public class UserCourseDao extends DBContext {
         } catch (SQLException e) {
         }
         return userCourses;
+    }
+
+    public UserCourse getUserCourse(int userID, int CourseID) {
+        String sql = "SELECT uc.*, c.Title FROM UserCourse uc JOIN Course c ON uc.CourseID = c.CourseID WHERE uc.UserID = ? AND uc.CourseID = ?";
+        
+        UserCourse userCourse = new UserCourse();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            ps.setInt(2, CourseID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                userCourse.setUserID(rs.getInt("UserID"));
+                userCourse.setCourseID(rs.getInt("CourseID"));
+                userCourse.setPkgName(rs.getString("PackageName"));
+                userCourse.setPrice(rs.getDouble("Price"));
+                userCourse.setEnrollDate(rs.getDate("EnrollDate"));
+                userCourse.setProgress(rs.getDouble("Progress"));
+                userCourse.setStatus(rs.getString("Status"));
+                userCourse.setValidFrom(rs.getString("ValidFrom"));
+                userCourse.setValidTo(rs.getString("ValidTo"));
+                userCourse.setTitle(rs.getString("Title"));
+            }
+        } catch (SQLException e) {
+        }
+        return userCourse;
     }
 
     public List<UserCourse> getUserCoursesByUserIDPayed(int userID) {
@@ -98,5 +123,15 @@ public class UserCourseDao extends DBContext {
         } catch (SQLException e) {
         }
         return userCourses;
+    }
+
+    public void deleteUserCourse(int userID, int courseID) {
+        String sql = "DELETE FROM UserCourse WHERE UserID = ? AND CourseID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            ps.setInt(2, courseID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+        }
     }
 }

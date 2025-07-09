@@ -74,9 +74,21 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-start flex-wrap mb-3">
                             <div class="d-flex gap-2 flex-wrap">
-                                <button class="btn btn-primary ps-4 pe-4" data-bs-toggle="modal" data-bs-target="#popupModal">
-                                    Enroll Now
-                                </button>
+                                <c:choose>
+                                    <c:when test="${not empty userCourse && userCourse.status == 'SUCCESS'}">
+                                        <form action="MyCourse" method="post" style="display: inline;">
+                                            <input type="hidden" name="userID" value="${userID}" />
+                                            <button type="submit" class="btn btn-success ps-4 pe-4">
+                                                Go to My Course
+                                            </button>
+                                        </form>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button class="btn btn-primary ps-4 pe-4" data-bs-toggle="modal" data-bs-target="#popupModal">
+                                            Enroll Now
+                                        </button>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <div class="text-muted d-flex flex-column align-items-end mt-2 mt-sm-0"
                                  style="font-size: 0.95rem;">
@@ -631,7 +643,7 @@
                     input.type = "hidden";
                     input.name = "userID";
                     input.value = event.data.userId;
-                    
+
                     form.appendChild(input);
                     document.body.appendChild(form);
                     form.submit();

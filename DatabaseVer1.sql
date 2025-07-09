@@ -94,7 +94,6 @@ CREATE TABLE CourseReviewMedia (
 	Caption NVARCHAR(255),
     FOREIGN KEY (ReviewID) REFERENCES CourseReview(ReviewID)
 );
-
 -- Bảng người dùng và khóa học (UserCourse)
 CREATE TABLE UserCourse (
     UserID INT,

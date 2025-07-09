@@ -26,26 +26,24 @@ public class CourseDetailServlet extends HttpServlet {
     private final LessonDao lessonDao = new LessonDao();
     private final ChapterDao chapterDao = new ChapterDao();
 
-    private void setUserIfLoggedIn(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            Account auth = (Account) session.getAttribute("auth");
-            if (auth != null) {
-                request.setAttribute("user", userDao.getLoginUser(auth));
-            }
-        }
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        setUserIfLoggedIn(request);
+        HttpSession session = request.getSession(false);
+        Account auth = null;
+        if (session != null) {
+            auth = (Account) session.getAttribute("auth");
+        }
         // CourseID và thông tin cơ bản
         int courseID = Integer.parseInt(request.getParameter("courseID"));
+        if (auth != null) {
+            int userId = userDao.getLoginUser(auth).getUserId();
+            request.setAttribute("userID", userId);
+            request.setAttribute("userCourse", new UserCourseDao().getUserCourse(userId, courseID));
+        }
         Course course = courseDao.getCourseByID(courseID);
         request.setAttribute("course", course);
         request.setAttribute("price", coursePackageDao.getCheapestCoursePackagesByCourse(course));
         request.setAttribute("courseAdditional", courseAdditionalDao.getCourseAdditionalByCourseID(courseID));
-
         // Chapter & Lesson
         List<Chapter> chapters = chapterDao.getChaptersByCourseID(courseID);
         Map<Integer, List<Lesson>> lessonMap = new HashMap<>();
@@ -122,7 +120,6 @@ public class CourseDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Kiểm tra đăng nhập
-        setUserIfLoggedIn(request);
         HttpSession session = request.getSession(false);
         Account auth = (Account) session.getAttribute("auth");
         if (auth == null) {
@@ -160,6 +157,7 @@ public class CourseDetailServlet extends HttpServlet {
 
         response.sendRedirect("CourseDetail?courseID=" + courseId);
     }
+
     @Override
     public String getServletInfo() {
         return "Course detail display and review submission servlet";

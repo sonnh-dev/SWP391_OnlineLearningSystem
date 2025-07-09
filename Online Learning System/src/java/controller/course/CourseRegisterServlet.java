@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller.course;
 
 import dao.CoursePackageDao;
@@ -126,9 +122,6 @@ public class CourseRegisterServlet extends HttpServlet {
         userCourse.setStatus("Pending");
         userCourse.setValidFrom(null);
         userCourse.setValidTo(null);
-        if (!userCourseDao.updateUserCourse(userCourse)) {
-            userCourseDao.addUserCourse(userCourse);
-        }
         // Forward to prePayment
         request.setAttribute("userId", user.getUserId());
         request.setAttribute("courseId", courseId);
