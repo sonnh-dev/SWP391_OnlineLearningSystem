@@ -8,7 +8,7 @@ public class Question {
     public List<Integer> getUserSelectedOptionIds() {
         return userSelectedOptionIds;
     }
-
+    private String explanation;
     private int questionID;
     private int quizID;
     private String questionContent;
@@ -18,9 +18,32 @@ public class Question {
     private List<Integer> userSelectedOptionIds;
     private String userAnswerText;
     private String answerKey;
+    private boolean isMarked;
 
-    
-    
+    public boolean isMarked() { // Getter for boolean isMarked
+        return isMarked;
+    }
+
+    public String getExplanation() {
+        return explanation;
+    }
+
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
+    }
+
+    public boolean isIsMarked() {
+        return isMarked;
+    }
+
+    public void setIsMarked(boolean isMarked) {
+        this.isMarked = isMarked;
+    }
+
+    public void setMarked(boolean marked) { // Setter for isMarked
+        isMarked = marked;
+    }
+
     public String getUserAnswerText() {
         return userAnswerText;
     }
@@ -55,6 +78,23 @@ public class Question {
     public Question() {
         this.options = new ArrayList<>();
         this.userSelectedOptionIds = new ArrayList<>();
+        this.isMarked = false; // Default to not marked
+    }
+
+    public Question(int questionId, String questionContent, String questionType,
+            String explanation, String answerKey, boolean isMarked) {
+        this(questionId, questionContent, questionType, answerKey, isMarked); // Gọi constructor phía dưới
+        this.explanation = explanation;
+    }
+
+    public Question(int questionId, String questionContent, String questionType,
+            String answerKey, boolean isMarked) {
+        this(); // Gọi constructor mặc định để khởi tạo List
+        this.questionID = questionId;
+        this.questionContent = questionContent;
+        this.questionType = questionType;
+        this.answerKey = answerKey;
+        this.isMarked = isMarked; // Khởi tạo từ tham số
     }
 
     public Question(String questionContent, String questionType, String answerKey) {
@@ -62,15 +102,16 @@ public class Question {
         this.questionType = questionType;
         this.answerKey = answerKey;
     }
+
     public Question(int questionId, String questionContent, String questionType) {
         this();
         this.questionID = questionId;
         this.questionContent = questionContent;
         this.questionType = questionType;
     }
-    
+
     // Constructor đầy đủ hơn
-        public Question(int questionId, String questionContent, String questionType, String answerKey) {
+    public Question(int questionId, String questionContent, String questionType, String answerKey) {
         this(); // Gọi constructor mặc định để khởi tạo List
         this.questionID = questionId;
         this.questionContent = questionContent;
@@ -89,7 +130,6 @@ public class Question {
     public void setOptions(List<QuestionOption> options) {
         this.options = options;
     }
-
 
     // Constructor, Getters, Setters
     public Question(int questionID, int quizID, String questionContent, String questionType) {

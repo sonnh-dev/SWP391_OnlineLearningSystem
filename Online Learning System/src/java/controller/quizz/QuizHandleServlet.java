@@ -66,7 +66,7 @@ public class QuizHandleServlet extends HttpServlet {
 
         try {
             // Corrected: Use getQuizById (assuming you've refactored your DAO)
-          Quiz quiz = quizDAO.getQuizById2(quizId); // Changed from getQuizById2
+            Quiz quiz = quizDAO.getQuizById2(quizId); // Changed from getQuizById2
             if (quiz == null) {
                 request.setAttribute("errorMessage", "Quiz không tồn tại.");
                 request.getRequestDispatcher("/views/error.jsp").forward(request, response);
@@ -145,28 +145,33 @@ public class QuizHandleServlet extends HttpServlet {
             }
             // 'questions' is now guaranteed not to be null if we reached this point.
             // 'attemptId' and 'quizStartTimeMillis' are also guaranteed to be set.
-            
-          // --- Handle saving answers from POST request (when clicking Next/Previous/Score Exam) ---
+
+            // --- Handle saving answers from POST request (when clicking Next/Previous/Score Exam) ---
             if ("POST".equalsIgnoreCase(request.getMethod())) {
                 String questionIdParam = request.getParameter("questionId");
                 if (questionIdParam != null) {
                     int submittedQuestionId = Integer.parseInt(questionIdParam);
-                    
+
                     Question submittedQuestion = null;
-                    if (questions != null) { // Defensive check, though 'questions' should not be null here
-                        for(Question q : questions) {
-                            if (q.getQuestionID() == submittedQuestionId) { // Corrected: use getQuestionId()
+                    if (questions != null) {
+                        for (Question q : questions) {
+                            if (q.getQuestionID() == submittedQuestionId) {
                                 submittedQuestion = q;
                                 break;
                             }
                         }
                     }
-                    
+
                     if (submittedQuestion != null) {
                         List<Integer> selectedOptionIds = null;
                         String userAnswerText = null;
 
-                        // Determine question type and retrieve appropriate answer
+                        // ✅ đọc trạng thái đánh dấu
+                        String isMarkedStr = request.getParameter("isMarked");
+                        boolean isMarked = "true".equals(isMarkedStr);
+                        submittedQuestion.setMarked(isMarked); // cập nhật trạng thái đánh dấu
+
+                        // Xử lý câu trả lời như cũ
                         if ("Multiple Choice".equals(submittedQuestion.getQuestionType()) || "True/False".equals(submittedQuestion.getQuestionType())) {
                             String[] options = request.getParameterValues("option_" + submittedQuestionId);
                             if (options != null) {
@@ -175,23 +180,22 @@ public class QuizHandleServlet extends HttpServlet {
                                     selectedOptionIds.add(Integer.parseInt(optId));
                                 }
                             } else {
-                                selectedOptionIds = new ArrayList<>(); // No options selected
+                                selectedOptionIds = new ArrayList<>();
                             }
                         } else if ("Short Answer".equals(submittedQuestion.getQuestionType()) || "Essay".equals(submittedQuestion.getQuestionType())) {
                             userAnswerText = request.getParameter("text_answer_" + submittedQuestionId);
                         }
 
-                        // Save the answer to DB using the updated DAO method
+                        // Lưu DB
                         quizDAO.saveUserAnswers(attemptId, submittedQuestionId, selectedOptionIds, userAnswerText);
 
-                        // Update the answer in the Question object in session for consistency
-                        if (questions != null) { // Defensive check
-                            for (Question q : questions) {
-                                if (q.getQuestionID() == submittedQuestionId) { // Corrected: use getQuestionId()
-                                    q.setUserSelectedOptionIds(selectedOptionIds != null ? selectedOptionIds : new ArrayList<>());
-                                    q.setUserAnswerText(userAnswerText);
-                                    break;
-                                }
+                        // Cập nhật session (bao gồm trạng thái đánh dấu)
+                        for (Question q : questions) {
+                            if (q.getQuestionID() == submittedQuestionId) {
+                                q.setUserSelectedOptionIds(selectedOptionIds != null ? selectedOptionIds : new ArrayList<>());
+                                q.setUserAnswerText(userAnswerText);
+                                q.setMarked(isMarked); // cập nhật trạng thái đánh dấu trong danh sách session
+                                break;
                             }
                         }
                     }
@@ -224,7 +228,9 @@ public class QuizHandleServlet extends HttpServlet {
             // Calculate remaining time
             long elapsedMillis = System.currentTimeMillis() - quizStartTimeMillis;
             long remainingTimeMillis = (long) quiz.getDurationMinutes() * 60 * 1000 - elapsedMillis;
-            if (remainingTimeMillis < 0) remainingTimeMillis = 0;
+            if (remainingTimeMillis < 0) {
+                remainingTimeMillis = 0;
+            }
             request.setAttribute("remainingTimeMillis", remainingTimeMillis);
 
             // Forward to JSP
@@ -249,13 +255,13 @@ public class QuizHandleServlet extends HttpServlet {
         Map<Integer, List<Integer>> correctOptionsMap = quizDAO.getCorrectAnswersForQuiz(quizId);
         // Get all user answers for this attempt
         List<QuizAttemptDetail> userAttemptDetails = quizDAO.getQuizAttemptDetailsForAttempt(attemptId);
-        
+
         // Convert userAttemptDetails to maps for easy lookup
         Map<Integer, List<Integer>> userSelectedOptionsMap = new java.util.HashMap<>();
         // No need for userAnswerTextMap here as short answers are not auto-scored
 
-        for(QuizAttemptDetail detail : userAttemptDetails){
-            if(detail.getSelectedOptionId() != null){
+        for (QuizAttemptDetail detail : userAttemptDetails) {
+            if (detail.getSelectedOptionId() != null) {
                 // Corrected: use getQuestionId()
                 userSelectedOptionsMap.computeIfAbsent(detail.getQuestionId(), k -> new ArrayList<>()).add(detail.getSelectedOptionId());
             }
@@ -268,7 +274,7 @@ public class QuizHandleServlet extends HttpServlet {
                 // Corrected: use getQuestionId()
                 List<Integer> userSelected = userSelectedOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
                 List<Integer> correct = correctOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
-           // Sort lists to ensure correct comparison for multiple correct options
+                // Sort lists to ensure correct comparison for multiple correct options
                 Collections.sort(userSelected);
                 Collections.sort(correct);
 
@@ -279,7 +285,7 @@ public class QuizHandleServlet extends HttpServlet {
             }
             // Short Answer/Essay questions are not automatically scored here
         }
-        
+
         // Avoid division by zero if there are no auto-scorable questions
         if (scoredQuestionsCount == 0) {
             return 0.0;
