@@ -126,7 +126,7 @@ CREATE TABLE Lesson (
     Title NVARCHAR(255),
     IsFree BIT,
     LessonOrder INT,
-	 Status BIT DEFAULT 1,
+	Status BIT DEFAULT 1,
     FOREIGN KEY (ChapterID) REFERENCES Chapter(ChapterID)
 );
 

@@ -82,9 +82,10 @@ public class ReturnPaymentServlet extends HttpServlet {
         } else {
             status = "invalid_signature";
         }
+        int price = Integer.parseInt(amount);
         request.setAttribute("status", status);
         request.setAttribute("orderCode", orderCode);
-        request.setAttribute("amount", amount);
+        request.setAttribute("amount", price/100);
         request.setAttribute("bankCode", bankCode);
         request.setAttribute("payDate", payDate);
         request.setAttribute("transactionNo", transactionNo);

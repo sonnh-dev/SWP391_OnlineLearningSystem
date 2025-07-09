@@ -109,15 +109,22 @@
                                                 </div>
                                                 <span class="text-muted small">${uc.progress}%</span>
                                             </div>
-                                            <a href="courseDetail?courseID=${uc.courseID}" class="btn btn-primary w-100">
-                                                <c:choose>
-                                                    <c:when test="${uc.progress == 100}">View Certificate</c:when>
-                                                    <c:otherwise>Continue Learning</c:otherwise>
-                                                </c:choose>
+                                            <c:choose>
+                                                <c:when test="${uc.progress == 100}">
+                                                    <a href="viewCertificate" class="btn btn-primary w-100">
+                                                        View Certificate
+                                                    </a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a href="lessionView?courseID=${uc.courseID}" class="btn btn-primary w-100">
+                                                        Continue Learning
+                                                    </a>
+                                                </c:otherwise>
+                                            </c:choose>
                                             </a>
                                         </c:when>
                                         <c:otherwise>
-                                            <a href="CourseDetail?courseID=${uc.courseID}" class="btn btn-primary w-100 mt-auto">
+                                            <a href="lessionView?courseID=${uc.courseID}" class="btn btn-primary w-100 mt-auto">
                                                 Start Course
                                             </a>
                                         </c:otherwise>

@@ -51,8 +51,8 @@
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body p-4">
                         <h5 class="card-title mb-4">Search</h5>
-                        <form class="d-flex rounded-pill overflow-hidden">
-                            <input type="search" class="form-control border-2 text-dark rounded-start-pill"
+                        <form action="post" method="get" class="d-flex rounded-pill overflow-hidden">
+                            <input type="search" name="search" class="form-control border-2 text-dark rounded-start-pill"
                                    placeholder="Search Blogs..." aria-label="Search">
                             <button class="btn rounded-end-pill px-3 text-white"
                                     style="background-color: rgba(30, 136, 229, 0.85);" type="submit">
@@ -68,7 +68,7 @@
                         <ul class="list-group list-group-flush">
                             <c:forEach var="entry" items="${categoryMap}">
                                 <li class="list-group-item d-flex justify-content-between align-items-center px-0 border-0">
-                                    <a href="#" class="text-decoration-none text-dark">${entry.key}</a>
+                                    <a href="post?category=${entry.key}" class="text-decoration-none text-dark">${entry.key}</a>
                                     <span class="badge bg-primary rounded-pill">${entry.value}</span>
                                 </li>
                             </c:forEach>
@@ -104,7 +104,7 @@
                             <!-- button see all-->
                             <div class="text-center mb-2">
                                 <button class="btn mt-3 px-3" style="background-color: #e0e0e0; color: #000;"
-                                        onclick="window.location.href = 'blogList.jsp'">
+                                        onclick="window.location.href = 'blogList'">
                                     See All
                                 </button>
                             </div>
