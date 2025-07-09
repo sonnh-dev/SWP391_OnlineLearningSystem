@@ -10,10 +10,11 @@ public class UserCourse {
 
     private int userID;
     private int courseID;
-    private int packageID;
     private String title;
     private String imageURL;
     private String description;
+    private String pkgName;
+    private Double price;
     private Date enrollDate;
     private double progress;
     private String status;
@@ -23,13 +24,14 @@ public class UserCourse {
     public UserCourse() {
     }
 
-    public UserCourse(int userID, int courseID, int packageID, String title, String imageURL, String description, Date enrollDate, double progress, String status, String validFrom, String validTo) {
+    public UserCourse(int userID, int courseID, String title, String imageURL, String description, String pkgName, Double price, Date enrollDate, double progress, String status, String validFrom, String validTo) {
         this.userID = userID;
         this.courseID = courseID;
-        this.packageID = packageID;
         this.title = title;
         this.imageURL = imageURL;
         this.description = description;
+        this.pkgName = pkgName;
+        this.price = price;
         this.enrollDate = enrollDate;
         this.progress = progress;
         this.status = status;
@@ -51,14 +53,6 @@ public class UserCourse {
 
     public void setCourseID(int courseID) {
         this.courseID = courseID;
-    }
-
-    public int getPackageID() {
-        return packageID;
-    }
-
-    public void setPackageID(int packageID) {
-        this.packageID = packageID;
     }
 
     public String getTitle() {
@@ -83,6 +77,22 @@ public class UserCourse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPkgName() {
+        return pkgName;
+    }
+
+    public void setPkgName(String pkgName) {
+        this.pkgName = pkgName;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public Date getEnrollDate() {

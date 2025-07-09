@@ -33,11 +33,6 @@ import model.course.UserCourse;
 @MultipartConfig
 public class CourseRegisterServlet extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -70,6 +65,9 @@ public class CourseRegisterServlet extends HttpServlet {
         String mobile = request.getParameter("mobile");
         String gender = request.getParameter("gender");
 
+        // Get course information.
+        CoursePackage coursePkg = new CoursePackageDao().getCoursePackagesByPackageID(packageId);
+        Double price = coursePkg.getOriginalPrice() - coursePkg.getOriginalPrice() * coursePkg.getSaleRate() / 100;
         Map<String, String> errors = new HashMap<>();
 
         //  Validations
@@ -117,13 +115,26 @@ public class CourseRegisterServlet extends HttpServlet {
                 Logger.getLogger(CourseRegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        // Add course into userCourse
         UserCourseDao userCourseDao = new UserCourseDao();
-        userCourseDao.addUserCourse(new UserCourse(user.getUserId(), courseId, packageId,"","","", null, 0.0, "Pending", null, null));
+        UserCourse userCourse = new UserCourse();
+        userCourse.setUserID(user.getUserId());
+        userCourse.setCourseID(courseId);
+        userCourse.setPkgName(coursePkg.getPackageName());
+        userCourse.setPrice(price);
+        userCourse.setProgress(0.0);
+        userCourse.setStatus("Pending");
+        userCourse.setValidFrom(null);
+        userCourse.setValidTo(null);
+        if (!userCourseDao.updateUserCourse(userCourse)) {
+            userCourseDao.addUserCourse(userCourse);
+        }
+        // Forward to prePayment
         request.setAttribute("userId", user.getUserId());
         request.setAttribute("courseId", courseId);
-        request.setAttribute("packageId", packageId);
-        double price = Double.parseDouble(request.getParameter("price"));
+        request.setAttribute("packageName", coursePkg.getPackageName());
         request.setAttribute("price", price);
+        request.setAttribute("useTime", coursePkg.getUseTime());
         request.getRequestDispatcher("/prePayment").forward(request, response);
     }
 

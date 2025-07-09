@@ -7,10 +7,12 @@ import java.sql.Timestamp;
  * @author sonpk
  */
 public class PaymentTransaction {
+
     private int transactionId;
     private int userId;
     private int courseId;
-    private int packageId;
+    String packageName;
+    int UseTime;
     private String orderCode;
     private double amount;
     private String vnpTransactionNo;
@@ -25,11 +27,12 @@ public class PaymentTransaction {
     public PaymentTransaction() {
     }
 
-    public PaymentTransaction(int transactionId, int userId, int courseId, int packageId, String orderCode, double amount, String vnpTransactionNo, String vnpResponseCode, String vnpOrderInfo, String status, Timestamp createdAt, Timestamp paidAt, Timestamp validFrom, Timestamp validTo) {
+    public PaymentTransaction(int transactionId, int userId, int courseId, String packageName, int UseTime, String orderCode, double amount, String vnpTransactionNo, String vnpResponseCode, String vnpOrderInfo, String status, Timestamp createdAt, Timestamp paidAt, Timestamp validFrom, Timestamp validTo) {
         this.transactionId = transactionId;
         this.userId = userId;
         this.courseId = courseId;
-        this.packageId = packageId;
+        this.packageName = packageName;
+        this.UseTime = UseTime;
         this.orderCode = orderCode;
         this.amount = amount;
         this.vnpTransactionNo = vnpTransactionNo;
@@ -66,12 +69,20 @@ public class PaymentTransaction {
         this.courseId = courseId;
     }
 
-    public int getPackageId() {
-        return packageId;
+    public String getPackageName() {
+        return packageName;
     }
 
-    public void setPackageId(int packageId) {
-        this.packageId = packageId;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public int getUseTime() {
+        return UseTime;
+    }
+
+    public void setUseTime(int UseTime) {
+        this.UseTime = UseTime;
     }
 
     public String getOrderCode() {

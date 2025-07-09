@@ -99,7 +99,8 @@ CREATE TABLE CourseReviewMedia (
 CREATE TABLE UserCourse (
     UserID INT,
     CourseID INT,
-    PackageID INT,
+	PackageName NVARCHAR(255),
+	Price DECIMAL(20,2),
     EnrollDate DATE DEFAULT GETDATE(),
     Progress DECIMAL(5,2),
     Status NVARCHAR(50),
@@ -108,7 +109,6 @@ CREATE TABLE UserCourse (
     PRIMARY KEY (UserID, CourseID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
-    FOREIGN KEY (PackageID) REFERENCES CoursePackage(PackageID)
 );
 
 --Chapter: hiện khi học.
@@ -232,9 +232,10 @@ CREATE TABLE PaymentTransaction (
     TransactionId INT IDENTITY PRIMARY KEY,
     UserID INT NOT NULL,
     CourseID INT NOT NULL,
-    PackageID INT NOT NULL,
+	PackageName NVARCHAR(255),
+	UseTime INT,
     OrderCode VARCHAR(100) NOT NULL,         
-    Amount DECIMAL(10,2) NOT NULL,
+    Amount DECIMAL(20,2) NOT NULL,
     Vnp_TransactionNo VARCHAR(100),         
     Vnp_ResponseCode VARCHAR(10),
     Vnp_OrderInfo NVARCHAR(255),
@@ -242,8 +243,7 @@ CREATE TABLE PaymentTransaction (
     CreatedAt DATETIME DEFAULT GETDATE(),
     PaidAt DATETIME NULL,
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
-    FOREIGN KEY (PackageID) REFERENCES CoursePackage(PackageID)
+    FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 CREATE TABLE Posts (
     PostID INT PRIMARY KEY IDENTITY(1,1),

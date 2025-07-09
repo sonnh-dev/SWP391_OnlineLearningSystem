@@ -51,8 +51,13 @@
                         </div>
                     </div>
                 </div>
-
-                <a href="myCourse" class="btn btn-outline-primary mt-4">Go my course</a>
+                <div class="d-flex justify-content-center">
+                    <form action="MyCourse" method="post" class="me-4">
+                        <input type="hidden" name="userID" value="${user.userId}" />
+                        <button type="submit" class="btn btn-outline-primary mt-4">Go my course</button>
+                    </form>
+                    <a href="home" class="btn btn-outline-primary mt-4 ms-4">Go to Home</a>
+                </div>
             </div>
         </div>
 

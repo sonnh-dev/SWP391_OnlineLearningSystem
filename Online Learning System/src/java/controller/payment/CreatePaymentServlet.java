@@ -34,22 +34,23 @@ public class CreatePaymentServlet extends HttpServlet {
 
         int userId = Integer.parseInt(request.getParameter("userId"));
         int courseId = Integer.parseInt(request.getParameter("courseId"));
-        int packageId = Integer.parseInt(request.getParameter("packageId"));
-        long amount = Integer.parseInt(request.getParameter("price")) * 100;
-
+        String packageName = request.getParameter("packageName");
+        double price = Double.parseDouble(request.getParameter("price"));
+        long amount = (long) (price * 100);
+        int useTime = Integer.parseInt(request.getParameter("useTime"));
         String orderCode = PaymentConfig.getRandomNumber(8);
 
         // Save to DB
         PaymentTransaction payment = new PaymentTransaction();
         payment.setUserId(userId);
         payment.setCourseId(courseId);
-        payment.setPackageId(packageId);
+        payment.setPackageName(packageName);
+        payment.setUseTime(useTime);
         payment.setOrderCode(orderCode);
         payment.setAmount(amount);
         payment.setStatus("PENDING");
-
-        PaymentDAO dao = new PaymentDAO();
-        int id = dao.insertPaymentTransaction(payment);
+        PaymentDAO paymentDAO = new PaymentDAO();
+        int id = paymentDAO.insertPaymentTransaction(payment);
         if (id < 0) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error processing payment");
             return;
@@ -72,7 +73,7 @@ public class CreatePaymentServlet extends HttpServlet {
         vnp_Params.put("vnp_CurrCode", "VND");
 
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+        vnp_Params.put("vnp_OrderInfo", "Course Payment:" + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
         vnp_Params.put("vnp_Locale", "vn");
 
@@ -118,4 +119,3 @@ public class CreatePaymentServlet extends HttpServlet {
         response.sendRedirect(paymentUrl);
     }
 }
-

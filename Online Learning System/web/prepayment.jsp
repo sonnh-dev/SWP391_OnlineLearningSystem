@@ -19,9 +19,9 @@
                         <div class="bg-light p-3 rounded mb-2">
                             <p class="mb-1"><strong>Course:</strong> ${courseName}</p>
                             <p class="mb-1"><strong>Package:</strong> ${packageName}</p>
-                            <p class="mb-1"><strong>Course ID:</strong> ${courseId}</p>
+                            <p class="mb-1"><strong>Customer name:</strong> ${user}</p>
                             <p class="mb-0 text-primary fw-bold fs-5">
-                                <fmt:formatNumber value="${price}" type="number" groupingUsed="true"/> ₫
+                                Price: <fmt:formatNumber value="${price}" type="number" groupingUsed="true"/> ₫
                             </p>
                         </div>
                     </div>
@@ -38,13 +38,6 @@
                             </label>
                         </div>
                     </div>
-
-                    <!-- Hidden Fields -->
-                    <input type="hidden" name="userId" value="${userId}">
-                    <input type="hidden" name="courseId" value="${courseId}">
-                    <input type="hidden" name="packageId" value="${packageId}">
-                    <input type="hidden" name="price" value="${price}">
-
                     <!-- Buttons -->
                     <div class="d-flex justify-content-between mt-4">
                         <a href="#" class="btn btn-outline-secondary" id="cancelBtn">Cancel</a>
@@ -54,13 +47,13 @@
             </div>
         </div>
         <script>
-            // Xử lý nút Cancel
+            // Button event
             document.getElementById("cancelBtn").addEventListener("click", (e) => {
                 e.preventDefault();
-                // Gửi message cho parent để chuyển trang chính và đóng popup
                 window.parent.postMessage({
-                    action: "closePopupAndRedirect",
-                    redirectUrl: "myRegister"
+                    action: "toMyRegister",
+                    redirectUrl: "myRegistration",
+                    userId: ${userId}
                 }, "*");
             });
             document.getElementById("proceedBtn").addEventListener("click", () => {
@@ -68,11 +61,11 @@
                     action: "proceedToPayment",
                     userId: "${userId}",
                     courseId: "${courseId}",
-                    packageId: "${packageId}",
-                    price: "${price}"
+                    packageName: "${packageName}",
+                    price: "${price}",
+                    useTime: "${useTime}"
                 };
-
-                // Gửi dữ liệu lên parent window
+                // send Data to CourseDetails
                 window.parent.postMessage(data, "*");
             });
         </script>

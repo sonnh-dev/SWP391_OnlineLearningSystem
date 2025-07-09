@@ -621,14 +621,29 @@
                     document.getElementById("popupModal").style.display = "none";
                     window.location.href = event.data.redirectUrl;
                 }
-
-                if (action === "proceedToPayment") {
-                    const {userId, courseId, packageId, price} = event.data;
+                if (action === "toMyRegister") {
                     document.getElementById("popupModal").style.display = "none";
+
+                    const form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = event.data.redirectUrl;
+                    const input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "userID";
+                    input.value = event.data.userId;
+                    
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+                if (action === "proceedToPayment") {
+                    const {userId, courseId, packageName, price, useTime} = event.data;
+                    document.getElementById("popupModal").style.display = "none";
+
                     const form = document.createElement("form");
                     form.method = "POST";
                     form.action = "create-payment";
-                    const fields = {userId, courseId, packageId, price};
+                    const fields = {userId, courseId, packageName, price, useTime};
                     for (const key in fields) {
                         const input = document.createElement("input");
                         input.type = "hidden";

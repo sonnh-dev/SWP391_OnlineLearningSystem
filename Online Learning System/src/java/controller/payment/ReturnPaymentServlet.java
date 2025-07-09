@@ -2,11 +2,13 @@ package controller.payment;
 
 import config.PaymentConfig;
 import dao.PaymentDAO;
+import dao.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.PaymentTransaction;
 
 import java.io.IOException;
@@ -14,14 +16,22 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.*;
+import model.Account;
 
 @WebServlet(name = "VnpayReturnServlet", urlPatterns = {"/vnpay-return"})
-public class VnpayReturnServlet extends HttpServlet {
+public class ReturnPaymentServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        UserDAO userDao = new UserDAO();
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            Account auth = (Account) session.getAttribute("auth");
+            if (auth != null) {
+                request.setAttribute("user", userDao.getLoginUser(auth));
+            }
+        }
         //Begin process return from VNPAY
         Map fields = new HashMap();
         for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {

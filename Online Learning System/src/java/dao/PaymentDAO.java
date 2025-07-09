@@ -14,15 +14,16 @@ import model.PaymentTransaction;
 public class PaymentDAO extends DBContext {
 
     public int insertPaymentTransaction(PaymentTransaction trans) {
-        String sql = "INSERT INTO PaymentTransaction (UserID, CourseID, PackageID, OrderCode, Amount, Status, CreatedAt) "
-                + "VALUES (?, ?, ?, ?, ?, ?, GETDATE())";
+        String sql = "INSERT INTO PaymentTransaction (UserID, CourseID, PackageName, UseTime, OrderCode, Amount, Status, CreatedAt) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE())";
         try (PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, trans.getUserId());
             ps.setInt(2, trans.getCourseId());
-            ps.setInt(3, trans.getPackageId());
-            ps.setString(4, trans.getOrderCode());
-            ps.setDouble(5, trans.getAmount());
-            ps.setString(6, trans.getStatus());
+            ps.setString(3, trans.getPackageName());
+            ps.setInt(4, trans.getUseTime());
+            ps.setString(5, trans.getOrderCode());
+            ps.setDouble(6, trans.getAmount());
+            ps.setString(7, trans.getStatus());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
@@ -33,45 +34,55 @@ public class PaymentDAO extends DBContext {
         return -1;
     }
 
-    public boolean updatePaymentTransaction(PaymentTransaction trans) {
-        String updateTransactionSQL = "UPDATE PaymentTransaction SET "
+    public boolean updateTransactionInfo(PaymentTransaction trans) {
+        String sql = "UPDATE PaymentTransaction SET "
                 + "Vnp_TransactionNo = ?, Vnp_ResponseCode = ?, Vnp_OrderInfo = ?, Status = ?, PaidAt = ? "
                 + "WHERE TransactionId = ?";
 
-        String updateUserCourseSQL = "UPDATE UserCourse SET Status = ?, ValidFrom = ?, ValidTo = ? "
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, trans.getVnpTransactionNo());
+            ps.setString(2, trans.getVnpResponseCode());
+            ps.setString(3, trans.getVnpOrderInfo());
+            ps.setString(4, trans.getStatus());
+            ps.setTimestamp(5, trans.getPaidAt());
+            ps.setInt(6, trans.getTransactionId());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean updateUserCourseStatus(PaymentTransaction trans) {
+        String sql = "UPDATE UserCourse SET Status = ?, ValidFrom = ?, ValidTo = ? "
                 + "WHERE UserID = ? AND CourseID = ?";
 
-        try (
-                PreparedStatement ps1 = connection.prepareStatement(updateTransactionSQL); PreparedStatement ps2 = connection.prepareStatement(updateUserCourseSQL)) {
-
-            Timestamp validFrom = trans.getPaidAt();
-            int useTime = getUseTimeFromCoursePackage(trans.getCourseId(), trans.getPackageId());
-            Timestamp validTo = null;
-            if (useTime > 0) {
-                validTo = Timestamp.valueOf(validFrom.toLocalDateTime().plusDays(useTime));
-            }
-            
-            ps1.setString(1, trans.getVnpTransactionNo());
-            ps1.setString(2, trans.getVnpResponseCode());
-            ps1.setString(3, trans.getVnpOrderInfo());
-            ps1.setString(4, trans.getStatus());
-            ps1.setTimestamp(5, validFrom);
-            ps1.setInt(6, trans.getTransactionId());
-            int rows1 = ps1.executeUpdate();
-            ps2.setString(1, trans.getStatus());
-            ps2.setTimestamp(2, validFrom);
-            if (validTo != null) {
-                ps2.setTimestamp(3, validTo);
-            } else {
-                ps2.setNull(3, java.sql.Types.TIMESTAMP);
-            }
-            ps2.setInt(4, trans.getUserId());
-            ps2.setInt(5, trans.getCourseId());
-            int rows2 = ps2.executeUpdate();
-            return rows1 > 0 && rows2 > 0;
-        } catch (SQLException e) {
+        Timestamp validFrom = trans.getPaidAt();
+        int useTime = trans.getUseTime();
+        Timestamp validTo = null;
+        if (useTime > 0) {
+            validTo = Timestamp.valueOf(validFrom.toLocalDateTime().plusDays(useTime));
         }
-        return false;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, trans.getStatus());
+            ps.setTimestamp(2, validFrom);
+            if (validTo != null) {
+                ps.setTimestamp(3, validTo);
+            } else {
+                ps.setNull(3, java.sql.Types.TIMESTAMP);
+            }
+            ps.setInt(4, trans.getUserId());
+            ps.setInt(5, trans.getCourseId());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean updatePaymentTransaction(PaymentTransaction trans) {
+        return updateTransactionInfo(trans) && updateUserCourseStatus(trans);
     }
 
     public PaymentTransaction getPaymentTransactionByOrderCode(String orderCode) {
@@ -84,7 +95,8 @@ public class PaymentDAO extends DBContext {
                 transaction.setTransactionId(rs.getInt("TransactionId"));
                 transaction.setUserId(rs.getInt("UserID"));
                 transaction.setCourseId(rs.getInt("CourseID"));
-                transaction.setPackageId(rs.getInt("PackageID"));
+                transaction.setPackageName(rs.getString("PackageName"));
+                transaction.setUseTime(rs.getInt("UseTime"));
                 transaction.setOrderCode(rs.getString("OrderCode"));
                 transaction.setAmount(rs.getDouble("Amount"));
                 transaction.setVnpTransactionNo(rs.getString("Vnp_TransactionNo"));
@@ -98,20 +110,5 @@ public class PaymentDAO extends DBContext {
         } catch (SQLException e) {
         }
         return null;
-    }
-
-    public int getUseTimeFromCoursePackage(int courseId, int packageId) {
-        String sql = "SELECT UseTime FROM CoursePackage WHERE CourseID = ? AND PackageID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, courseId);
-            ps.setInt(2, packageId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("UseTime");
-                }
-            }
-        } catch (SQLException e) {
-        }
-        return 0;
     }
 }
