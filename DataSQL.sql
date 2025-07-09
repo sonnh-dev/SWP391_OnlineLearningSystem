@@ -847,3 +847,752 @@ VALUES
 (2,2, 'Master Time Management Today', 'Prioritize what matters and reclaim your hours with proven time strategies.', 'media/sliders/image2.png', 1),
 (3,6, 'Enhance Your EQ for Workplace Success', 'Emotional intelligence improves teamwork, communication, and leadership.', 'media/sliders/image3.png', 0),
 (4,7, 'Become a Pro at Problem Solving', 'Tackle complex problems with confidence using structured problem-solving tools.', 'media/sliders/image4.png', 1);
+
+
+
+
+INSERT INTO Chapter (CourseID, Title, ChapterOrder) VALUES
+-- Chapters for 'Strategic Leadership' (CourseID 1)
+(1, 'Foundations of Strategic Leadership', 1),
+(1, 'Developing Vision and Strategy', 2),
+(1, 'Executing and Adapting Strategy', 3),
+
+-- Chapters for 'Time Management Mastery' (CourseID 2)
+(2, 'Understanding Time and Priorities', 1),
+(2, 'Effective Planning and Techniques', 2),
+(2, 'Overcoming Obstacles to Productivity', 3),
+
+-- Chapters for 'Mastering Self-Awareness' (CourseID 3)
+(3, 'Basics of Self-Awareness', 1),
+(3, 'Developing Internal Awareness', 2),
+(3, 'Applying Self-Awareness in Life', 3),
+
+-- Chapters for 'Public Speaking Essentials' (CourseID 4)
+(4, 'Preparation and Audience Analysis', 1),
+(4, 'Structuring and Delivering Your Message', 2),
+(4, 'Handling Nerves and Engaging Audience', 3),
+
+-- Chapters for 'Leadership Fundamentals' (CourseID 5)
+(5, 'The Essence of Leadership', 1),
+(5, 'Key Leadership Skills', 2),
+(5, 'Building and Inspiring Your Team', 3),
+(5, 'Leading Through Challenges', 4),
+
+-- Chapters for 'Emotional Intelligence at Work' (CourseID 6)
+(6, 'Introduction to Emotional Intelligence', 1),
+(6, 'Self-Management and Awareness', 2),
+(6, 'Social Awareness and Relationship Management', 3),
+
+-- Chapters for 'Problem Solving Techniques' (CourseID 7)
+(7, 'Defining and Analyzing Problems', 1),
+(7, 'Generating and Evaluating Solutions', 2),
+(7, 'Implementing and Reviewing Solutions', 3),
+
+-- Chapters for 'Critical Thinking Skills' (CourseID 8)
+(8, 'Foundations of Critical Thinking', 1),
+(8, 'Analyzing Arguments and Evidence', 2),
+(8, 'Making Informed Decisions', 3),
+
+-- Chapters for 'Effective Communication Skills' (CourseID 9)
+(9, 'Fundamentals of Communication', 1),
+(9, 'Verbal and Non-Verbal Communication', 2),
+(9, 'Listening and Feedback Skills', 3),
+(9, 'Advanced Communication Strategies', 4),
+
+-- Chapters for 'Productivity & Planning Bootcamp' (CourseID 10)
+(10, 'Understanding Productivity Basics', 1),
+(10, 'Goal Setting and Prioritization', 2),
+(10, 'Advanced Planning and Execution', 3);
+
+
+
+INSERT INTO Lesson (ChapterID, Title, IsFree, LessonOrder, Status) VALUES
+-- Lessons for 'Foundations of Strategic Leadership' (ChapterID 1, CourseID 1)
+(1, 'Welcome to Strategic Leadership', 1, 1, 1),
+(1, 'The Importance of Strategic Thinking', 0, 2, 1),
+(1, 'Key Concepts of Strategic Leadership', 0, 3, 1),
+
+-- Lessons for 'Developing Vision and Strategy' (ChapterID 2, CourseID 1)
+(2, 'Crafting a Compelling Vision', 0, 1, 1),
+(2, 'Strategic Goal Setting', 0, 2, 1),
+(2, 'SWOT Analysis for Leaders', 0, 3, 1),
+(2, 'Developing Strategic Initiatives', 0, 4, 1),
+
+-- Lessons for 'Executing and Adapting Strategy' (ChapterID 3, CourseID 1)
+(3, 'Aligning Teams with Strategy', 0, 1, 1),
+(3, 'Monitoring and Evaluation', 0, 2, 1),
+(3, 'Adapting to Market Changes', 0, 3, 1),
+
+-- Lessons for 'Understanding Time and Priorities' (ChapterID 4, CourseID 2)
+(4, 'Introduction to Time Management', 1, 1, 1),
+(4, 'Identifying Your Time Wasters', 0, 2, 1),
+(4, 'The Power of Prioritization', 0, 3, 1),
+
+-- Lessons for 'Effective Planning and Techniques' (ChapterID 5, CourseID 2)
+(5, 'Setting Effective Goals (SMART)', 0, 1, 1),
+(5, 'Time Blocking and Scheduling', 0, 2, 1),
+(5, 'The Pomodoro Technique Explained', 0, 3, 1),
+(5, 'Creating Effective To-Do Lists', 0, 4, 1),
+
+-- Lessons for 'Overcoming Obstacles to Productivity' (ChapterID 6, CourseID 2)
+(6, 'Dealing with Distractions', 0, 1, 1),
+(6, 'Overcoming Procrastination', 0, 2, 1),
+(6, 'Delegation Skills', 0, 3, 1),
+
+-- Lessons for 'Basics of Self-Awareness' (ChapterID 7, CourseID 3)
+(7, 'What is Self-Awareness and Why it Matters?', 1, 1, 1),
+(7, 'Internal vs. External Self-Awareness', 0, 2, 1),
+
+-- Lessons for 'Developing Internal Awareness' (ChapterID 8, CourseID 3)
+(8, 'Journaling for Self-Discovery', 0, 1, 1),
+(8, 'Mindfulness Practices for Awareness', 0, 2, 1),
+(8, 'Understanding Your Values and Beliefs', 0, 3, 1),
+
+-- Lessons for 'Applying Self-Awareness in Life' (ChapterID 9, CourseID 3)
+(9, 'Seeking and Receiving Feedback Effectively', 0, 1, 1),
+(9, 'Managing Your Emotions with Awareness', 0, 2, 1),
+
+-- Lessons for 'Preparation and Audience Analysis' (ChapterID 10, CourseID 4)
+(10, 'Understanding Your Audience', 1, 1, 1),
+(10, 'Defining Your Message and Purpose', 0, 2, 1),
+(10, 'Structuring Your Presentation', 0, 3, 1),
+
+-- Lessons for 'Structuring and Delivering Your Message' (ChapterID 11, CourseID 4)
+(11, 'Crafting Engaging Introductions and Conclusions', 0, 1, 1),
+(11, 'Using Visual Aids Effectively', 0, 2, 1),
+(11, 'Vocal Delivery and Body Language', 0, 3, 1),
+
+-- Lessons for 'Handling Nerves and Engaging Audience' (ChapterID 12, CourseID 4)
+(12, 'Managing Public Speaking Anxiety', 0, 1, 1),
+(12, 'Techniques for Audience Engagement', 0, 2, 1),
+
+-- Lessons for 'The Essence of Leadership' (ChapterID 13, CourseID 5)
+(13, 'What Defines a Leader?', 1, 1, 1),
+(13, 'Leadership Styles and Their Impact', 0, 2, 1),
+
+-- Lessons for 'Key Leadership Skills' (ChapterID 14, CourseID 5)
+(14, 'Effective Communication for Leaders', 0, 1, 1),
+(14, 'Decision Making in Leadership', 0, 2, 1),
+(14, 'Delegation and Empowerment', 0, 3, 1),
+
+-- Lessons for 'Building and Inspiring Your Team' (ChapterID 15, CourseID 5)
+(15, 'Motivating and Inspiring Your Team', 0, 1, 1),
+(15, 'Conflict Resolution in Teams', 0, 2, 1),
+
+-- Lessons for 'Leading Through Challenges' (ChapterID 16, CourseID 5)
+(16, 'Leading Through Change', 0, 1, 1),
+(16, 'Resilience in Leadership', 0, 2, 1),
+
+-- Lessons for 'Introduction to Emotional Intelligence' (ChapterID 17, CourseID 6)
+(17, 'Understanding Emotional Intelligence (EQ)', 1, 1, 1),
+(17, 'Why EQ Matters in the Workplace', 0, 2, 1),
+
+-- Lessons for 'Self-Management and Awareness' (ChapterID 18, CourseID 6)
+(18, 'Developing Self-Awareness at Work', 0, 1, 1),
+(18, 'Strategies for Self-Regulation', 0, 2, 1),
+
+-- Lessons for 'Social Awareness and Relationship Management' (ChapterID 19, CourseID 6)
+(19, 'Practicing Empathy in Professional Settings', 0, 1, 1),
+(19, 'Building Strong Work Relationships', 0, 2, 1),
+
+-- Lessons for 'Defining and Analyzing Problems' (ChapterID 20, CourseID 7)
+(20, 'Introduction to Problem Solving', 1, 1, 1),
+(20, 'Defining the Problem Clearly', 0, 2, 1),
+(20, 'Root Cause Analysis (5 Whys)', 0, 3, 1),
+
+-- Lessons for 'Generating and Evaluating Solutions' (ChapterID 21, CourseID 7)
+(21, 'Brainstorming Techniques', 0, 1, 1),
+(21, 'Evaluating Potential Solutions', 0, 2, 1),
+
+-- Lessons for 'Implementing and Reviewing Solutions' (ChapterID 22, CourseID 7)
+(22, 'Action Planning and Implementation', 0, 1, 1),
+(22, 'Monitoring and Adapting Solutions', 0, 2, 1),
+
+-- Lessons for 'Foundations of Critical Thinking' (ChapterID 23, CourseID 8)
+(23, 'What is Critical Thinking?', 1, 1, 1),
+(23, 'The Importance of Objective Analysis', 0, 2, 1),
+
+-- Lessons for 'Analyzing Arguments and Evidence' (ChapterID 24, CourseID 8)
+(24, 'Identifying Arguments and Premises', 0, 1, 1),
+(24, 'Evaluating Evidence and Sources', 0, 2, 1),
+
+-- Lessons for 'Making Informed Decisions' (ChapterID 25, CourseID 8)
+(25, 'Recognizing Cognitive Biases', 0, 1, 1),
+(25, 'Applying Critical Thinking to Decision Making', 0, 2, 1),
+
+-- Lessons for 'Fundamentals of Communication' (ChapterID 26, CourseID 9)
+(26, 'The Communication Process', 1, 1, 1),
+(26, 'Barriers to Effective Communication', 0, 2, 1),
+
+-- Lessons for 'Verbal and Non-Verbal Communication' (ChapterID 27, CourseID 9)
+(27, 'Mastering Verbal Communication', 0, 1, 1),
+(27, 'Understanding Non-Verbal Cues', 0, 2, 1),
+
+-- Lessons for 'Listening and Feedback Skills' (ChapterID 28, CourseID 9)
+(28, 'Active Listening Techniques', 0, 1, 1),
+(28, 'Giving and Receiving Constructive Feedback', 0, 2, 1),
+
+-- Lessons for 'Advanced Communication Strategies' (ChapterID 29, CourseID 9)
+(29, 'Communication in Difficult Conversations', 0, 1, 1),
+(29, 'Cross-Cultural Communication', 0, 2, 1),
+
+-- Lessons for 'Understanding Productivity Basics' (ChapterID 30, CourseID 10)
+(30, 'What is True Productivity?', 1, 1, 1),
+(30, 'Identifying Your Productivity Style', 0, 2, 1),
+
+-- Lessons for 'Goal Setting and Prioritization' (ChapterID 31, CourseID 10)
+(31, 'Setting Meaningful Goals', 0, 1, 1),
+(31, 'Prioritization Frameworks (Urgent/Important)', 0, 2, 1),
+
+-- Lessons for 'Advanced Planning and Execution' (ChapterID 32, CourseID 10)
+(32, 'Advanced Time Blocking', 0, 1, 1),
+(32, 'Batching and Deep Work', 0, 2, 1),
+(32, 'Reviewing Your Productivity', 0, 3, 1);
+
+
+
+INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, Status) VALUES
+-- Quizzes for Course 1: Strategic Leadership
+(NULL, 1, 'Strategic Leadership Assessment', 'Leadership', 'Intermediate', 10, 20, 70.00, 'Course Assessment', 1, 1),
+
+-- Quizzes for Lesson 3: Key Concepts of Strategic Leadership (ChapterID 1, CourseID 1)
+(3, NULL, 'Strategic Concepts Check', 'Leadership Principles', 'Easy', 10, 15, 60.00, 'Practice', 1, 1),
+
+-- Quizzes for Course 2: Time Management Mastery
+(NULL, 2, 'Time Management Skills Evaluation', 'Time Management', 'Intermediate', 10, 25, 75.00, 'Course Assessment', 1, 1),
+
+-- Quizzes for Lesson 6: The Pomodoro Technique Explained (ChapterID 5, CourseID 2)
+(6, NULL, 'Pomodoro Technique Quiz', 'Productivity Methods', 'Easy', 10, 12, 60.00, 'Practice', 1, 1),
+
+-- Quizzes for Course 3: Mastering Self-Awareness
+(NULL, 3, 'Self-Awareness Core Concepts', 'Emotional Intelligence', 'Intermediate', 10, 18, 70.00, 'Course Assessment', 1, 1),
+
+-- Quizzes for Lesson 8: Journaling for Self-Discovery (ChapterID 8, CourseID 3)
+(8, NULL, 'Journaling Benefits Quiz', 'Self-Discovery', 'Easy', 10, 10, 50.00, 'Practice', 1, 1),
+
+-- Quizzes for Course 4: Public Speaking Essentials
+(NULL, 4, 'Public Speaking Readiness Test', 'Communication', 'Intermediate', 10, 20, 70.00, 'Course Assessment', 1, 1),
+
+-- Quizzes for Course 5: Leadership Fundamentals
+(NULL, 5, 'Leadership Principles Quiz', 'Leadership', 'Intermediate', 10, 18, 65.00, 'Course Assessment', 1, 1),
+
+-- Quizzes for Lesson 14: Decision Making in Leadership (ChapterID 14, CourseID 5)
+(14, NULL, 'Leadership Decision Scenarios', 'Decision Making', 'Medium', 10, 15, 70.00, 'Practice', 1, 1),
+
+-- Quizzes for Course 6: Emotional Intelligence at Work
+(NULL, 6, 'Workplace EQ Assessment', 'Emotional Intelligence', 'Intermediate', 10, 20, 70.00, 'Course Assessment', 1, 1),
+
+-- Quizzes for Course 7: Problem Solving Techniques
+(NULL, 7, 'Problem Solving Fundamentals Quiz', 'Problem Solving', 'Intermediate', 10, 15, 65.00, 'Course Assessment', 1, 1),
+
+-- Quizzes for Lesson 20: Introduction to Problem Solving (ChapterID 20, CourseID 7)
+(20, NULL, 'Problem Definition Check', 'Problem Solving', 'Easy', 10, 12, 60.00, 'Practice', 1, 1);
+
+
+
+INSERT INTO Questions (QuizID, QuestionContent, QuestionType, AnswerKey, Explanation) VALUES
+-- Questions for 'Strategic Leadership Assessment' (QuizID 1)
+(1, 'Which of the following is NOT a core characteristic of strategic leadership?', 'Multiple Choice', NULL, NULL),
+(1, 'Explain how a strategic leader fosters innovation within an organization.', 'Short Answer', 'Focus on vision, empowerment, risk-taking, and continuous learning.', 'Strategic leaders create an environment where innovation thrives by encouraging risk-taking, empowering employees, and continuously seeking new ideas aligned with the long-term vision.'),
+(1, 'What is the primary purpose of a SWOT analysis in strategic planning?', 'Multiple Choice', NULL, NULL),
+(1, 'Describe the role of adaptability in strategic leadership in a rapidly changing market.', 'Short Answer', 'Ability to pivot, adjust plans, and embrace change.', 'In a rapidly changing market, adaptability allows strategic leaders to quickly adjust plans, reallocate resources, and embrace new opportunities or mitigate threats, ensuring the organization remains relevant and competitive.'),
+(1, 'A strategic leader is primarily concerned with:', 'Multiple Choice', NULL, NULL),
+(1, 'What is the difference between operational and strategic planning?', 'Short Answer', 'Operational is short-term/daily, strategic is long-term/future.', 'Operational planning focuses on day-to-day activities and short-term goals, while strategic planning deals with the organization long-term vision and overarching objectives.'),
+(1, 'Which component of strategic leadership involves communicating a clear direction?', 'Multiple Choice', NULL, NULL),
+(1, 'How does a strategic leader ensure alignment across different departments?', 'Short Answer', 'Clear communication of vision, common goals, cross-functional collaboration.', 'Strategic leaders ensure alignment by clearly communicating the organizational vision, setting common goals that transcend departmental boundaries, and fostering cross-functional collaboration.'),
+(1, 'What does it mean to "lead by example" in a strategic context?', 'Multiple Choice', NULL, NULL),
+(1, 'Discuss the importance of foresight in strategic decision-making.', 'Short Answer', 'Anticipating trends, mitigating risks, seizing opportunities.', 'Foresight in strategic decision-making involves anticipating future trends, potential challenges, and emerging opportunities, allowing leaders to make proactive rather than reactive choices.'),
+
+
+(2, 'Strategic leadership primarily focuses on : ', 'Multiple Choice', NULL, NULL),
+(2, 'The "big picture" thinking in strategic leadership refers to:', 'Multiple Choice', NULL, NULL),
+(2, 'Which of these best defines a strategic vision?', 'Multiple Choice', NULL, NULL),
+(2, 'Explain why alignment is critical for strategic execution.', 'Short Answer', 'Ensures everyone works towards same goal, avoids wasted effort.', 'Alignment ensures that all parts of an organization are working cohesively towards the same strategic goals, preventing fragmented efforts and maximizing resource utilization.'),
+(2, 'What role does communication play in implementing a new strategy?', 'Multiple Choice', NULL, NULL),
+(2, 'How does strategic leadership differ from traditional management?', 'Short Answer', 'Strategic focuses on long-term, vision; traditional on short-term, operations.', 'Strategic leadership emphasizes long-term vision and adaptability, while traditional management often focuses on maintaining current operations and short-term efficiency.'),
+(2, 'A strategic leader encourages:', 'Multiple Choice', NULL, NULL),
+(2, 'Define "organizational culture" in the context of strategic leadership.', 'Short Answer', 'Shared values and norms guiding behavior.', 'Organizational culture refers to the shared values, beliefs, and norms that influence how employees interact and perform, and strategic leaders shape it to support strategic objectives.'),
+(2, 'The term "proactive decision" in strategy means:', 'Multiple Choice', NULL, NULL),
+(2, 'Give an example of a strategic objective.', 'Short Answer', 'Increase market share by X%, expand into Y new markets.', 'An example of a strategic objective could be: "To increase market share by 15% in the next three years by expanding into emerging Asian markets."'),
+
+-- Questions for 'Time Management Skills Evaluation' (QuizID 3)
+(3, 'Which time management matrix helps categorize tasks by urgency and importance?', 'Multiple Choice', NULL, NULL),
+(3, 'List three common time-wasting activities and how to avoid them.', 'Short Answer', 'Examples: social media, unnecessary meetings, perfectionism. Avoidance: limit access, set agendas, set realistic goals.', 'Common time-wasting activities include excessive social media, unnecessary meetings, and striving for perfectionism. These can be avoided by setting time limits for social media, creating clear meeting agendas, and setting realistic, achievable standards.'),
+(3, 'What is the recommended duration for a focused work session in the Pomodoro Technique?', 'Multiple Choice', NULL, NULL),
+(3, 'Explain the concept of "time blocking" in personal productivity.', 'Short Answer', 'Allocating specific time slots for specific tasks.', 'Time blocking involves scheduling specific periods in your calendar for dedicated work on particular tasks or projects, treating these time slots as non-negotiable appointments.'),
+(3, 'Which of these is a SMART goal component?', 'Multiple Choice', NULL, NULL),
+(3, 'Describe the "Eat the Frog" principle.', 'Short Answer', 'Do your most difficult task first in the day.', 'The "Eat the Frog" principle suggests tackling your most challenging or important task first thing in the morning, ensuring it gets done before other distractions arise.'),
+(3, 'What is the purpose of a "brain dump" in task management?', 'Multiple Choice', NULL, NULL),
+(3, 'How does delegating tasks improve your personal time management?', 'Short Answer', 'Frees up time for high-value tasks, empowers others.', 'Delegating tasks allows you to free up your own time to focus on higher-priority or more complex responsibilities, while also empowering and developing the skills of others.'),
+(3, 'Which tool is best for visualizing project deadlines?', 'Multiple Choice', NULL, NULL),
+(3, 'What is the benefit of regularly reviewing your time management system?', 'Short Answer', 'Identifies what works, allows for adjustments and improvements.', 'Regularly reviewing your time management system helps you identify which strategies are effective, pinpoint areas for improvement, and make necessary adjustments to optimize your productivity.'),
+
+-- Questions for 'Pomodoro Technique Quiz' (QuizID 4)
+(4, 'The Pomodoro Technique involves short breaks after how many minutes of focused work?', 'Multiple Choice', NULL, NULL),
+(4, 'What is the purpose of the 5-minute break in Pomodoro?', 'Multiple Choice', NULL, NULL),
+(4, 'After how many Pomodoros should you take a longer break?', 'Multiple Choice', NULL, NULL),
+(4, 'Which of these is a core principle of Pomodoro?', 'Multiple Choice', NULL, NULL),
+(4, 'Explain how the Pomodoro Technique helps in maintaining focus.', 'Short Answer', 'Breaks prevent burnout, timer creates urgency.', 'The Pomodoro Technique helps maintain focus by breaking down work into manageable chunks, with short, regular breaks that prevent mental fatigue and promote sustained concentration. The timer creates a sense of urgency, encouraging dedicated work.'),
+(4, 'Can you interrupt a Pomodoro once it has started?', 'Multiple Choice', NULL, NULL),
+(4, 'What should you do during a long break (e.g., 15-30 minutes)?', 'Short Answer', 'Relax, stretch, disconnect from work.', 'During a long break, you should disengage from work completely. This could involve stretching, taking a walk, getting a snack, or engaging in a light, non-work-related activity to fully recharge.'),
+(4, 'The name "Pomodoro" comes from:', 'Multiple Choice', NULL, NULL),
+(4, 'Is the Pomodoro Technique suitable for all types of work?', 'Multiple Choice', NULL, NULL),
+(4, 'How does Pomodoro help in estimating task completion time?', 'Short Answer', 'Breaks down tasks into measurable units (Pomodoros).', 'By breaking down tasks into 25-minute Pomodoros, the technique helps in estimating how many such units a task will take, making time estimation more accurate and manageable.'),
+
+-- Questions for 'Self-Awareness Core Concepts' (QuizID 5)
+(5, 'Internal self-awareness refers to:', 'Multiple Choice', NULL, NULL),
+(5, 'How can journaling contribute to increased self-awareness?', 'Short Answer', 'Reflects thoughts, emotions, patterns, helps understand reactions.', 'Journaling provides a space for reflection, allowing individuals to record thoughts, emotions, and reactions. This practice helps in identifying patterns, understanding triggers, and gaining insight into one inner world, thereby increasing self-awareness.'),
+(5, 'Which of these is an example of external self-awareness?', 'Multiple Choice', NULL, NULL),
+(5, 'Why is feedback important for developing self-awareness?', 'Short Answer', 'Provides outside perspective, reveals blind spots.', 'Feedback from others offers an external perspective on how your actions and behaviors are perceived, revealing blind spots and areas for improvement that you might not be aware of internally.'),
+(5, 'The ability to understand your own emotions is called:', 'Multiple Choice', NULL, NULL),
+(5, 'Describe the role of mindfulness in building self-awareness.', 'Short Answer', 'Being present, observing thoughts without judgment.', 'Mindfulness involves intentionally focusing on the present moment and observing your thoughts, feelings, and bodily sensations without judgment. This practice helps in becoming more attuned to your inner state, fostering greater self-awareness.'),
+(5, 'Which emotion is typically associated with high self-awareness?', 'Multiple Choice', NULL, NULL),
+(5, 'How can understanding your personal values enhance self-awareness?', 'Short Answer', 'Guides decisions, aligns actions with beliefs.', 'Understanding personal values helps you recognize what truly matters to you, guiding your decisions and ensuring your actions are aligned with your deepest beliefs, thus strengthening your sense of self.'),
+(5, 'What is a "blind spot" in the context of self-awareness?', 'Multiple Choice', NULL, NULL),
+(5, 'Why is self-awareness considered the foundation of emotional intelligence?', 'Short Answer', 'Cannot manage or understand others emotions without understanding your own.', 'Self-awareness is the foundation because you cannot effectively manage your own emotions or understand the emotions of others without first recognizing and understanding your own internal states, thoughts, and feelings.'),
+
+-- Questions for 'Journaling Benefits Quiz' (QuizID 6)
+(6, 'Which is a common benefit of journaling for self-awareness?', 'Multiple Choice', NULL, NULL),
+(6, 'Journaling primarily helps you:', 'Multiple Choice', NULL, NULL),
+(6, 'Is it necessary to write in a journal every day to see benefits?', 'Multiple Choice', NULL, NULL),
+(6, 'Which of these is a good journaling practice?', 'Multiple Choice', NULL, NULL),
+(6, 'Explain how journaling can help in processing emotions.', 'Short Answer', 'Allows expression, creates distance, helps identify patterns.', 'Journaling provides a safe outlet to express and explore emotions. By writing them down, you can create distance from intense feelings, identify triggers, and gain clarity on their origins, aiding emotional processing.'),
+(6, 'Can journaling help in problem-solving?', 'Multiple Choice', NULL, NULL),
+(6, 'What kind of topics are suitable for journaling?', 'Short Answer', 'Thoughts, feelings, daily events, goals, gratitude.', 'Suitable topics for journaling include your thoughts, feelings, daily experiences, challenges, goals, aspirations, and anything you are grateful for or concerned about.'),
+(6, 'Is there a "right" way to journal?', 'Multiple Choice', NULL, NULL),
+(6, 'How does regular journaling affect stress levels?', 'Multiple Choice', NULL, NULL),
+(6, 'Why is privacy important when journaling for self-awareness?', 'Short Answer', 'Encourages honesty and vulnerability without judgment.', 'Privacy is important because it allows you to be completely honest and vulnerable without fear of judgment from others, leading to deeper self-reflection and more authentic insights.'),
+
+-- Questions for 'Public Speaking Readiness Test' (QuizID 7)
+(7, 'Which of these is crucial for engaging your audience during a speech?', 'Multiple Choice', NULL, NULL),
+(7, 'Name two techniques to manage public speaking anxiety.', 'Short Answer', 'Deep breathing, visualization, practice.', 'Two effective techniques to manage public speaking anxiety are deep breathing exercises before and during the speech, and visualization, where you mentally rehearse a successful and confident delivery.'),
+(7, 'What is the purpose of an effective introduction in public speaking?', 'Multiple Choice', NULL, NULL),
+(7, 'How can visual aids enhance a presentation?', 'Short Answer', 'Clarify complex info, engage audience, aid memory.', 'Visual aids can enhance a presentation by clarifying complex information, making it more digestible, engaging the audience visually, and helping them retain key points more effectively.'),
+(7, 'Which type of audience analysis focuses on their knowledge level of the topic?', 'Multiple Choice', NULL, NULL),
+(7, 'Why is it important to practice your speech aloud?', 'Short Answer', 'Identifies awkward phrasing, improves flow and timing.', 'Practicing aloud helps you identify awkward phrasing or transitions, refine your delivery, ensure the speech flows naturally, and manage your timing effectively.'),
+(7, 'Which posture conveys confidence in public speaking?', 'Multiple Choice', NULL, NULL),
+(7, 'Describe "active listening" in the context of audience interaction.', 'Short Answer', 'Paying full attention, understanding, responding appropriately.', 'Active listening in audience interaction involves giving your full attention to audience questions or comments, seeking to understand their underlying message, and responding thoughtfully rather than defensively.'),
+(7, 'What is the ideal amount of text on a presentation slide?', 'Multiple Choice', NULL, NULL),
+(7, 'How can storytelling benefit your public speaking?', 'Short Answer', 'Makes message relatable, memorable, creates emotional connection.', 'Storytelling makes your message more relatable and memorable by connecting with the audience on an emotional level, illustrating points vividly, and making complex ideas easier to grasp.'),
+
+-- Questions for 'Leadership Principles Quiz' (QuizID 8)
+(8, 'A leader who empowers their team typically does what?', 'Multiple Choice', NULL, NULL),
+(8, 'What is the difference between a manager and a leader?', 'Short Answer', 'Manager administers, leader innovates; manager maintains, leader develops.', 'While a manager focuses on administering and maintaining systems, a leader innovates and develops. Managers often deal with processes, whereas leaders inspire and motivate people towards a vision.'),
+(8, 'Which leadership style involves making decisions with minimal input from others?', 'Multiple Choice', NULL, NULL),
+(8, 'Explain the concept of "situational leadership".', 'Short Answer', 'Adapting leadership style to follower readiness.', 'Situational leadership is a theory where leaders adapt their style and approach to fit the development level and readiness of their individual followers or team members for a specific task.'),
+(8, 'Effective leaders are also skilled at:', 'Multiple Choice', NULL, NULL),
+(8, 'Why is integrity crucial for a leader?', 'Short Answer', 'Builds trust, sets ethical standard, inspires confidence.', 'Integrity is crucial because it builds trust and credibility with followers, sets an an ethical standard for the entire team, and inspires confidence and loyalty.'),
+(8, 'Which is a characteristic of a transformational leader?', 'Multiple Choice', NULL, NULL),
+(8, 'How does constructive feedback benefit a leader?', 'Short Answer', 'Identifies blind spots, promotes growth, improves performance.', 'Constructive feedback helps leaders identify their blind spots, understand their impact on others, promotes personal and professional growth, and ultimately leads to improved leadership performance.'),
+(8, 'Which leadership approach focuses on clear goals and rewards?', 'Multiple Choice', NULL, NULL),
+(8, 'Discuss the importance of emotional intelligence in leadership.', 'Short Answer', 'Understanding self and others, empathy, managing conflict.', 'Emotional intelligence in leadership is vital for understanding and managing one own emotions, empathizing with team members, resolving conflicts, and building stronger, more productive relationships.'),
+
+-- Questions for 'Leadership Decision Scenarios' (QuizID 9)
+(9, 'You need to make a quick decision under pressure. What is your priority?', 'Multiple Choice', NULL, NULL),
+(9, 'A team member is underperforming. What is the most effective initial approach?', 'Multiple Choice', NULL, NULL),
+(9, 'Your team is resistant to a new company policy. How do you address this as a leader?', 'Multiple Choice', NULL, NULL),
+(9, 'Explain a time you had to make a tough decision as a leader and its outcome.', 'Short Answer', 'Requires personal experience, focus on process and learning.', '*(Requires personal reflection from the user. Expected answer should describe a decision, the process, challenges, and lessons learned.)*'),
+(9, 'How would you handle a conflict between two valuable team members?', 'Multiple Choice', NULL, NULL),
+(9, 'What is your approach to motivating a demotivated team?', 'Short Answer', 'Identify root cause, offer support, clarify purpose, celebrate small wins.', 'My approach would involve first understanding the root cause of demotivation, then offering support and resources, clarifying the purpose and impact of their work, and celebrating small achievements to rebuild morale.'),
+(9, 'A project deadline is approaching, and your team is behind schedule. What do you do?', 'Multiple Choice', NULL, NULL),
+(9, 'Describe how you would delegate a complex task to a junior team member.', 'Short Answer', 'Clear instructions, resources, support, check-ins, trust.', 'I would provide clear instructions, ensure they have the necessary resources and support, set up regular check-ins without micromanaging, and express trust in their ability to learn and complete the task.'),
+(9, 'Which is the best way to foster innovation within your team?', 'Multiple Choice', NULL, NULL),
+(9, 'You receive negative feedback about your leadership style. How do you respond?', 'Short Answer', 'Listen actively, ask clarifying questions, thank them, reflect, make a plan.', 'I would listen actively without interrupting, ask clarifying questions to understand the feedback fully, thank the person for their honesty, reflect on the feedback, and develop a plan for improvement.'),
+
+-- Questions for 'Workplace EQ Assessment' (QuizID 10)
+(10, 'Empathy in the workplace involves:', 'Multiple Choice', NULL, NULL),
+(10, 'Give an example of how self-regulation can prevent a conflict in the workplace.', 'Short Answer', 'Pause before reacting, manage anger, calm down.', 'If a colleague makes a critical comment, self-regulation would involve pausing before reacting impulsively, taking a deep breath to manage anger, and choosing a calm, constructive response instead of an immediate defensive one.'),
+(10, 'Which of these is a sign of high social skills?', 'Multiple Choice', NULL, NULL),
+(10, 'How does understanding your own emotional triggers help you at work?', 'Short Answer', 'Prevents overreactions, allows for proactive management.', 'Understanding your emotional triggers helps you anticipate situations that might provoke a strong reaction, allowing you to proactively manage your response and prevent unnecessary conflicts or emotional outbursts.'),
+(10, 'The ability to understand how your words affect others is part of:', 'Multiple Choice', NULL, NULL),
+(10, 'Describe a situation where displaying self-awareness was beneficial in your professional life.', 'Short Answer', 'Recognizing a weakness, admitting a mistake, seeking help.', '*(Requires personal reflection from the user. Expected answer should describe a situation where acknowledging one own feelings or limitations led to a positive outcome.)*'),
+(10, 'Which component of EQ helps you bounce back from setbacks?', 'Multiple Choice', NULL, NULL),
+(10, 'How can active listening improve emotional intelligence in team interactions?', 'Short Answer', 'Shows respect, builds trust, helps understand underlying emotions.', 'Active listening demonstrates respect, builds trust, and allows you to grasp not just the words but also the underlying emotions and intentions of others, leading to more empathetic and effective communication.'),
+(10, 'Which action demonstrates good relationship management?', 'Multiple Choice', NULL, NULL),
+(10, 'Why is it important for leaders to have high emotional intelligence?', 'Short Answer', 'Inspires trust, resolves conflict, motivates teams, handles stress.', 'Leaders with high emotional intelligence can inspire trust, effectively resolve conflicts, motivate their teams, and handle stress with greater resilience, leading to a more positive and productive work environment.'),
+
+-- Questions for 'Problem Solving Fundamentals Quiz' (QuizID 11)
+(11, 'The "5 Whys" technique is primarily used for:', 'Multiple Choice', NULL, NULL),
+(11, 'Briefly explain the importance of clearly defining a problem before attempting to solve it.', 'Short Answer', 'Ensures correct problem is addressed, avoids wasted effort.', 'Clearly defining a problem ensures that efforts are directed at the actual issue, rather than symptoms. It helps in understanding the scope and context, preventing wasted resources on solving the wrong problem.'),
+(11, 'Which step typically comes after identifying the problem?', 'Multiple Choice', NULL, NULL),
+(11, 'What is the benefit of brainstorming multiple solutions?', 'Short Answer', 'Increases options, encourages creativity, finds optimal solutions.', 'Brainstorming multiple solutions helps in exploring a wide range of possibilities, fosters creativity, and increases the likelihood of finding innovative and optimal solutions rather than settling for the first idea.'),
+(11, 'When evaluating potential solutions, what should you consider?', 'Multiple Choice', NULL, NULL),
+(11, 'Describe the difference between a problem and a symptom.', 'Short Answer', 'Problem is root cause, symptom is visible effect.', 'A problem is the underlying cause of an issue, while a symptom is a visible effect or indicator that a problem exists. Solving symptoms without addressing the root problem leads to recurrence.'),
+(11, 'Which approach encourages breaking down complex problems?', 'Multiple Choice', NULL, NULL),
+(11, 'Why is it important to test a solution before full implementation?', 'Short Answer', 'Identifies flaws, minimizes risk, allows for adjustments.', 'Testing a solution on a small scale helps identify any flaws or unforeseen issues, minimizes risk, and allows for adjustments and refinements before a full-scale implementation.'),
+(11, 'What is a common pitfall in problem-solving?', 'Multiple Choice', NULL, NULL),
+(11, 'How does collaboration enhance the problem-solving process?', 'Short Answer', 'Diverse perspectives, broader knowledge, shared ownership.', 'Collaboration brings together diverse perspectives, a broader range of knowledge and skills, and fosters shared ownership, leading to more comprehensive and effective solutions.'),
+
+-- Questions for 'Problem Definition Check' (QuizID 12)
+(12, 'The first step in effective problem-solving is usually:', 'Multiple Choice', NULL, NULL),
+(12, 'What does a well-defined problem statement include?', 'Multiple Choice', NULL, NULL),
+(12, 'Why is it crucial to distinguish between a problem and its symptoms?', 'Multiple Choice', NULL, NULL),
+(12, 'Explain how asking "why" repeatedly (e.g., 5 Whys) helps in problem definition.', 'Short Answer', 'Uncovers root cause by iterative questioning.', 'Asking "why" repeatedly helps to dig deeper beyond immediate symptoms to uncover the underlying root cause of a problem, leading to more effective and lasting solutions.'),
+(12, 'Which of these indicates a problem is clearly defined?', 'Multiple Choice', NULL, NULL),
+(12, 'What role do assumptions play in problem definition?', 'Short Answer', 'Can bias analysis, should be identified and validated.', 'Assumptions can introduce bias and limit the scope of a problem if not identified and validated. Recognizing assumptions helps in approaching the problem with a more open and accurate perspective.'),
+(12, 'To confirm problem definition, you should:', 'Multiple Choice', NULL, NULL),
+(12, 'Give an example of a vague problem statement vs. a clear one.', 'Short Answer', 'Vague: Sales are down. Clear: Sales of Product X decreased by 10% in Q2 due to competitor Y.', 'A vague statement might be: "Sales are down." A clear problem statement would be: "Sales of Product X in the Western region decreased by 15% last quarter, primarily due to increased competitor promotional activity."'),
+(12, 'Which technique helps visually represent causes and effects of a problem?', 'Multiple Choice', NULL, NULL),
+(12, 'Why is involving stakeholders important during problem definition?', 'Short Answer', 'Ensures comprehensive understanding, builds buy-in.', 'Involving stakeholders ensures that all relevant perspectives are considered, leading to a comprehensive understanding of the problem and fostering buy-in for future solutions.')
+
+
+
+
+INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
+-- Options for QuestionID 1 (QuizID 1: Strategic Leadership Assessment)
+(1, 'Foresight and vision', 0),
+(1, 'Adaptability and innovation', 0),
+(1, 'Focus on short-term operational efficiency', 1), -- Correct for NOT a characteristic
+(1, 'Empowerment and influence', 0),
+-- Options for QuestionID 3 (QuizID 1)
+(3, 'To identify external threats only', 0),
+(3, 'To assess an organization''s internal strengths and weaknesses, and external opportunities and threats', 1),
+(3, 'To set financial targets for the next quarter', 0),
+(3, 'To analyze past performance metrics', 0),
+-- Options for QuestionID 5 (QuizID 1)
+(5, 'Day-to-day task management', 0),
+(5, 'Long-term organizational growth and sustainability', 1),
+(5, 'Meeting weekly sales quotas', 0),
+(5, 'Employee grievance handling', 0),
+-- Options for QuestionID 7 (QuizID 1)
+(7, 'Delegating all strategic tasks', 0),
+(7, 'Vision development and articulation', 1),
+(7, 'Avoiding any form of public speaking', 0),
+(7, 'Focusing only on current profits', 0),
+-- Options for QuestionID 9 (QuizID 1)
+(9, 'To always be the first to complete a task', 0),
+(9, 'To demonstrate the values and behaviors you expect from your team', 1),
+(9, 'To take on all the difficult tasks yourself', 0),
+(9, 'To only give instructions without participating', 0),
+
+
+-- Options for QuestionID 11 (QuizID 2: Strategic Concepts Check)
+(11, 'Daily operational tasks', 0),
+(11, 'Long-term vision and organizational goals', 1),
+(11, 'Individual employee performance reviews', 0),
+(11, 'Short-term financial reporting', 0),
+-- Options for QuestionID 12 (QuizID 2)
+(12, 'Focusing only on immediate deadlines', 0),
+(12, 'Understanding the interconnectedness of various business functions and external factors', 1),
+(12, 'Delegating all major decisions to subordinates', 0),
+(12, 'Ignoring market trends to stick to the original plan', 0),
+-- Options for QuestionID 13 (QuizID 2)
+(13, 'A detailed action plan for the next week.', 0),
+(13, 'A clear, aspirational image of the desired future state of the organization.', 1),
+(13, 'A list of current employee strengths and weaknesses.', 0),
+(13, 'A report on last year''s financial performance.', 0),
+-- Options for QuestionID 15 (QuizID 2)
+(15, 'It helps in hiding critical information from competitors.', 0),
+(15, 'It ensures everyone understands their role and the overall direction.', 1),
+(15, 'It eliminates the need for leadership involvement.', 0),
+(15, 'It is only necessary during times of crisis.', 0),
+-- Options for QuestionID 17 (QuizID 2)
+(17, 'Rigid adherence to established procedures', 0),
+(17, 'Risk aversion and maintaining the status quo', 0),
+(17, 'Innovation, adaptability, and empowered decision-making', 1),
+(17, 'Strict hierarchy and top-down control', 0),
+-- Options for QuestionID 19 (QuizID 2)
+(19, 'A decision made quickly without much thought.', 0),
+(19, 'A decision made in response to an existing problem.', 0),
+(19, 'A decision made in anticipation of future events or trends.', 1),
+(19, 'A decision based solely on past experiences.', 0),
+
+
+-- Options for QuestionID 21 (QuizID 3: Time Management Skills Evaluation)
+(21, 'Gantt Chart', 0),
+(21, 'Kanban Board', 0),
+(21, 'Eisenhower Matrix', 1),
+(21, 'PERT Chart', 0),
+-- Options for QuestionID 23 (QuizID 3)
+(23, '10 minutes', 0),
+(23, '25 minutes', 1),
+(23, '45 minutes', 0),
+(23, '60 minutes', 0),
+-- Options for QuestionID 25 (QuizID 3)
+(25, 'Specific', 1),
+(25, 'Difficult', 0),
+(25, 'Ambiguous', 0),
+(25, 'Unrealistic', 0),
+-- Options for QuestionID 27 (QuizID 3)
+(27, 'To distract yourself from work', 0),
+(27, 'To quickly jot down all tasks and ideas floating in your mind', 1),
+(27, 'To share your thoughts with colleagues', 0),
+(27, 'To analyze historical data', 0),
+-- Options for QuestionID 29 (QuizID 3)
+(29, 'Flowchart', 0),
+(29, 'Gantt Chart', 1),
+(29, 'Mind Map', 0),
+(29, 'Fishbone Diagram', 0),
+
+
+-- Options for QuestionID 31 (QuizID 4: Pomodoro Technique Quiz)
+(31, '5 minutes', 1),
+(31, '15 minutes', 0),
+(31, '30 minutes', 0),
+(31, 'No breaks are taken', 0),
+-- Options for QuestionID 32 (QuizID 4)
+(32, 'To check social media', 0),
+(32, 'To relax and recharge your mind', 1),
+(32, 'To start a new task immediately', 0),
+(32, 'To send emails', 0),
+-- Options for QuestionID 33 (QuizID 4)
+(33, 'After 1 Pomodoro', 0),
+(33, 'After 2 Pomodoros', 0),
+(33, 'After 3 Pomodoros', 0),
+(33, 'After 4 Pomodoros', 1),
+-- Options for QuestionID 34 (QuizID 4)
+(34, 'Multitasking is encouraged.', 0),
+(34, 'Focus for short, intense bursts followed by breaks.', 1),
+(34, 'Work until you feel tired, then take a long break.', 0),
+(34, 'Only use it for creative tasks.', 0),
+-- Options for QuestionID 36 (QuizID 4)
+(36, 'Yes, at any time for any reason.', 0),
+(36, 'No, ideally you should complete the 25-minute session without interruption.', 1),
+(36, 'Only if someone calls you.', 0),
+(36, 'Only for urgent emails.', 0),
+-- Options for QuestionID 38 (QuizID 4)
+(38, 'A type of clock', 1),
+(38, 'An Italian dish', 0),
+(38, 'The inventor''s last name', 0),
+(38, 'A specific time management software', 0),
+-- Options for QuestionID 39 (QuizID 4)
+(39, 'Yes, it is universally effective for everyone and every task.', 0),
+(39, 'No, some people or tasks may benefit more from other techniques.', 1),
+(39, 'Only for tasks requiring creativity.', 0),
+(39, 'Only for very short tasks.', 0),
+
+
+-- Options for QuestionID 41 (QuizID 5: Self-Awareness Core Concepts)
+(41, 'Understanding how others perceive you', 0),
+(41, 'Recognizing your own thoughts, emotions, and values', 1),
+(41, 'Being aware of current events', 0),
+(41, 'Knowing your job description perfectly', 0),
+-- Options for QuestionID 43 (QuizID 5)
+(43, 'Knowing your own strengths and weaknesses.', 0),
+(43, 'Understanding how your behavior impacts others.', 1),
+(43, 'Being able to read other people''s minds.', 0),
+(43, 'Having a clear vision for the future.', 0),
+-- Options for QuestionID 45 (QuizID 5)
+(45, 'Self-motivation', 0),
+(45, 'Empathy', 0),
+(45, 'Self-awareness', 1),
+(45, 'Social skills', 0),
+-- Options for QuestionID 47 (QuizID 5)
+(47, 'Anger', 0),
+(47, 'Frustration', 0),
+(47, 'Humility', 1),
+(47, 'Arrogance', 0),
+-- Options for QuestionID 49 (QuizID 5)
+(49, 'A skill you are not good at.', 0),
+(49, 'An aspect of your behavior or personality that you are unaware of, but others can see.', 1),
+(49, 'A secret goal you have.', 0),
+(49, 'A task you keep forgetting to do.', 0),
+
+
+-- Options for QuestionID 51 (QuizID 6: Journaling Benefits Quiz)
+(51, 'Improved physical strength', 0),
+(51, 'Increased clarity on thoughts and emotions', 1),
+(51, 'Better memory for factual information', 0),
+(51, 'Enhanced financial literacy', 0),
+-- Options for QuestionID 52 (QuizID 6)
+(52, 'Memorize facts more easily', 0),
+(52, 'Reflect on your inner thoughts and feelings', 1),
+(52, 'Impress others with your writing', 0),
+(52, 'Develop typing speed', 0),
+-- Options for QuestionID 53 (QuizID 6)
+(53, 'Yes, without fail.', 0),
+(53, 'No, consistency over time is more important than daily adherence.', 1),
+(53, 'Only if you have a lot of free time.', 0),
+(53, 'Only when you are feeling stressed.', 0),
+-- Options for QuestionID 54 (QuizID 6)
+(54, 'Focusing on external events only', 0),
+(54, 'Writing without self-censorship or judgment', 1),
+(54, 'Only writing about positive experiences', 0),
+(54, 'Always writing in perfect grammar and spelling', 0),
+-- Options for QuestionID 56 (QuizID 6)
+(56, 'No, journaling is only for emotional reflection.', 0),
+(56, 'Yes, by helping organize thoughts and identify solutions.', 1),
+(56, 'Only for mathematical problems.', 0),
+(56, 'Only if you are a professional problem solver.', 0),
+-- Options for QuestionID 58 (QuizID 6)
+(58, 'Yes, there is one universally correct journaling method.', 0),
+(58, 'No, it is a personal practice with many valid approaches.', 1),
+(58, 'Only if you use a specific type of journal.', 0),
+(58, 'Only if you follow strict rules.', 0),
+-- Options for QuestionID 59 (QuizID 6)
+(59, 'Increases stress due to daily commitment.', 0),
+(59, 'Helps reduce stress by externalizing thoughts and emotions.', 1),
+(59, 'Has no impact on stress levels.', 0),
+(59, 'Only reduces stress for certain personality types.', 0),
+
+
+-- Options for QuestionID 61 (QuizID 7: Public Speaking Readiness Test)
+(61, 'Reading directly from notes', 0),
+(61, 'Maintaining strong eye contact and using engaging gestures', 1),
+(61, 'Speaking in a monotone voice', 0),
+(61, 'Avoiding any interaction with the audience', 0),
+-- Options for QuestionID 63 (QuizID 7)
+(63, 'To confuse the audience', 0),
+(63, 'To grab attention, establish credibility, and preview the topic', 1),
+(63, 'To summarize the entire speech upfront', 0),
+(63, 'To delay the main content', 0),
+-- Options for QuestionID 65 (QuizID 7)
+(65, 'Demographic analysis', 0),
+(65, 'Situational analysis', 0),
+(65, 'Psychological analysis', 1),
+(65, 'Environmental analysis', 0),
+-- Options for QuestionID 67 (QuizID 7)
+(67, 'Slouched shoulders and looking down', 0),
+(67, 'Standing tall with open body language and making eye contact', 1),
+(67, 'Crossing your arms tightly', 0),
+(67, 'Pacing rapidly across the stage', 0),
+-- Options for QuestionID 69 (QuizID 7)
+(69, 'As much as possible to be thorough.', 0),
+(69, 'Minimal text, focusing on key points and visuals.', 1),
+(69, 'Only bullet points, no full sentences.', 0),
+(69, 'Long paragraphs to ensure all information is present.', 0),
+
+
+-- Options for QuestionID 71 (QuizID 8: Leadership Principles Quiz)
+(71, 'Gives detailed instructions for every task', 0),
+(71, 'Trusts team members with responsibilities and supports their growth', 1),
+(71, 'Monitors every step of a project closely', 0),
+(71, 'Makes all decisions independently without team input', 0),
+-- Options for QuestionID 73 (QuizID 8)
+(73, 'Autocratic', 1),
+(73, 'Democratic', 0),
+(73, 'Laissez-faire', 0),
+(73, 'Transformational', 0),
+-- Options for QuestionID 75 (QuizID 8)
+(75, 'Ignoring team member concerns', 0),
+(75, 'Active listening and clear communication', 1),
+(75, 'Micromanaging every detail', 0),
+(75, 'Avoiding conflict at all costs', 0),
+-- Options for QuestionID 77 (QuizID 8)
+(77, 'Transactional leadership', 0),
+(77, 'Servant leadership', 0),
+(77, 'Transformational leadership', 1),
+(77, 'Autocratic leadership', 0),
+-- Options for QuestionID 79 (QuizID 8)
+(79, 'Transactional leadership', 1),
+(79, 'Charismatic leadership', 0),
+(79, 'Situational leadership', 0),
+(79, 'Authentic leadership', 0),
+
+
+-- Options for QuestionID 81 (QuizID 9: Leadership Decision Scenarios)
+(81, 'Gathering all possible data, even if it delays the decision.', 0),
+(81, 'Making a decision without consulting anyone.', 0),
+(81, 'Assessing the immediate impact and making the best decision with available information.', 1),
+(81, 'Waiting for others to make the decision.', 0),
+-- Options for QuestionID 82 (QuizID 9)
+(82, 'Immediately remove them from the team.', 0),
+(82, 'Ignore it and hope it improves.', 0),
+(82, 'Schedule a private conversation to understand the issues and offer support.', 1),
+(82, 'Publicly call them out during a team meeting.', 0),
+-- Options for QuestionID 83 (QuizID 9)
+(83, 'Announce it as final and non-negotiable.', 0),
+(83, 'Dismiss their concerns as unjustified.', 0),
+(83, 'Hold a discussion to listen to their concerns and explain the rationale.', 1),
+(83, 'Blame upper management for the policy.', 0),
+-- Options for QuestionID 85 (QuizID 9)
+(85, 'Take sides with one team member.', 0),
+(85, 'Ignore the conflict until it resolves itself.', 0),
+(85, 'Mediate a discussion, focusing on solutions and mutual understanding.', 1),
+(85, 'Tell both team members to stop arguing.', 0),
+-- Options for QuestionID 87 (QuizID 9)
+(87, 'Blame the team for falling behind.', 0),
+(87, 'Extend the deadline without seeking solutions.', 0),
+(87, 'Re-evaluate priorities, reallocate resources, and potentially work overtime.', 1),
+(87, 'Give up on the project.', 0),
+-- Options for QuestionID 89 (QuizID 9)
+(89, 'Implementing a strict, top-down approach to project execution.', 0),
+(89, 'Encouraging experimentation, psychological safety, and diverse ideas.', 1),
+(89, 'Only rewarding individual achievements.', 0),
+(89, 'Discouraging any form of failure or risk-taking.', 0),
+
+
+-- Options for QuestionID 91 (QuizID 10: Workplace EQ Assessment)
+(91, 'Always agreeing with colleagues to avoid conflict', 0),
+(91, 'Understanding and sharing the feelings of another person', 1),
+(91, 'Focusing solely on your own tasks and emotions', 0),
+(91, 'Only showing emotions when you are angry or frustrated', 0),
+-- Options for QuestionID 93 (QuizID 10)
+(93, 'Being a good public speaker.', 0),
+(93, 'Building rapport and navigating social situations effectively.', 1),
+(93, 'Having a large network of contacts.', 0),
+(93, 'Always being the center of attention.', 0),
+-- Options for QuestionID 95 (QuizID 10)
+(95, 'Self-awareness', 0),
+(95, 'Relationship management', 1),
+(95, 'Motivation', 0),
+(95, 'Self-regulation', 0),
+-- Options for QuestionID 97 (QuizID 10)
+(97, 'Self-awareness', 0),
+(97, 'Self-regulation', 0),
+(97, 'Motivation (Resilience)', 1),
+(97, 'Social skills', 0),
+-- Options for QuestionID 99 (QuizID 10)
+(99, 'Avoiding interactions with difficult colleagues.', 0),
+(99, 'Resolving conflicts constructively and building positive networks.', 1),
+(99, 'Only communicating through email.', 0),
+(99, 'Micromanaging team members.', 0),
+
+
+-- Options for QuestionID 101 (QuizID 11: Problem Solving Fundamentals Quiz)
+(101, 'Identifying the best solution immediately', 0),
+(101, 'Generating as many solutions as possible', 0),
+(101, 'Finding the root cause of a problem', 1),
+(101, 'Delegating the problem to someone else', 0),
+-- Options for QuestionID 103 (QuizID 11)
+(103, 'Brainstorming solutions', 0),
+(103, 'Analyzing the problem and its root causes', 1),
+(103, 'Implementing the solution', 0),
+(103, 'Testing the solution', 0),
+-- Options for QuestionID 105 (QuizID 11)
+(105, 'Only the cost of the solution.', 0),
+(105, 'Feasibility, cost, potential impact, and risks.', 1),
+(105, 'How quickly it can be implemented, regardless of effectiveness.', 0),
+(105, 'Only whether it''s a unique idea.', 0),
+-- Options for QuestionID 107 (QuizID 11)
+(107, 'Linear thinking', 0),
+(107, 'Systematic approach', 0),
+(107, 'Decomposition (breaking down)', 1),
+(107, 'Analogical reasoning', 0),
+-- Options for QuestionID 109 (QuizID 11)
+(109, 'Jumping to conclusions without sufficient data.', 1),
+(109, 'Thorough analysis of all aspects.', 0),
+(109, 'Considering multiple perspectives.', 0),
+(109, 'Systematic evaluation of solutions.', 0),
+
+
+-- Options for QuestionID 111 (QuizID 12: Problem Definition Check)
+(111, 'Brainstorming solutions', 0),
+(111, 'Implementing a chosen solution', 0),
+(111, 'Clearly defining the problem', 1),
+(111, 'Collecting data', 0),
+-- Options for QuestionID 112 (QuizID 12)
+(112, 'A list of potential solutions.', 0),
+(112, 'Only who is responsible for the problem.', 0),
+(112, 'What the problem is, its impact, who is affected, and when/where it occurs.', 1),
+(112, 'How the problem has been solved in the past.', 0),
+-- Options for QuestionID 113 (QuizID 12)
+(113, 'Because symptoms are easier to fix.', 0),
+(113, 'Solving symptoms without addressing the root problem leads to recurrence.', 1),
+(113, 'It is not important; just fix what you see.', 0),
+(113, 'Symptoms are always more critical than the root problem.', 0),
+-- Options for QuestionID 115 (QuizID 12)
+(115, 'It has many possible interpretations.', 0),
+(115, 'It is specific, measurable, achievable, relevant, and time-bound.', 1),
+(115, 'It blames a specific individual or team.', 0),
+(115, 'It only describes emotional feelings about the situation.', 0),
+-- Options for QuestionID 117 (QuizID 12)
+(117, 'Immediately start looking for external solutions.', 0),
+(117, 'Validate it with data and input from affected parties.', 1),
+(117, 'Keep it vague so everyone can interpret it differently.', 0),
+(117, 'Assume you know all the details without asking.', 0),
+-- Options for QuestionID 119 (QuizID 12)
+(119, 'Pareto Chart', 0),
+(119, 'Fishbone (Ishikawa) Diagram', 1),
+(119, 'Control Chart', 0),
+(119, 'Scatter Plot', 0);
