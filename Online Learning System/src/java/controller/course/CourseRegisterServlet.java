@@ -1,8 +1,11 @@
 package controller.course;
 
+import config.EmailSender;
+import config.PasswordGenerator;
 import dao.CoursePackageDao;
 import dao.UserCourseDao;
 import dao.UserDAO;
+import jakarta.mail.MessagingException;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -74,8 +77,11 @@ public class CourseRegisterServlet extends HttpServlet {
             if (lastName == null || lastName.trim().isEmpty()) {
                 errors.put("lastName", "Last name is required.");
             }
-            if (email == null || userDAO.isEmailExists(email) || !email.matches("^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
-                errors.put("email", "Invalid email format or this email is already registered.");
+            if (email == null || !email.matches("^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+                errors.put("email", "Invalid email format.");
+            }
+            if (userDAO.isEmailExists(email)) {
+                errors.put("email", "This email is already registered.");
             }
             if (mobile == null || !mobile.matches("\\d{10,15}")) {
                 errors.put("mobile", "Invalid mobile number.");
@@ -98,7 +104,13 @@ public class CourseRegisterServlet extends HttpServlet {
         if (auth != null) {
             user = userDAO.getLoginUser(auth);
         } else {
-            user = new User(0, firstName, lastName, gender, email, mobile, "user", true, "default.png", null, null, null);
+            String password = PasswordGenerator.generatePassword();
+            try {
+                EmailSender.sendPassword(email, password);
+            } catch (MessagingException ex) {
+                Logger.getLogger(CourseRegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            user = new User(0, firstName, lastName, gender, email, mobile, "user", true, "default.png", password, null, null);
             try {
                 userDAO.addUser(user);
                 response.setContentType("text/html;charset=UTF-8");
@@ -122,6 +134,9 @@ public class CourseRegisterServlet extends HttpServlet {
         userCourse.setStatus("Pending");
         userCourse.setValidFrom(null);
         userCourse.setValidTo(null);
+        if (!userCourseDao.updateUserCourse(userCourse)) {
+            userCourseDao.addUserCourse(userCourse);
+        }
         // Forward to prePayment
         request.setAttribute("userId", user.getUserId());
         request.setAttribute("courseId", courseId);

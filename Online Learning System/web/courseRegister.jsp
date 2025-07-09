@@ -15,7 +15,7 @@
         <div class="bg-white rounded shadow p-4 p-md-5">
             <!-------------------------------------------------------->
             <!-- Registration Form -->
-            <form method="post" action="CourseRegister">    
+            <form method="post" action="CourseRegister" id="registerForm">    
                 <input type="hidden" name="courseID" value="${courseID}">
                 <input type="hidden" name="price" id="priceInput" />
                 <div class="mb-5">
@@ -167,7 +167,7 @@
                 </div>
                 <!-- Submit Button -->
                 <div class="d-flex justify-content-end">
-                    <button type="submit"
+                    <button id="submitBtn" type="submit"
                             class="text-white font-bold py-3 px-6 rounded-3 shadow-lg border-0"
                             style=" background-color: #4f46e5;">
                         Complete Registration
@@ -180,7 +180,7 @@
                 const packageRadios = document.querySelectorAll('input[name="packageID"]');
                 function updatePackageInfo(radio) {
                     const name = radio.dataset.name;
-                    const rawPrice = radio.dataset.price; // giữ dạng số
+                    const rawPrice = radio.dataset.price;
                     const formattedPrice = Number(rawPrice).toLocaleString('vi-VN') + '₫';
 
                     document.getElementById('summaryPackage').textContent = name;
@@ -194,6 +194,16 @@
                 const defaultRadio = document.querySelector('input[name="packageID"]:checked');
                 if (defaultRadio) {
                     updatePackageInfo(defaultRadio);
+                }
+                const form = document.getElementById("registerForm");
+                const btn = document.getElementById("submitBtn");
+                if (form && btn) {
+                    form.addEventListener("submit", function () {
+                        btn.disabled = true;
+                        btn.textContent = "Processing...";
+                        btn.style.opacity = "0.7";
+                        btn.style.cursor = "not-allowed";
+                    });
                 }
             });
         </script>

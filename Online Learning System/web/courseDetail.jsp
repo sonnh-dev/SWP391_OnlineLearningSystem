@@ -678,7 +678,7 @@
                 if (action === "notifyAccountCreated") {
                     document.getElementById("popupModal").style.display = "none";
                     alert(message);
-                    window.location.href = "check-mail.jsp";
+                    window.location.href = "emailConfirmation.jsp";
                 }
             });
         </script>

@@ -46,8 +46,8 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         // Lấy thông tin từ form
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String email = request.getParameter("email").trim();
+        String password = request.getParameter("password").trim();
 
         // Kiểm tra input trống
         if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
