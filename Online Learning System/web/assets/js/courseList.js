@@ -1,230 +1,205 @@
+document.addEventListener("DOMContentLoaded", function () {
 // ====== DOM Elements ======
-const container = document.querySelector(".subject-container");
-const noCourseMessage = document.getElementById("noCourseMessage");
-const pagination = document.querySelector(".pagination");
-const paginationNav = document.querySelector("nav[aria-label='Subject pagination']");
+    const container = document.querySelector(".subject-container");
+    const noMsg = document.getElementById("noCourseMessage");
+    const pagination = document.querySelector(".pagination");
+    const nav = document.querySelector("nav[aria-label='Subject pagination']");
 
-const coursePerPageInput = document.getElementById("coursePerPage");
-const priceRangeInput = document.getElementById("priceRange");
-const priceRangeValue = document.getElementById("priceRangeValue");
+    const perPageInput = document.getElementById("coursePerPage");
+    const priceInput = document.getElementById("priceRange");
+    const priceValue = document.getElementById("priceRangeValue");
 
-const searchForm = document.getElementById("searchForm");
-const searchInput = document.getElementById("searchInput");
+    const searchForm = document.getElementById("searchForm");
+    const searchInput = document.getElementById("searchInput");
 
-const infoAll = document.getElementById("info-all");
-const infoFilter = document.querySelectorAll("input[id^='info-']:not(#info-all)");
+    const infoAll = document.getElementById("info-all");
+    const infoChecks = document.querySelectorAll("input[id^='info-']:not(#info-all)");
 
-const catAll = document.getElementById("cat-all");
-const catFilter = document.querySelectorAll("input[id^='cat-']:not(#cat-all)");
+    const catAll = document.getElementById("cat-all");
+    const catChecks = document.querySelectorAll("input[id^='cat-']:not(#cat-all)");
 
-const applyBtn = document.getElementById("applyFilter");
-const clearBtn = document.getElementById("clearFilter");
+    const sortBtns = document.querySelectorAll(".sort-btn");
+    const catLinks = document.querySelectorAll(".category-sidebar");
 
-const categoryLinks = document.querySelectorAll(".category-sidebar");
+    const applyBtn = document.getElementById("applyFilter");
+    const clearBtn = document.getElementById("clearFilter");
+    const resetBtn = document.getElementById("reset");
 
+    const optionBtn = document.getElementById("optionCustom");
+    const optionContent = document.getElementById("optionContent");
+
+    optionBtn?.addEventListener("click", () => {
+        optionContent.style.display = optionContent.style.display === "block" ? "none" : "block";
+    });
 // ====== State ======
-let sortStatus = "updated";
-let currentMaxPrice = parseInt(priceRangeInput?.value) || 2000000;
-let currentPage = 1;
-let coursePerPage = parseInt(coursePerPageInput?.value || 4);
-let searchKeyword = "";
-let displayFields = new Set(); //Set giá trị hiển thị của 1 course
-let selectedCategories = new Set(); //Set giá trị chứa category
+    let courses = Array.from(container.querySelectorAll(".course-item"));
+    let filtered = [];
+    let searchKey = new URLSearchParams(window.location.search).get("search")?.trim().toLowerCase() || "";
+    let categories = new Set();
+    const catParam = new URLSearchParams(window.location.search).get("category")?.trim().toLowerCase();
+    if (catParam)
+        categories.add(catParam);
+    let sortKey = "updated";
+    let displayFields = new Set(["all"]);
+    let MaxPrice = parseInt(priceInput.value) || 2000000;
+    let currentPage = 1;
+    let perPage = parseInt(perPageInput.value) || 4;
 
-// ====== Original course list ======
-const originalCourses = Array.from(container.querySelectorAll(".course-item"));
-
-// ====== Init ======
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("reset")?.addEventListener("click", resetAllFilters); //nút reset
-    const urlParams = new URLSearchParams(window.location.search);
-    searchKeyword = urlParams.get("search")?.trim().toLowerCase() || "";  //search bar bên ngoài
-    if (searchKeyword)
-        searchInput.value = searchKeyword;
-    const searchCategory = urlParams.get("category")?.trim().toLowerCase();  // category bên ngoài
-    if (searchCategory) {
-        selectedCategories = new Set([searchCategory]);
-        // Cập nhật checkbox
+    if (searchKey)
+        searchInput.value = searchKey;
+    if (catParam) {
         catAll.checked = false;
-        catFilter.forEach(cb => {
-            const val = cb.value.trim().toLowerCase();
-            cb.checked = selectedCategories.has(val);
-        });
+        catChecks.forEach(c => c.checked = c.value.toLowerCase() === catParam);
     }
-    // Hiển thị thanh custom display
-    document.getElementById("optionCustom")?.addEventListener("click", () => {
-        const content = document.getElementById("optionContent");
-        content.style.display = content.style.display === "block" ? "none" : "block";
+    // ===== Event Binding =====
+    // ===== Course Per Page =====
+    perPageInput.addEventListener("change", () => {
+        perPage = +perPageInput.value;
+        currentPage = 1;
+        applyFilters();
     });
 
-    initCheckboxGroup(infoAll, infoFilter);
-    initCheckboxGroup(catAll, catFilter, selectedCategories);
-    FilterEvents();
-    SearchAndSortEvents();
-    bindCategoryLinks();
-
-    applyDisplaySettings();
-});
-
-// ====== Checkbox Group ======
-function initCheckboxGroup(allCheckbox, groupCheckboxes, valueSet = null) {
-    allCheckbox?.addEventListener("change", () => {
-        if (allCheckbox.checked) {
-            groupCheckboxes.forEach(cb => cb.checked = false);
-            valueSet?.clear();
+    // ===== Price Range =====
+    priceInput.addEventListener("input", () => {
+        MaxPrice = +priceInput.value;
+        priceValue.textContent = new Intl.NumberFormat("vi-VN").format(MaxPrice) + " ₫";
+        applyFilters();
+    });
+    // ===== Search Form =====
+    searchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        searchKey = searchInput.value.trim().toLowerCase();
+        currentPage = 1;
+        applyFilters();
+    });
+    // ===== Sider sorting =====
+    sortBtns.forEach((btn) => {
+        btn.addEventListener("click", function () {
+            sortBtns.forEach((b) => b.classList.remove("active"));
+            this.classList.add("active");
+            sortKey = this.dataset.sort;
             currentPage = 1;
-            applyCourseFiltersAndSort();
+            applyFilters();
+        });
+    });
+    // ===== Info box =====
+    infoAll.addEventListener("change", () => {
+        if (infoAll.checked)
+            infoChecks.forEach(c => c.checked = false);
+        applyFilters();
+    });
+    infoChecks.forEach((cb) => {
+        cb.addEventListener("change", () => {
+            const checked = Array.from(infoChecks).filter(c => c.checked);
+            if (checked.length === 0) {
+                infoAll.checked = true;
+                displayFields = new Set(["all"]);
+            } else {
+                infoAll.checked = false;
+                displayFields = new Set(checked.map(c => c.value));
+            }
+            applyFilters();
+        });
+    });
+    // ===== Cat box =====
+    catAll.addEventListener("change", () => {
+        if (catAll.checked) {
+            categories.clear();
+            catChecks.forEach((c) => (c.checked = false));
+            applyFilters();
         }
     });
 
-    groupCheckboxes.forEach(cb => {
+    catChecks.forEach((cb) => {
         cb.addEventListener("change", () => {
-            const anyChecked = [...groupCheckboxes].some(c => c.checked);
-            allCheckbox.checked = !anyChecked;
-
-            if (valueSet) {
-                valueSet.clear();
-                groupCheckboxes.forEach(c => {
-                    if (c.checked)
-                        valueSet.add(c.value.trim().toLowerCase());
-                });
-            }
-            currentPage = 1;
-            applyCourseFiltersAndSort();
+            categories.clear();
+            catChecks.forEach((c) => {
+                if (c.checked)
+                    categories.add(c.value.toLowerCase());
+            });
+            catAll.checked = categories.size === 0;
+            applyFilters();
         });
     });
-}
-
-// ====== Filter Events ======
-function FilterEvents() {
-    //Course per page
-    coursePerPageInput?.addEventListener("change", () => {
-        coursePerPage = parseInt(coursePerPageInput.value);
-        currentPage = 1;
-        applyCourseFiltersAndSort();
-    });
-    //Price Range
-    priceRangeInput?.addEventListener("input", () => {
-        currentMaxPrice = parseInt(priceRangeInput.value);
-        priceRangeValue.textContent = new Intl.NumberFormat("vi-VN").format(currentMaxPrice) + " ₫";
-        currentPage = 1;
-        applyCourseFiltersAndSort();
-    });
-
-    applyBtn?.addEventListener("click", applyDisplaySettings);
-
-    clearBtn?.addEventListener("click", () => {
-        infoAll.checked = true;
-        infoFilter.forEach(cb => cb.checked = false);
-
-        catAll.checked = true;
-        catFilter.forEach(cb => cb.checked = false);
-        selectedCategories.clear();
-        searchInput.value = "";
-        coursePerPageInput.value = coursePerPage = 4;
-        currentPage = 1;
-        applyDisplaySettings();
-    });
-}
-
-// ====== Search & Sort ======
-function SearchAndSortEvents() {
-    //search bar
-    searchForm?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        searchKeyword = searchInput.value.trim().toLowerCase();
-        currentPage = 1;
-        applyCourseFiltersAndSort();
-    });
-    //sort button
-    document.querySelectorAll(".sort-btn").forEach(btn => {
-        btn.addEventListener("click", function () {
-            document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
-            this.classList.add("active");
-            sortStatus = this.dataset.sort;
-            currentPage = 1;
-            applyCourseFiltersAndSort();
-        });
-    });
-}
-
-// ====== Category Sidebar Clicks ======
-function bindCategoryLinks() {
-    categoryLinks.forEach(link => {
+    // ===== Category from sider =====
+    catLinks.forEach((link) => {
         link.addEventListener("click", (e) => {
             e.preventDefault();
-            const selected = link.textContent.trim().toLowerCase();
-            selectedCategories = new Set([selected]);
-
+            const cat = link.textContent.trim().toLowerCase();
+            categories = new Set([cat]);
+            catChecks.forEach((c) => (c.checked = c.value.toLowerCase() === cat));
             catAll.checked = false;
-            catFilter.forEach(cb => {
-                const val = cb.value.trim().toLowerCase();
-                cb.checked = selectedCategories.has(val);
-            });
-
-            currentPage = 1;
-            applyCourseFiltersAndSort();
+            applyFilters();
         });
     });
-}
+    // ===== Button =====
+    applyBtn.addEventListener("click", applyFilters);
+    clearBtn.addEventListener("click", clearAll);
+    resetBtn.addEventListener("click", resetAll);
 
-// ====== Display Settings ======
-function applyDisplaySettings() {
-    displayFields.clear();
-    if (infoAll.checked) {
-        displayFields.add("all");
-    } else {
-        infoFilter.forEach(cb => cb.checked && displayFields.add(cb.value));
+    // ===== Help Func =====
+    // ===== Get Course Price base on sale at the selected package =====
+    function getCoursePrice(course) {
+        const priceEl = course.querySelector(".new-price");
+        return parseInt(priceEl?.textContent.replace(/\D/g, "") || "0", 10);
     }
-    applyCourseFiltersAndSort();
-}
-
-// ====== Main Filter + Sort Logic ======
-function applyCourseFiltersAndSort() {
-    const filtered = originalCourses.filter(course => {
-        const price = parseInt(course.dataset.price);
-        const title = course.querySelector(".course-title")?.textContent.toLowerCase() || "";
-        const desc = course.querySelector(".course-description")?.textContent.toLowerCase() || "";
-        const cat = course.dataset.category?.toLowerCase() || "";
-        return (price <= currentMaxPrice) &&
-                (title.includes(searchKeyword) || desc.includes(searchKeyword)) &&
-                (selectedCategories.size === 0 || selectedCategories.has(cat));
-    });
-    filtered.sort((a, b) => {
-        const getPrice = (course) => {
-            const newPriceEl = course.querySelector(".new-price");
-            const rawText = newPriceEl.textContent.trim().replace(/[^\d]/g, "");
-            return parseInt(rawText, 10) || 0;
-        };
-        const priceA = getPrice(a);
-        const priceB = getPrice(b);
-        switch (sortStatus) {
-            case "price-asc":
-                return priceA - priceB;
-            case "price-desc":
-                return priceB - priceA;
-            case "popular":
-                return b.dataset.enrolled - a.dataset.enrolled;
-            case "updated":
-                return b.dataset.updated - a.dataset.updated;
-            case "recommend":
-                return b.dataset.rating - a.dataset.rating;
-            default:
-                return 0;
+    // ===== Display the sale rate and Price after sale base on the coursePackage =====
+    function updatePrice(course) {
+        const sel = course.querySelector(".course-package");
+        const badge = course.querySelector(".discount-badge");
+        const oldP = course.querySelector(".old-price");
+        const newP = course.querySelector(".new-price");
+        const d = sel.selectedOptions[0].dataset;
+        badge.textContent = `${d.salerate}% OFF`;
+        oldP.textContent = new Intl.NumberFormat("vi-VN").format(d.price) + " ₫";
+        newP.textContent = new Intl.NumberFormat("vi-VN").format(d.sale) + " ₫";
+        badge.style.display = "inline-block";
+    }
+    // ===== Core Func =====
+    // ===== Filter =====
+    function applyFilters() {
+        filtered = courses
+                .filter((c) => {
+                    const price = getCoursePrice(c);
+                    const title = c.querySelector(".course-title").textContent.toLowerCase();
+                    const desc = c.querySelector(".course-description").textContent.toLowerCase();
+                    const cat = c.dataset.category.toLowerCase();
+                    return (
+                            price <= MaxPrice &&
+                            (!searchKey || title.includes(searchKey) || desc.includes(searchKey)) &&
+                            (categories.size === 0 || categories.has(cat))
+                            );
+                })
+                .sort((a, b) => {
+                    const priceA = getCoursePrice(a);
+                    const priceB = getCoursePrice(b);
+                    switch (sortKey) {
+                        case "price-asc":
+                            return priceA - priceB;
+                        case "price-desc":
+                            return priceB - priceA;
+                        case "popular":
+                            return b.dataset.enrolled - a.dataset.enrolled;
+                        case "updated":
+                            return b.dataset.updated - a.dataset.updated;
+                        case "recommend":
+                            return b.dataset.rating - a.dataset.rating;
+                    }
+                });
+        buildPagination(Math.ceil(filtered.length / perPage));
+        renderCourses();
+    }
+    // ===== Custom Display of Course Card =====
+    function renderCourses() {
+        container.innerHTML = "";
+        if (!filtered.length) {
+            noMsg.style.display = "block";
+            pagination.style.display = "none";
+            return;
         }
-    });
-    container.innerHTML = "";
-    if (filtered.length === 0) {
-        noCourseMessage.style.display = "block";
-        paginationNav.style.display = "none";
-        return;
-    } else {
-        noCourseMessage.style.display = "none";
-    }
-
-    const totalPages = Math.ceil(filtered.length / coursePerPage);
-    const pagedCourses = filtered.slice((currentPage - 1) * coursePerPage, currentPage * coursePerPage);
-    pagedCourses.forEach(course => {
+        noMsg.style.display = "none";
+        const start = (currentPage - 1) * perPage;
+        const pageItems = filtered.slice(start, start + perPage);
         const fieldMap = {
             title: ".course-title",
             category: ".course-category",
@@ -234,118 +209,87 @@ function applyCourseFiltersAndSort() {
             updatedate: ".course-updateDate",
             totalenrollment: ".course-enroll",
             rating: ".course-rating",
-            coursepackage: ".course-package"
-        };
-        for (const [key, selector] of Object.entries(fieldMap)) {
-            course.querySelector(selector).classList.toggle("d-none", !(displayFields.has("all") || displayFields.has(key)));
-        }
-
-        // ===== Update Price and Discount Badge =====
-        const select = course.querySelector(".course-package");
-        const oldPriceEl = course.querySelector(".old-price");
-        const newPriceEl = course.querySelector(".new-price");
-        const saleRateEl = course.querySelector(".sale-rate");
-        const discountBadge = course.querySelector(".discount-badge");
-        const updatePrice = () => {
-            const selected = select?.selectedOptions[0];
-            const oldPrice = parseFloat(selected.dataset.price || "0");
-            const salePrice = parseFloat(selected.dataset.sale || "0");
-            const saleRate = parseFloat(selected.dataset.salerate || "0");
-            discountBadge.textContent = `${saleRate}% OFF`;
-            discountBadge.style.display = "inline-block";
-            oldPriceEl.textContent = new Intl.NumberFormat("vi-VN").format(oldPrice) + " ₫";
-            newPriceEl.textContent = new Intl.NumberFormat("vi-VN").format(salePrice) + " ₫";
-        };
-        select.addEventListener("change", updatePrice);
-        updatePrice();
-        container.appendChild(course); //chuyển course đã sửa giá xuống cuối contenter (không thêm mới)
-    });
-    updatePagination(totalPages);
-}
-
-// ====== Pagination Builder ======
-function updatePagination(totalPages) {
-    pagination.innerHTML = "";
-    paginationNav.style.display = totalPages > 1 ? "block" : "none";
-    //tạo <li> <a>
-    const createItem = (label, page, disabled = false, active = false) => {
-        const li = document.createElement("li");
-        li.className = `page-item${disabled ? " disabled" : ""}${active ? " active" : ""}`;
-        const a = document.createElement("a");
-        a.className = "page-link";
-        a.href = "#";
-        a.textContent = label;
-        a.addEventListener("click", (e) => {
-            e.preventDefault();
-            currentPage = page;
-            applyCourseFiltersAndSort();
+            coursepackage: ".course-package"};
+        pageItems.forEach((course) => {
+            Object.entries(fieldMap).forEach(([key, selector]) => {
+                const element = course.querySelectorAll(selector);
+                element.forEach((el) => {
+                    el.classList.toggle("d-none", !(displayFields.has("all") || displayFields.has(key)));
+                });
+            });
+            // ===== Select package =====
+            const selected = course.querySelector(".course-package");
+            if (!selected.hasListener) {
+                selected.addEventListener("change", () => updatePrice(course));
+                selected.hasListener = true;
+            }
+            updatePrice(course);
+            container.appendChild(course);
         });
-        li.appendChild(a);
-        return li;
-    };
-
-    const addDotPage = () => {
-        const li = document.createElement("li");
-        li.className = "page-item disabled";
-        li.innerHTML = `<span class="page-link">...</span>`;
-        pagination.appendChild(li);
-    };
-    pagination.appendChild(createItem("Prev", currentPage - 1, currentPage === 1));
-    if (totalPages <= 5) {
-        for (let i = 1; i <= totalPages; i++) {
-            pagination.appendChild(createItem(i, i, false, i === currentPage));
-        }
-    } else {
-        switch (true) {
-            // page 1-2-3
-            case (currentPage <= 3):
-                for (let i = 1; i <= 3; i++) {
-                    pagination.appendChild(createItem(i, i, false, i === currentPage));
-                }
-                addDotPage();
-                pagination.appendChild(createItem(totalPages, totalPages));
-                break;
-                // Page at last
-            case (currentPage >= totalPages - 1):
-                pagination.appendChild(createItem(1, 1));
-                addDotPage();
-                for (let i = totalPages - 2; i <= totalPages; i++) {
-                    pagination.appendChild(createItem(i, i, false, i === currentPage));
-                }
-                break;
-                // middle
-            default:
-                pagination.appendChild(createItem(1, 1));
-                addDotPage();
-                for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-                    pagination.appendChild(createItem(i, i, false, i === currentPage));
-                }
-                addDotPage();
-                pagination.appendChild(createItem(totalPages, totalPages));
-                break;
-        }
     }
-    pagination.appendChild(createItem("Next", currentPage + 1, currentPage === totalPages));
-}
+    // ===== Pagination =====
+    function buildPagination(totalPages) {
+        pagination.innerHTML = "";
+        nav.style.display = totalPages > 1 ? "block" : "none";
+        // Make <li><a> to make page.
+        function makeItem(label, page, disabled, active) {
+            const li = document.createElement("li");
+            li.className = "page-item" + (disabled ? " disabled" : "") + (active ? " active" : "");
+            const a = document.createElement("a");
+            a.className = "page-link";
+            a.href = "#";
+            a.textContent = label;
+            a.onclick = (e) => {
+                e.preventDefault();
+                if (!disabled && page >= 1 && page <= totalPages) {
+                    currentPage = page;
+                    applyFilters();
+                }
+            };
+            li.appendChild(a);
+            pagination.appendChild(li);
+        }
+        makeItem("Prev", currentPage - 1, currentPage === 1);
+        for (let i = 1; i <= totalPages; i++) {
+            makeItem(i, i, false, i === currentPage);
+        }
+        makeItem("Next", currentPage + 1, currentPage === totalPages);
+    }
+    function clearAll() {
+        categories.clear();
+        displayFields = new Set(["all"]);
+        currentPage = 1;
+        perPage = 4;
+        infoAll.checked = true;
+        infoChecks.forEach((c) => (c.checked = false));
+        catAll.checked = true;
+        catChecks.forEach((c) => (c.checked = false));
+        perPageInput.value = perPage;
+        applyFilters();
+    }
+    function resetAll() {
+        searchKey = "";
+        categories.clear();
+        sortKey = "updated";
+        displayFields = new Set(["all"]);
+        currentPage = 1;
+        perPage = 4;
 
-// ====== Reset Filters ======
-function resetAllFilters() {
-    searchKeyword = "";
-    searchInput.value = "";
-    currentMaxPrice = parseInt(priceRangeInput?.max) || 2000000;
-    priceRangeInput.value = currentMaxPrice;
-    priceRangeValue.textContent = new Intl.NumberFormat("vi-VN").format(currentMaxPrice) + " ₫";
-    infoAll.checked = true;
-    infoFilter.forEach(cb => cb.checked = false);
-    catAll.checked = true;
-    catFilter.forEach(cb => cb.checked = false);
-    selectedCategories.clear();
-    coursePerPage = 4;
-    coursePerPageInput.value = 4;
-    sortStatus = "updated";
-    currentPage = 1;
-    document.querySelectorAll(".sort-btn").forEach(btn =>
-        btn.classList.toggle("active", btn.dataset.sort === "updated")
-    );
-    applyDisplaySettings();
-}
+        searchInput.value = "";
+        MaxPrice = 2000000;
+        priceInput.value = MaxPrice;
+        priceValue.textContent = new Intl.NumberFormat("vi-VN").format(MaxPrice) + " ₫";
+        infoAll.checked = true;
+        infoChecks.forEach((c) => (c.checked = false));
+        catAll.checked = true;
+        catChecks.forEach((c) => (c.checked = false));
+        perPageInput.value = perPage;
+        sortBtns.forEach((b) => b.classList.toggle("active", b.dataset.sort === "updated"));
+
+        applyFilters();
+    }
+    applyFilters();
+// ===== END =====
+});
+
+

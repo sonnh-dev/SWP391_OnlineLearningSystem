@@ -667,8 +667,6 @@
                     form.submit();
                 }
             });
-        </script>
-        <script>
             window.addEventListener("message", function (event) {
                 if (!event.data || typeof event.data !== "object")
                     return;
@@ -681,8 +679,6 @@
                     window.location.href = "emailConfirmation.jsp";
                 }
             });
-        </script>
-        <script>
             function getParam(param) {
                 return new URLSearchParams(window.location.search).get(param);
             }
