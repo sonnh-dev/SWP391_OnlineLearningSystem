@@ -43,7 +43,7 @@
                                 <i class="bi bi-person-circle me-1"></i> My account
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="profile.jsp">My Profile</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/profile">My Profile</a></li>
                                 <li>
                                     <form action="${pageContext.request.contextPath}/MyCourse" method="post" class="dropdown-item p-0">
                                         <input type="hidden" name="userID" value="${user.userId}" />

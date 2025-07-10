@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Quiz Lesson</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -81,8 +82,10 @@
             margin: 30px 0;
         }
     </style>
+    <%@include file="../includes/head.jsp" %>
 </head>
 <body>
+     <%@include file="../includes/navbar.jsp" %>
     <div class="container">
         <h1>Bài Quiz: ${quiz.quizName}</h1>
 
@@ -125,5 +128,6 @@
         <hr>
         <a href="index.jsp">← Về trang chủ</a>
     </div>
+        <%@include file="../includes/foot.jsp" %>
 </body>
 </html>

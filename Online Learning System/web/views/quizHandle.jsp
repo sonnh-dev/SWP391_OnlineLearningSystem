@@ -244,6 +244,7 @@
         </style>
     </head>
     <body>
+        <%@include file="../includes/navbar.jsp" %>
         <%
             // Corrected: Ensure questions list is not null when accessed
             List<Question> questions = (List<Question>) request.getAttribute("questions");
@@ -560,5 +561,6 @@
             }
 
         </script>
+        <%@include file="../includes/foot.jsp" %>
     </body>
 </html>
