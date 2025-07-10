@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +8,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #004aad; /* Màu xanh đậm như ảnh */
+            background-color: #004aad;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -41,6 +41,12 @@
             font-size: 18px;
             text-align: center;
             font-weight: bold;
+        }
+
+        .welcome p {
+            font-size: 0.85em;
+            color: gray;
+            margin-top: 20px;
         }
 
         .login-box h2 {
@@ -106,24 +112,24 @@
     </div>
     <div class="login-box">
         <h2>Login</h2>
-        <form action="Login" method="POST">
+        <form action="LoginServlet" method="POST" accept-charset="UTF-8">
             <label for="email">Email</label>
-            <input type="text" id="email" name="email"
-                   value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>"
-                   required>
+            <input type="text" id="email" name="email" required autofocus
+                   placeholder="Enter your email"
+                   value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>">
             <% if (request.getAttribute("errorEmail") != null) { %>
                 <div class="error-message"><%= request.getAttribute("errorEmail") %></div>
             <% } %>
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" required placeholder="Enter your password">
 
             <% if (request.getAttribute("error") != null) { %>
                 <div class="error-message"><%= request.getAttribute("error") %></div>
             <% } %>
 
             <div class="actions">
-                <a href="#">Forgot password ?</a>
+                <a href="#">Forgot password?</a>
                 <a href="register.jsp">Register new information</a>
             </div>
 

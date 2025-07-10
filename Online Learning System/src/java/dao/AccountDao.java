@@ -1,4 +1,4 @@
-    package dao;
+package dao;
 
 import context.context2;
 import java.sql.Connection;
@@ -16,35 +16,34 @@ public class AccountDao {
 
     // ✅ Đăng nhập
 // Đăng nhập
-    public static Account getAccountByEmailAndPassword(String email, String password) {
-        context2 dbConnect = context2.getInstance();
-        ArrayList<Account> accounts = new ArrayList<>();
+   public static Account getAccountByEmailAndPassword(String email, String password) {
+    context2 dbConnect = context2.getInstance();
+    String sql = "SELECT UserID, email, password FROM Users WHERE email = ? AND password = ?";
 
-        String sql = "SELECT * FROM Users WHERE email = ? AND password = ?";
+    try (Connection conn = dbConnect.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        try (Connection conn = dbConnect.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, email);
+        stmt.setString(2, password);
 
-            stmt.setString(1, email);
-            stmt.setString(2, password);
+        ResultSet rs = stmt.executeQuery();
 
-            ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            int id = rs.getInt("UserID");
+            String e = rs.getString("email");
+            String p = rs.getString("password");
 
-            while (rs.next()) {
-                Account account = new Account(
-                    rs.getString("email"),
-                    rs.getString("password")
-                );
-                accounts.add(account);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            return new Account(id, e, p);
         }
 
-        return accounts.isEmpty() ? null : accounts.get(0);
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+
+    return null;
+}
+
+
 
     // ✅ Thêm tài khoản mới
     public boolean insertUser(String fullName, String gender, String email, String phoneNumber, String password) {

@@ -7,7 +7,18 @@ package model;
 public class Account {
     private String email;
     private String password;
-    
+    private int UserID;
+
+public Account(int UserID, String email, String password) {
+    this.UserID = UserID;
+    this.email = email;
+    this.password = password;
+}
+
+public int getId() {
+    return UserID;
+}
+
     // Constructors
     public Account() {
     }
