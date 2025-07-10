@@ -86,19 +86,23 @@ public class LoginServlet extends HttpServlet {
 
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             } else {
+                // Đăng nhập thành công
                 failedAttempts.remove(email);
                 lockoutTime.remove(email);
 
-                // ✅ Lấy User từ UserDao
+                // Lấy thông tin người dùng chi tiết
                 UserDao1 userDao = new UserDao1();
                 User user = userDao.getUserById(account.getId());
 
+                // Tạo session
                 HttpSession session = request.getSession();
-                session.setAttribute("account", account); // lưu Account riêng
-                session.setAttribute("user", user);        // lưu User riêng
+                session.setAttribute("auth", account);      // ✅ quan trọng cho auth.jsp
+                session.setAttribute("account", account);   // tùy bạn dùng thêm
+                session.setAttribute("user", user);
                 session.setAttribute("userEmail", email);
                 session.setAttribute("userID", account.getId());
 
+                // Điều hướng đến trang chủ
                 response.sendRedirect("home");
             }
 
