@@ -9,6 +9,7 @@ import dao.CourseLessionActivityDao;
 import dao.LessonContentDao;
 import dao.LessonDao;
 import dao.QuizDAO;
+import dao.UserCourseDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,6 +27,7 @@ import model.CheckLesson;
 import model.Lesson;
 import model.LessonContent;
 import model.Quiz;
+import model.course.UserCourse;
 
 /**
  *
@@ -34,6 +36,7 @@ import model.Quiz;
 @WebServlet(name = "LessionViewServlet", urlPatterns = {"/LessonView"})
 public class LessionViewServlet extends HttpServlet {
 
+    UserCourseDao userCourseDao = new UserCourseDao();
     ChapterDao chapterDao = new ChapterDao();
     LessonDao lessonDao = new LessonDao();
     LessonContentDao lessonContentDao = new LessonContentDao();
@@ -52,56 +55,60 @@ public class LessionViewServlet extends HttpServlet {
         if (auth != null) {
             userID = auth.getId();
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or invalid userID");
+            response.sendRedirect("login.jsp");
             return;
         }
-
         int courseID = Integer.parseInt(request.getParameter("courseID"));
+        for (UserCourse i : userCourseDao.getUserCoursesByUserIDPayed(userID)) {
+            if (i.getCourseID() == courseID) {
+                // ===== Process tracking =====
+                int completedLesson = courseLessionActivityDao.getProcessByUserAndCourse(userID, courseID);
+                int totalLesson = lessonDao.countLessonsByCourse(courseID);
+                int percentCompleted = totalLesson == 0 ? 0 : (completedLesson * 100) / totalLesson;
+                request.setAttribute("completedCount", completedLesson);
+                request.setAttribute("totalLessons", totalLesson);
+                request.setAttribute("percentCompleted", percentCompleted);
 
-        // ===== Process tracking =====
-        int completedLesson = courseLessionActivityDao.getProcessByUserAndCourse(userID, courseID);
-        int totalLesson = lessonDao.countLessonsByCourse(courseID);
-        int percentCompleted = totalLesson == 0 ? 0 : (completedLesson * 100) / totalLesson;
-        request.setAttribute("completedCount", completedLesson);
-        request.setAttribute("totalLessons", totalLesson);
-        request.setAttribute("percentCompleted", percentCompleted);
+                // ===== Get chapter and lesson + quizz
+                List<Chapter> chapter = chapterDao.getChaptersByCourseID(courseID);
 
-        // ===== Get chapter and lesson + quizz
-        List<Chapter> chapter = chapterDao.getChaptersByCourseID(courseID);
+                Map<Chapter, List<CheckLesson>> chapterContentMap = new LinkedHashMap<>();
+                for (Chapter chap : chapter) {
+                    List<CheckLesson> contentList = new ArrayList<>();
+                    List<Lesson> lessons = lessonDao.getLessonsByChapterID(chap.getChapterID());
+                    for (Lesson lesson : lessons) {
+                        LessonContent content = lessonContentDao.getLessonContentByLessonID(lesson.getLessonID());
+                        lesson.setLessonContent(content);
+                        contentList.add(new CheckLesson("lesson", lesson));
 
-        Map<Chapter, List<CheckLesson>> chapterContentMap = new LinkedHashMap<>();
-        for (Chapter chap : chapter) {
-            List<CheckLesson> contentList = new ArrayList<>();
-            List<Lesson> lessons = lessonDao.getLessonsByChapterID(chap.getChapterID());
-            for (Lesson lesson : lessons) {
-                LessonContent content = lessonContentDao.getLessonContentByLessonID(lesson.getLessonID());
-                lesson.setLessonContent(content);
-                contentList.add(new CheckLesson("lesson", lesson));
-
-                List<Quiz> quizzes = quizDao.getQuizByLessonID(lesson.getLessonID());
-                for (Quiz quiz : quizzes) {
-                    contentList.add(new CheckLesson("quiz", quiz));
+                        List<Quiz> quizzes = quizDao.getQuizByLessonID(lesson.getLessonID());
+                        for (Quiz quiz : quizzes) {
+                            contentList.add(new CheckLesson("quiz", quiz));
+                        }
+                    }
+                    chapterContentMap.put(chap, contentList);
                 }
-            }
-            chapterContentMap.put(chap, contentList);
-        }
-        // catch lession
-        String lessonIDStr = request.getParameter("lessonID");
-        if (lessonIDStr != null && !lessonIDStr.isEmpty()) {
-            int lessonID = Integer.parseInt(lessonIDStr);
-            Lesson selectedLesson = lessonDao.getLessonByID(lessonID);
-            if (selectedLesson != null) {
-                LessonContent content = lessonContentDao.getLessonContentByLessonID(lessonID);
-                selectedLesson.setLessonContent(content);
-                request.setAttribute("selectedLesson", selectedLesson);
-            }
+                // catch lession
+                String lessonIDStr = request.getParameter("lessonID");
+                if (lessonIDStr != null && !lessonIDStr.isEmpty()) {
+                    int lessonID = Integer.parseInt(lessonIDStr);
+                    Lesson selectedLesson = lessonDao.getLessonByID(lessonID);
+                    if (selectedLesson != null) {
+                        LessonContent content = lessonContentDao.getLessonContentByLessonID(lessonID);
+                        selectedLesson.setLessonContent(content);
+                        request.setAttribute("selectedLesson", selectedLesson);
+                    }
 
+                }
+                request.setAttribute("chapter", chapter);
+                request.setAttribute("chapterContent", chapterContentMap);
+                request.setAttribute("courseID", courseID);
+
+                request.getRequestDispatcher("lessonView.jsp").forward(request, response);
+                return;
+            }
         }
-        request.setAttribute("chapter", chapter);
-        request.setAttribute("chapterContent", chapterContentMap);
-        request.setAttribute("courseID", courseID);
-        
-        request.getRequestDispatcher("lessonView.jsp").forward(request, response);
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "user is not enrolled in course yet");
     }
 
     @Override
@@ -116,7 +123,7 @@ public class LessionViewServlet extends HttpServlet {
         if (auth != null) {
             userID = auth.getId();
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or invalid userID");
+            response.sendRedirect("login.jsp");
             return;
         }
         int courseID = Integer.parseInt(request.getParameter("courseID"));
