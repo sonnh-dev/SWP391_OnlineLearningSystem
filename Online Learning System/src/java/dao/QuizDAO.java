@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Option;
 import model.Question;
 import model.QuestionOption;
 import model.QuizAttempt;
@@ -700,5 +699,38 @@ public class QuizDAO extends DBContextF {
             closeResources(rs, ps, con);
         }
         return quiz;
+    }
+
+    public List<Quiz> getQuizByLessonID(int lessonID) {
+        List<Quiz> quizzes = new ArrayList<>();
+        String sql = "SELECT * FROM Quizzes WHERE LessonID = ?";
+
+        try (Connection con = dbContext.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, lessonID);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Quiz quiz = new Quiz();
+                    quiz.setQuizID(rs.getInt("QuizID"));
+                    quiz.setLessonID(rs.getInt("LessonID"));
+                    quiz.setCourseID(rs.getInt("CourseID"));
+                    quiz.setQuizName(rs.getString("QuizName"));
+                    quiz.setSubject(rs.getString("Subject"));
+                    quiz.setLevel(rs.getString("Level"));
+                    quiz.setNumQuestions(rs.getInt("NumQuestions"));
+                    quiz.setDurationMinutes(rs.getInt("DurationMinutes"));
+                    quiz.setPassRate(rs.getDouble("PassRate"));
+                    quiz.setQuizType(rs.getString("QuizType"));
+                    quiz.setQuestionOrder(rs.getInt("QuestionOrder"));
+                    quiz.setCreatedAt(rs.getDate("CreatedAt"));
+                    quiz.setUpdatedAt(rs.getDate("UpdatedAt"));
+                    quiz.setStatus(rs.getBoolean("Status"));
+                    quizzes.add(quiz);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+        }
+
+        return quizzes;
     }
 }

@@ -10,8 +10,9 @@ public class Lesson {
     private int chapterID;
     private String title;
     private boolean isFree;
+    private LessonContent lessonContent;
     private int lessonOrder;
- private Boolean status;  
+    private Boolean status;
 
     public Boolean getStatus() {
         return status;
@@ -20,6 +21,7 @@ public class Lesson {
     public void setStatus(Boolean status) {
         this.status = status;
     }
+
     public Lesson() {
     }
 
@@ -61,6 +63,14 @@ public class Lesson {
 
     public void setIsFree(boolean isFree) {
         this.isFree = isFree;
+    }
+
+    public LessonContent getLessonContent() {
+        return lessonContent;
+    }
+
+    public void setLessonContent(LessonContent lessonContent) {
+        this.lessonContent = lessonContent;
     }
 
     public int getLessonOrder() {

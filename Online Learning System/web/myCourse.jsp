@@ -116,7 +116,7 @@
                                                     </a>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <a href="lessionView?courseID=${uc.courseID}" class="btn btn-primary w-100">
+                                                    <a href="LessonView?courseID=${uc.courseID}&lessonID=1" class="btn btn-primary w-100">
                                                         Continue Learning
                                                     </a>
                                                 </c:otherwise>
@@ -124,7 +124,7 @@
                                             </a>
                                         </c:when>
                                         <c:otherwise>
-                                            <a href="lessionView?courseID=${uc.courseID}" class="btn btn-primary w-100 mt-auto">
+                                            <a href="LessonView?courseID=${uc.courseID}&lessonID=1" class="btn btn-primary w-100 mt-auto">
                                                 Start Course
                                             </a>
                                         </c:otherwise>

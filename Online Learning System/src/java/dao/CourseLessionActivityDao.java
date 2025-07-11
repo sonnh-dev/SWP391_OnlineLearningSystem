@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class CourseLessionActivityDao extends DBContext {
 
     public int getProcessByUserAndCourse(int userID, int courseID) {
-        String sql = "SELECT COUNT(*) FROM CourseLessionActivity WHERE UserID = ? AND CourseID = ? AND IsCompleted = true";
+        String sql = "SELECT COUNT(*) FROM UserLessonActivity WHERE UserID = ? AND CourseID = ? AND IsCompleted = 1";
         int completedCount = 0;
 
         try {
@@ -28,8 +28,30 @@ public class CourseLessionActivityDao extends DBContext {
         return completedCount;
     }
 
+    public void markLessonAsCompleted(int userID, int lessonID, int courseID) {
+        String checkSql = "SELECT 1 FROM UserLessonActivity WHERE UserID = ? AND LessonID = ?";
+        String insertSql = "INSERT INTO UserLessonActivity (UserID, LessonID, CourseID, IsCompleted) VALUES (?, ?, ?, 1)";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(checkSql);
+            ps.setInt(1, userID);
+            ps.setInt(2, lessonID);
+            ResultSet rs = ps.executeQuery();
+
+            if (!rs.next()) {
+                ps = connection.prepareStatement(insertSql);
+                ps.setInt(1, userID);
+                ps.setInt(2, lessonID);
+                ps.setInt(3, courseID);
+                ps.executeUpdate();   
+                updateProgressForUserCourse(userID, courseID);
+            }
+        } catch (SQLException e) {
+        }
+    }
+
     public void updateProgressForUserCourse(int userID, int courseID) {
-        String countCompletedSql = "SELECT COUNT(*) FROM CourseLessionActivity WHERE UserID = ? AND CourseID = ? AND IsCompleted = 1";
+        String countCompletedSql = "SELECT COUNT(*) FROM UserLessonActivity WHERE UserID = ? AND CourseID = ? AND IsCompleted = 1";
         String countTotalSql = "SELECT COUNT(*) FROM Lesson l JOIN Chapter c ON l.ChapterID = c.ChapterID WHERE c.CourseID = ?";
         String updateSql = "UPDATE UserCourse SET Progress = ? WHERE UserID = ? AND CourseID = ?";
 
@@ -37,9 +59,7 @@ public class CourseLessionActivityDao extends DBContext {
         int total = 0;
 
         try (
-            PreparedStatement ps1 = connection.prepareStatement(countCompletedSql);
-            PreparedStatement ps2 = connection.prepareStatement(countTotalSql);
-            PreparedStatement ps3 = connection.prepareStatement(updateSql)) {
+                PreparedStatement ps1 = connection.prepareStatement(countCompletedSql); PreparedStatement ps2 = connection.prepareStatement(countTotalSql); PreparedStatement ps3 = connection.prepareStatement(updateSql)) {
             ps1.setInt(1, userID);
             ps1.setInt(2, courseID);
             ResultSet rs1 = ps1.executeQuery();
