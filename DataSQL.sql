@@ -841,65 +841,43 @@ INSERT INTO CourseReviewMedia (ReviewID, MediaURL, IsVideo, Caption) VALUES
 (50, 'media/courseReview/course_video.mp4', 1, 'Thank-you message from trainer.');
 
 -- Slider image (homepage)
-INSERT INTO SliderImage (SliderID,CourseID, SliderTitle, SliderContent, SliderURL, Status)
+INSERT INTO SliderImage (CourseID, SliderTitle, SliderContent, SliderURL, Status)
 VALUES
-(1,4, 'Boost Your Confidence in Public Speaking', 'Learn practical tips and techniques to overcome stage fright and speak clearly.', 'media/sliders/image1.png', 1),
-(2,2, 'Master Time Management Today', 'Prioritize what matters and reclaim your hours with proven time strategies.', 'media/sliders/image2.png', 1),
-(3,6, 'Enhance Your EQ for Workplace Success', 'Emotional intelligence improves teamwork, communication, and leadership.', 'media/sliders/image3.png', 0),
-(4,7, 'Become a Pro at Problem Solving', 'Tackle complex problems with confidence using structured problem-solving tools.', 'media/sliders/image4.png', 1);
-
-
-
+(4, 'Boost Your Confidence in Public Speaking', 'Learn practical tips and techniques to overcome stage fright and speak clearly.', 'media/sliders/image1.png', 1),
+(2, 'Master Time Management Today', 'Prioritize what matters and reclaim your hours with proven time strategies.', 'media/sliders/image2.png', 1),
+(6, 'Enhance Your EQ for Workplace Success', 'Emotional intelligence improves teamwork, communication, and leadership.', 'media/sliders/image3.png', 0),
+(7, 'Become a Pro at Problem Solving', 'Tackle complex problems with confidence using structured problem-solving tools.', 'media/sliders/image4.png', 1);
 
 INSERT INTO Chapter (CourseID, Title, ChapterOrder) VALUES
--- Chapters for 'Strategic Leadership' (CourseID 1)
 (1, 'Foundations of Strategic Leadership', 1),
 (1, 'Developing Vision and Strategy', 2),
 (1, 'Executing and Adapting Strategy', 3),
-
--- Chapters for 'Time Management Mastery' (CourseID 2)
 (2, 'Understanding Time and Priorities', 1),
 (2, 'Effective Planning and Techniques', 2),
 (2, 'Overcoming Obstacles to Productivity', 3),
-
--- Chapters for 'Mastering Self-Awareness' (CourseID 3)
 (3, 'Basics of Self-Awareness', 1),
 (3, 'Developing Internal Awareness', 2),
 (3, 'Applying Self-Awareness in Life', 3),
-
--- Chapters for 'Public Speaking Essentials' (CourseID 4)
 (4, 'Preparation and Audience Analysis', 1),
 (4, 'Structuring and Delivering Your Message', 2),
 (4, 'Handling Nerves and Engaging Audience', 3),
-
--- Chapters for 'Leadership Fundamentals' (CourseID 5)
 (5, 'The Essence of Leadership', 1),
 (5, 'Key Leadership Skills', 2),
 (5, 'Building and Inspiring Your Team', 3),
 (5, 'Leading Through Challenges', 4),
-
--- Chapters for 'Emotional Intelligence at Work' (CourseID 6)
 (6, 'Introduction to Emotional Intelligence', 1),
 (6, 'Self-Management and Awareness', 2),
 (6, 'Social Awareness and Relationship Management', 3),
-
--- Chapters for 'Problem Solving Techniques' (CourseID 7)
 (7, 'Defining and Analyzing Problems', 1),
 (7, 'Generating and Evaluating Solutions', 2),
 (7, 'Implementing and Reviewing Solutions', 3),
-
--- Chapters for 'Critical Thinking Skills' (CourseID 8)
 (8, 'Foundations of Critical Thinking', 1),
 (8, 'Analyzing Arguments and Evidence', 2),
 (8, 'Making Informed Decisions', 3),
-
--- Chapters for 'Effective Communication Skills' (CourseID 9)
 (9, 'Fundamentals of Communication', 1),
 (9, 'Verbal and Non-Verbal Communication', 2),
 (9, 'Listening and Feedback Skills', 3),
 (9, 'Advanced Communication Strategies', 4),
-
--- Chapters for 'Productivity & Planning Bootcamp' (CourseID 10)
 (10, 'Understanding Productivity Basics', 1),
 (10, 'Goal Setting and Prioritization', 2),
 (10, 'Advanced Planning and Execution', 3);
@@ -907,149 +885,361 @@ INSERT INTO Chapter (CourseID, Title, ChapterOrder) VALUES
 
 
 INSERT INTO Lesson (ChapterID, Title, IsFree, LessonOrder, Status) VALUES
--- Lessons for 'Foundations of Strategic Leadership' (ChapterID 1, CourseID 1)
 (1, 'Welcome to Strategic Leadership', 1, 1, 1),
 (1, 'The Importance of Strategic Thinking', 0, 2, 1),
 (1, 'Key Concepts of Strategic Leadership', 0, 3, 1),
-
--- Lessons for 'Developing Vision and Strategy' (ChapterID 2, CourseID 1)
 (2, 'Crafting a Compelling Vision', 0, 1, 1),
 (2, 'Strategic Goal Setting', 0, 2, 1),
 (2, 'SWOT Analysis for Leaders', 0, 3, 1),
 (2, 'Developing Strategic Initiatives', 0, 4, 1),
-
--- Lessons for 'Executing and Adapting Strategy' (ChapterID 3, CourseID 1)
 (3, 'Aligning Teams with Strategy', 0, 1, 1),
 (3, 'Monitoring and Evaluation', 0, 2, 1),
 (3, 'Adapting to Market Changes', 0, 3, 1),
-
--- Lessons for 'Understanding Time and Priorities' (ChapterID 4, CourseID 2)
 (4, 'Introduction to Time Management', 1, 1, 1),
 (4, 'Identifying Your Time Wasters', 0, 2, 1),
 (4, 'The Power of Prioritization', 0, 3, 1),
-
--- Lessons for 'Effective Planning and Techniques' (ChapterID 5, CourseID 2)
 (5, 'Setting Effective Goals (SMART)', 0, 1, 1),
 (5, 'Time Blocking and Scheduling', 0, 2, 1),
 (5, 'The Pomodoro Technique Explained', 0, 3, 1),
 (5, 'Creating Effective To-Do Lists', 0, 4, 1),
-
--- Lessons for 'Overcoming Obstacles to Productivity' (ChapterID 6, CourseID 2)
 (6, 'Dealing with Distractions', 0, 1, 1),
 (6, 'Overcoming Procrastination', 0, 2, 1),
 (6, 'Delegation Skills', 0, 3, 1),
-
--- Lessons for 'Basics of Self-Awareness' (ChapterID 7, CourseID 3)
 (7, 'What is Self-Awareness and Why it Matters?', 1, 1, 1),
 (7, 'Internal vs. External Self-Awareness', 0, 2, 1),
-
--- Lessons for 'Developing Internal Awareness' (ChapterID 8, CourseID 3)
 (8, 'Journaling for Self-Discovery', 0, 1, 1),
 (8, 'Mindfulness Practices for Awareness', 0, 2, 1),
 (8, 'Understanding Your Values and Beliefs', 0, 3, 1),
-
--- Lessons for 'Applying Self-Awareness in Life' (ChapterID 9, CourseID 3)
 (9, 'Seeking and Receiving Feedback Effectively', 0, 1, 1),
 (9, 'Managing Your Emotions with Awareness', 0, 2, 1),
-
--- Lessons for 'Preparation and Audience Analysis' (ChapterID 10, CourseID 4)
 (10, 'Understanding Your Audience', 1, 1, 1),
 (10, 'Defining Your Message and Purpose', 0, 2, 1),
 (10, 'Structuring Your Presentation', 0, 3, 1),
-
--- Lessons for 'Structuring and Delivering Your Message' (ChapterID 11, CourseID 4)
 (11, 'Crafting Engaging Introductions and Conclusions', 0, 1, 1),
 (11, 'Using Visual Aids Effectively', 0, 2, 1),
 (11, 'Vocal Delivery and Body Language', 0, 3, 1),
-
--- Lessons for 'Handling Nerves and Engaging Audience' (ChapterID 12, CourseID 4)
 (12, 'Managing Public Speaking Anxiety', 0, 1, 1),
 (12, 'Techniques for Audience Engagement', 0, 2, 1),
-
--- Lessons for 'The Essence of Leadership' (ChapterID 13, CourseID 5)
 (13, 'What Defines a Leader?', 1, 1, 1),
 (13, 'Leadership Styles and Their Impact', 0, 2, 1),
-
--- Lessons for 'Key Leadership Skills' (ChapterID 14, CourseID 5)
 (14, 'Effective Communication for Leaders', 0, 1, 1),
 (14, 'Decision Making in Leadership', 0, 2, 1),
 (14, 'Delegation and Empowerment', 0, 3, 1),
-
--- Lessons for 'Building and Inspiring Your Team' (ChapterID 15, CourseID 5)
 (15, 'Motivating and Inspiring Your Team', 0, 1, 1),
 (15, 'Conflict Resolution in Teams', 0, 2, 1),
-
--- Lessons for 'Leading Through Challenges' (ChapterID 16, CourseID 5)
 (16, 'Leading Through Change', 0, 1, 1),
 (16, 'Resilience in Leadership', 0, 2, 1),
-
--- Lessons for 'Introduction to Emotional Intelligence' (ChapterID 17, CourseID 6)
 (17, 'Understanding Emotional Intelligence (EQ)', 1, 1, 1),
 (17, 'Why EQ Matters in the Workplace', 0, 2, 1),
-
--- Lessons for 'Self-Management and Awareness' (ChapterID 18, CourseID 6)
 (18, 'Developing Self-Awareness at Work', 0, 1, 1),
 (18, 'Strategies for Self-Regulation', 0, 2, 1),
-
--- Lessons for 'Social Awareness and Relationship Management' (ChapterID 19, CourseID 6)
 (19, 'Practicing Empathy in Professional Settings', 0, 1, 1),
 (19, 'Building Strong Work Relationships', 0, 2, 1),
-
--- Lessons for 'Defining and Analyzing Problems' (ChapterID 20, CourseID 7)
 (20, 'Introduction to Problem Solving', 1, 1, 1),
 (20, 'Defining the Problem Clearly', 0, 2, 1),
 (20, 'Root Cause Analysis (5 Whys)', 0, 3, 1),
-
--- Lessons for 'Generating and Evaluating Solutions' (ChapterID 21, CourseID 7)
 (21, 'Brainstorming Techniques', 0, 1, 1),
 (21, 'Evaluating Potential Solutions', 0, 2, 1),
-
--- Lessons for 'Implementing and Reviewing Solutions' (ChapterID 22, CourseID 7)
 (22, 'Action Planning and Implementation', 0, 1, 1),
 (22, 'Monitoring and Adapting Solutions', 0, 2, 1),
-
--- Lessons for 'Foundations of Critical Thinking' (ChapterID 23, CourseID 8)
 (23, 'What is Critical Thinking?', 1, 1, 1),
 (23, 'The Importance of Objective Analysis', 0, 2, 1),
-
--- Lessons for 'Analyzing Arguments and Evidence' (ChapterID 24, CourseID 8)
 (24, 'Identifying Arguments and Premises', 0, 1, 1),
 (24, 'Evaluating Evidence and Sources', 0, 2, 1),
-
--- Lessons for 'Making Informed Decisions' (ChapterID 25, CourseID 8)
 (25, 'Recognizing Cognitive Biases', 0, 1, 1),
 (25, 'Applying Critical Thinking to Decision Making', 0, 2, 1),
-
--- Lessons for 'Fundamentals of Communication' (ChapterID 26, CourseID 9)
 (26, 'The Communication Process', 1, 1, 1),
 (26, 'Barriers to Effective Communication', 0, 2, 1),
-
--- Lessons for 'Verbal and Non-Verbal Communication' (ChapterID 27, CourseID 9)
 (27, 'Mastering Verbal Communication', 0, 1, 1),
 (27, 'Understanding Non-Verbal Cues', 0, 2, 1),
-
--- Lessons for 'Listening and Feedback Skills' (ChapterID 28, CourseID 9)
 (28, 'Active Listening Techniques', 0, 1, 1),
 (28, 'Giving and Receiving Constructive Feedback', 0, 2, 1),
-
--- Lessons for 'Advanced Communication Strategies' (ChapterID 29, CourseID 9)
 (29, 'Communication in Difficult Conversations', 0, 1, 1),
 (29, 'Cross-Cultural Communication', 0, 2, 1),
-
--- Lessons for 'Understanding Productivity Basics' (ChapterID 30, CourseID 10)
 (30, 'What is True Productivity?', 1, 1, 1),
 (30, 'Identifying Your Productivity Style', 0, 2, 1),
-
--- Lessons for 'Goal Setting and Prioritization' (ChapterID 31, CourseID 10)
 (31, 'Setting Meaningful Goals', 0, 1, 1),
 (31, 'Prioritization Frameworks (Urgent/Important)', 0, 2, 1),
-
--- Lessons for 'Advanced Planning and Execution' (ChapterID 32, CourseID 10)
 (32, 'Advanced Time Blocking', 0, 1, 1),
 (32, 'Batching and Deep Work', 0, 2, 1),
 (32, 'Reviewing Your Productivity', 0, 3, 1);
 
+INSERT INTO LessonContent (LessonID, DocContent, VideoURL) VALUES
+(1, 'Welcome to the Strategic Leadership course! In this lesson, we introduce the core objectives and structure of the entire course. Strategic leadership is a vital skill for modern leaders, combining vision, strategic thinking, and the ability to inspire teams. You will get a glimpse of how the course unfolds across chapters and understand how to navigate it. Leadership in today’s world demands agility, forward-thinking, and emotional intelligence. This lesson sets the foundation by emphasizing the importance of embracing change, developing clarity in communication, and identifying your leadership style. You’ll explore how strategic thinking differs from operational thinking and why it is essential to long-term success. The course will also include practical activities, case studies, and assessments to help reinforce learning. By the end of this lesson, you should be able to describe what strategic leadership means, identify the key characteristics of effective strategic leaders, and begin to self-assess your current skills. This first step is the beginning of a transformative journey where your leadership mindset and strategic capabilities will evolve significantly. We encourage you to take notes, participate in discussions, and reflect frequently as you progress. Remember, leadership is not about a title but about impact.',
+'https://www.youtube.com/watch?v=sCQ0VYNCmKw'),
 
+(2, 'Strategic thinking is the backbone of successful leadership. This lesson focuses on understanding why it matters so much. Strategic thinking allows leaders to align actions with a broader vision, anticipate changes, and make informed decisions. It’s about looking beyond the immediate and considering long-term implications. In this session, you’ll explore how strategic leaders differ from operational managers. Strategic thinkers consider market trends, internal capacities, and stakeholder needs all at once. You will examine real-life case studies where companies either succeeded or failed based on their strategic decisions. Moreover, the lesson highlights how to overcome common barriers to strategic thinking, such as tunnel vision or short-term focus. Tools like SWOT analysis, PESTLE framework, and scenario planning will be briefly introduced. You’ll be prompted to reflect on your own strategic awareness and think about recent decisions you made. Were they tactical or strategic? By the end, you’ll be more aware of how your thought process aligns with strategic goals and be better equipped to lead initiatives with a long-term impact.',
+'https://www.youtube.com/watch?v=sCQ0VYNCmKw'),
+
+(3, 'This lesson breaks down the fundamental principles and concepts behind strategic leadership. You will learn about vision setting, aligning teams, and making decisions under uncertainty. Strategic leadership requires a deep understanding of both internal and external environments. We’ll dive into the difference between reactive and proactive leadership, and explore models like the Balanced Scorecard and Strategic Alignment Model. You’ll also be introduced to the idea of competitive advantage and how a strategic leader ensures sustainability through innovation and culture. The lesson will guide you to assess your leadership behaviors and how they align with the organization’s mission and vision. You’ll engage in a self-reflection task where you map out your current leadership traits against strategic demands. We also touch on the importance of feedback, adaptability, and stakeholder management in achieving strategic goals. By applying these insights, you’ll begin building a personal roadmap for growth as a strategic leader.',
+'https://www.youtube.com/watch?v=sCQ0VYNCmKw'),
+
+(4, 'A compelling vision is the heart of any successful strategy. In this lesson, you’ll learn how to craft a vision that motivates and guides your team. A strong vision gives purpose and direction, especially during uncertainty. We’ll examine how great leaders communicate vision clearly and consistently, and how they engage others in co-creating it. You’ll review vision statements from top organizations and analyze what makes them effective. The lesson walks you through steps for crafting your own leadership vision: understanding your values, defining future goals, and articulating the why. You’ll practice creating a draft vision statement and receive criteria for refinement. A good vision is both inspiring and actionable—it should help people connect emotionally and understand where the organization is headed. You’ll also learn techniques for aligning your team’s daily actions with the broader vision. By the end of the lesson, you’ll have a stronger grasp of how a vision empowers leadership, drives alignment, and sustains focus.',
+'https://www.youtube.com/watch?v=sCQ0VYNCmKw'),
+
+(5, 'Setting strategic goals ensures your vision turns into action. This lesson teaches you how to define clear, measurable, and achievable goals. You’ll explore frameworks like SMART goals and OKRs (Objectives and Key Results). We’ll discuss how to differentiate between strategic, tactical, and operational goals. Real examples from businesses will illustrate how effective goal setting can transform an organization’s direction and culture. You’ll be asked to create your own strategic goals aligned with your vision and apply the SMART criteria. There will be exercises on identifying key performance indicators (KPIs) that track progress. You’ll also explore the role of cascading goals—how leadership goals should translate into team and individual objectives. This lesson emphasizes the importance of goal communication and alignment. A strategic goal without execution is merely a dream. By the end, you’ll have a practical goal-setting toolkit that aligns with your strategic direction and empowers teams to act with purpose.',
+'https://example.com/videos/lesson5.mp4'),
+
+(6, 'SWOT analysis is a foundational tool for strategic planning. This lesson explores how leaders can leverage SWOT (Strengths, Weaknesses, Opportunities, Threats) to make better decisions. You’ll learn how to conduct a SWOT analysis for your team, department, or project. Through real-world examples, we’ll show how this tool can uncover blind spots and illuminate areas for growth. We’ll provide a worksheet you can use to analyze your current situation and create action plans based on your findings. You’ll also explore how to prioritize issues identified in SWOT and how to integrate results into strategic goal setting. This lesson discusses common mistakes like being too vague or failing to act on insights. Strategic leaders use SWOT to continuously adapt and stay competitive. By the end, you’ll have completed your own SWOT analysis and identified at least two strategic initiatives based on your findings. This activity sets the foundation for your leadership planning going forward.',
+'https://example.com/videos/lesson6.mp4'),
+
+(7, 'Strategic initiatives are where strategy meets action. In this lesson, you’ll learn how to translate ideas into clear, manageable projects. Strategic initiatives are the vehicles through which visions and goals are realized. You’ll discover how to scope initiatives, assign responsibilities, and define success metrics. We’ll explore the role of project charters and how to build stakeholder buy-in early. You’ll be introduced to prioritization tools like the Eisenhower Matrix and Impact-Effort Grid to help decide which initiatives to start. The lesson includes guidance on breaking initiatives into phases, tracking progress, and ensuring accountability. Common pitfalls, such as lack of ownership or overcommitment, will also be discussed. You’ll practice mapping out a real initiative from your context, identifying key milestones and resources required. By the end, you’ll be equipped with a practical framework for leading successful strategic initiatives that drive real results.',
+'https://example.com/videos/lesson7.mp4'),
+
+(8, 'Team alignment is critical to executing strategy. This lesson helps you understand how to align team members with organizational goals and values. You’ll learn how communication, shared purpose, and role clarity contribute to alignment. Case studies will show how successful leaders foster alignment through regular check-ins, feedback loops, and collaborative planning. You’ll explore tools like team charters, scorecards, and strategic narratives. The lesson highlights the importance of onboarding and continuous reinforcement of strategic goals. You’ll also learn how to manage resistance and increase engagement. We’ll include a team alignment diagnostic tool that you can apply to your own team. By the end of this lesson, you’ll be better prepared to foster alignment, improve team cohesion, and enhance execution.',
+'https://example.com/videos/lesson8.mp4'),
+
+(9, 'Monitoring and evaluation ensure your strategies are working. In this lesson, you’ll learn how to set up effective tracking systems. Strategic leaders use dashboards, KPIs, and review cycles to monitor progress. You’ll explore how to define success indicators and collect feedback. The lesson includes tips on how to run effective review meetings, interpret results, and make adjustments. We’ll also touch on risk management—how to anticipate obstacles and develop contingency plans. Examples will demonstrate how timely evaluations helped organizations pivot and improve outcomes. You’ll be encouraged to create your own monitoring plan using the tools provided. By the end, you’ll understand how evaluation strengthens accountability and drives continuous improvement.',
+'https://example.com/videos/lesson9.mp4'),
+
+(10, 'Change is constant, and leaders must adapt quickly. This lesson focuses on how strategic leaders navigate change with confidence. You’ll explore the psychology of change and how it affects individuals and teams. The lesson introduces frameworks like Kotter’s 8-Step Change Model and Lewin’s Change Management theory. You’ll learn how to build change readiness, communicate transparently, and handle resistance. Case studies will show how poor change management leads to failure, while proactive leadership creates opportunities. You’ll practice developing a basic change management plan for a scenario in your workplace. By the end of this session, you’ll have tools to lead through uncertainty, inspire trust, and keep teams aligned—even in turbulent environments.',
+'https://example.com/videos/lesson10.mp4'),
+
+(11, 'Welcome to Time Management! This lesson introduces the importance of managing your time effectively to achieve both personal and professional goals. You’ll learn how time management is not just about being busy but about being productive. The lesson outlines common myths about multitasking and explains how prioritization can lead to significant improvements in efficiency. You will explore how leaders use time intentionally, and how poor time habits affect leadership performance. We’ll also guide you in conducting a quick time audit to assess how you currently spend your day. Effective time managers are not born; they build systems and habits that support their goals. This lesson serves as the gateway to understanding how to take control of your schedule, make time for strategic thinking, and reduce stress. By the end, you will reflect on how you value time, and why managing it well is one of the most powerful skills a leader can master.',
+'https://example.com/videos/lesson11.mp4'),
+
+(12, 'In this lesson, we help you identify the time wasters that silently drain your productivity. These could be unnecessary meetings, social media distractions, email overload, or unclear priorities. You’ll learn how to spot these habits, quantify their cost, and create strategies to reduce or eliminate them. A key activity includes analyzing your past week to determine where time went off track. The lesson also introduces the concept of “time leaks”—small, seemingly harmless activities that accumulate into hours of lost productivity. Leaders must protect their time fiercely, and that starts with awareness. We’ll share stories from professionals who reclaimed 5–10 hours per week by fixing time-wasting habits. You’ll come away from this lesson with a clearer understanding of what’s truly urgent versus what’s just noise.',
+'https://example.com/videos/lesson12.mp4'),
+
+(13, 'Prioritization is one of the most valuable leadership skills. In this lesson, you’ll learn how to rank tasks based on urgency and importance. You’ll work with models like the Eisenhower Matrix and ABCDE method to categorize your work effectively. We’ll walk you through examples of leaders who successfully turned chaos into focus using these frameworks. You’ll also explore how emotion and bias can impact our prioritization decisions. The lesson includes a prioritization exercise where you’ll sort your current responsibilities into focus categories. Leaders must learn when to say no, and when to delegate. By the end, you’ll feel more confident in your ability to protect time for high-impact activities.',
+'https://example.com/videos/lesson13.mp4'),
+
+(14, 'SMART goals are the foundation of effective planning. In this lesson, you’ll learn how to write goals that are Specific, Measurable, Achievable, Relevant, and Time-bound. We’ll review real-world examples of good and bad goals, and how clarity boosts motivation. You’ll also explore the connection between personal goals and organizational objectives. The lesson walks you through turning vague intentions into actionable commitments. You’ll write at least one SMART goal and outline the next three steps toward achieving it. By mastering SMART goal-setting, you’ll take control of your progress and be able to support others in doing the same.',
+'https://example.com/videos/lesson14.mp4'),
+
+(15, 'Time blocking is a productivity technique where you schedule every part of your day into designated blocks. In this lesson, you’ll learn how to implement time blocking to reduce context switching and increase deep work. We’ll also explore daily routines of high-performing leaders who block time for strategic thinking, team interaction, and self-care. You’ll be guided to create your own ideal day using time blocks and identify your peak productivity hours. This lesson encourages experimenting with various templates (e.g., maker schedule vs. manager schedule). By using this technique consistently, you’ll begin to feel more control over your time and attention.',
+'https://example.com/videos/lesson15.mp4'),
+
+(16, 'The Pomodoro Technique is a time management method that uses short bursts of focused work followed by short breaks. In this lesson, you’ll learn the origins of the method, how it works, and how to apply it using simple tools like a timer. You’ll explore the science behind why working in intervals improves focus and reduces mental fatigue. The lesson also discusses modifications to fit different personality types or work styles. We’ll walk you through your first Pomodoro session and give tips for staying disciplined. You’ll also learn how to track progress using completed Pomodoro sets. This method is especially helpful for tackling overwhelming tasks or overcoming procrastination.',
+'https://example.com/videos/lesson16.mp4'),
+
+(17, 'To-do lists are only effective if they’re structured well. This lesson teaches you how to design actionable and realistic to-do lists. We’ll explore common mistakes like overly long lists, vague tasks, and lack of prioritization. You’ll discover list formats like daily 3-task rules, MITs (Most Important Tasks), and time-estimated lists. The lesson includes a reflection activity where you analyze your current list-making habits and redesign them for clarity. We’ll also discuss analog vs. digital tools and introduce helpful apps. By the end, you’ll be able to create lists that boost clarity and actually move you forward.',
+'https://example.com/videos/lesson17.mp4'),
+
+(18, 'Distractions are everywhere—and they destroy focus. This lesson helps you identify internal and external distractions, and how to guard your attention. You’ll explore the role of environment, digital tools, and self-discipline. Common culprits like notifications, open tabs, or even background noise will be addressed. We’ll introduce the concept of attention residue—how switching tasks makes you less effective. You’ll be guided to set up a distraction-free zone and use techniques like batching and schedule anchoring. Distraction management is a cornerstone of sustained productivity, and this lesson will empower you to take back control.',
+'https://example.com/videos/lesson18.mp4'),
+
+(19, 'Procrastination is more about emotion than laziness. In this lesson, you’ll learn what causes procrastination—from fear of failure to perfectionism—and how to overcome it. We’ll explore science-backed methods like the 5-Minute Rule, temptation bundling, and cognitive reframing. You’ll reflect on tasks you’ve avoided recently and apply the techniques directly. We’ll also discuss how to build momentum with small wins and accountability. By the end, you’ll have a personalized anti-procrastination plan to implement immediately.',
+'https://example.com/videos/lesson19.mp4'),
+
+(20, 'Delegation is a leadership multiplier. This lesson explores why leaders struggle to delegate and how it can unlock time, trust, and talent. You’ll learn what tasks are best delegated, how to choose the right person, and how to communicate expectations clearly. We’ll walk through the 5 levels of delegation and how to empower rather than micromanage. Exercises include identifying tasks you can delegate this week and writing a delegation checklist. We’ll also share common delegation traps, such as reverse delegation or over-control. By the end, you’ll be equipped to grow your team’s ownership and your strategic focus.',
+'https://example.com/videos/lesson20.mp4'),
+
+(21, 'Brainstorming is a vital technique used to generate a wide range of ideas quickly and creatively. Whether working individually or in a group, it encourages free thinking, the suspension of judgment, and the exploration of diverse solutions. In a typical brainstorming session, participants contribute as many ideas as possible, even if they seem unrealistic at first. The focus is on quantity over quality to spark innovation and uncover hidden perspectives. Tools such as mind maps, sticky notes, and digital whiteboards can enhance the process. Effective facilitation ensures everyone’s voice is heard, and ideas are captured without criticism. Once the brainstorming session concludes, ideas are grouped, refined, and evaluated based on feasibility and relevance. Brainstorming can be applied to problem-solving, marketing, planning, and team building. It also fosters collaboration and helps break mental blocks by encouraging lateral thinking. As such, it remains a staple in both education and industry.',
+'video21.mp4'),
+
+(22, 'Action planning is the process of turning goals into concrete steps. It involves identifying specific actions, assigning responsibilities, setting deadlines, and allocating resources. An effective action plan breaks down large objectives into manageable tasks and helps ensure accountability. It also helps in tracking progress and making adjustments as needed. Without an action plan, even the best strategies can falter due to lack of direction. A good action plan includes what needs to be done, who will do it, when it will be completed, and how success will be measured. Regular check-ins and updates are important to keep everyone aligned and motivated. In team environments, action planning promotes transparency and collaboration. When challenges arise, a solid plan provides a framework to adapt and pivot efficiently. In summary, action planning brings structure and clarity to execution, making success more achievable.',
+'video22.mp4'),
+
+(23, 'Critical thinking is the ability to evaluate information logically and objectively. It allows individuals to make reasoned judgments by analyzing facts, identifying assumptions, and questioning evidence. In today’s fast-paced world, where misinformation can spread quickly, critical thinking is essential for making informed decisions. This skill involves being curious, open-minded, and reflective. Rather than accepting things at face value, critical thinkers seek deeper understanding and challenge their own viewpoints. They also differentiate between opinions and evidence, recognize bias, and understand the implications of their conclusions. In the workplace, critical thinking contributes to problem-solving, innovation, and effective communication. In academic settings, it enhances comprehension and learning. Cultivating this skill requires consistent practice, self-awareness, and a willingness to engage in difficult discussions. Ultimately, critical thinkers are better equipped to navigate complexity and uncertainty.',
+'video23.mp4'),
+
+(24, 'Understanding the structure of arguments and premises is essential for sound reasoning. An argument is a set of statements that support a conclusion, and the supporting statements are called premises. Being able to identify these parts allows individuals to evaluate the logic and strength of an argument. For example, if the premises are weak or irrelevant, the conclusion may not be valid. Recognizing logical fallacies—like false dilemmas, slippery slopes, or ad hominem attacks—is also a crucial part of argument analysis. Learning to map arguments visually can help clarify their structure and highlight weaknesses. This skill is particularly useful in debates, academic writing, legal reasoning, and professional communication. Mastery of argument identification improves critical thinking, persuasive abilities, and decision-making.',
+'video24.mp4'),
+
+(25, 'Cognitive biases are subconscious errors in thinking that affect judgment and decision-making. These biases often arise from the brain’s attempt to simplify information processing. While they can be useful in making quick decisions, they also lead to systematic errors. Common biases include confirmation bias (favoring information that confirms existing beliefs), anchoring bias (relying too heavily on the first piece of information), and availability bias (judging based on what comes easily to mind). Being aware of these biases is the first step toward reducing their impact. Strategies like seeking opposing viewpoints, slowing down decision-making, and using checklists can help mitigate bias. In professional environments, unchecked biases can lead to poor hiring, flawed strategies, and conflict. Developing awareness and applying objective methods fosters more rational and equitable thinking.',
+'video25.mp4'),
+
+(26, 'The communication process describes how information flows between a sender and a receiver. It includes components such as the message, encoding, channel, decoding, feedback, and potential noise. Effective communication occurs when the receiver interprets the message as the sender intended. However, barriers like language differences, distractions, or emotional interference can distort meaning. Understanding this process helps individuals tailor their communication style, choose the right channels, and confirm mutual understanding. Feedback is especially important as it closes the loop, confirming that the message has been received accurately. In the workplace, mastering the communication process improves collaboration, reduces errors, and enhances relationships. Whether it’s face-to-face, written, or digital, every form of communication benefits from clarity, empathy, and intention.',
+'video26.mp4'),
+
+(27, 'Verbal communication involves the use of words to convey information, whether spoken or written. It is the most direct and widely used form of communication. Effective verbal communication depends on clarity, tone, pace, and the appropriateness of language. In presentations or meetings, verbal skills influence how ideas are received and how persuasive the speaker is. Good communicators also consider their audience, avoiding jargon and adjusting their delivery based on context. Listening is a critical counterpart—understanding others helps foster meaningful dialogue. Developing verbal communication includes practicing active listening, improving vocabulary, and receiving feedback. In leadership, strong verbal skills enhance trust and motivation. In customer service, they build rapport and resolve issues. Ultimately, mastering verbal communication empowers individuals to express themselves confidently and respectfully.',
+'video27.mp4'),
+
+(28, 'Active listening is a communication technique that involves giving full attention to the speaker and responding thoughtfully. Unlike passive hearing, active listening requires mental engagement and non-verbal cues such as eye contact, nodding, and open body language. It also includes verbal affirmations, paraphrasing, and asking clarifying questions. Active listening builds trust, reduces misunderstandings, and strengthens relationships. It is especially useful in conflict resolution, counseling, and leadership. Barriers like distractions, assumptions, or emotional reactions can hinder listening. Practicing mindfulness and patience can improve one’s ability to stay present and focused. Active listeners not only absorb information more effectively but also make others feel heard and respected. This makes it a critical skill for both personal and professional growth.',
+'video28.mp4'),
+
+(29, 'Difficult conversations are a normal part of human interaction, especially in leadership and team environments. These include addressing poor performance, delivering negative feedback, or handling disagreements. The key to success lies in preparation, emotional control, and clear communication. Starting with empathy and focusing on shared goals helps reduce defensiveness. It’s important to use “I” statements, avoid blame, and give the other person time to respond. Active listening is crucial—acknowledging feelings and perspectives can de-escalate tension. Timing and setting also matter; private, neutral spaces are best for sensitive topics. Practicing these conversations beforehand can build confidence. When handled skillfully, difficult conversations lead to stronger relationships, greater trust, and improved outcomes. Avoiding them, on the other hand, can create confusion and resentment.',
+'video29.mp4'),
+
+(30, 'True productivity isn’t about doing more—it’s about doing what matters most, effectively. It involves setting meaningful goals, focusing on priorities, and managing time and energy wisely. Productivity varies by person, so understanding your own work style is essential. Some thrive with strict schedules, while others need flexibility. Techniques like time blocking, task batching, and the Pomodoro method help structure work. Equally important is minimizing distractions—turning off notifications, setting boundaries, and creating a focused workspace. Being productive also means saying no to tasks that don’t align with your goals. Reflecting on your daily output and adjusting habits improves efficiency over time. Ultimately, true productivity results in progress with purpose—not just being busy but being effective. This leads to better performance, greater satisfaction, and less burnout.',
+'video30.mp4'),
+
+(31, 'Setting meaningful goals is the foundation of personal and professional success. Unlike vague aspirations, meaningful goals are specific, purposeful, and aligned with one’s values and priorities. These goals provide motivation and a clear sense of direction. Using frameworks like SMART (Specific, Measurable, Achievable, Relevant, Time-bound) helps ensure goals are well-defined and achievable. Setting goals also promotes accountability—by defining desired outcomes, individuals are more likely to stay focused and persist through challenges. It is helpful to break long-term goals into smaller milestones and regularly track progress. Reflection and adjustment are also important, as circumstances and priorities can change. When individuals pursue goals that resonate with their deeper aspirations, they experience greater satisfaction and fulfillment. Whether personal, academic, or career-oriented, meaningful goal-setting empowers individuals to take control of their lives and achieve purposeful success.',
+'video31.mp4'),
+
+(32, 'Advanced time blocking is a powerful strategy for managing time, energy, and focus. Unlike simple to-do lists, time blocking involves scheduling specific tasks during set time periods throughout the day. This method helps reduce multitasking and context switching, both of which hinder productivity. With advanced time blocking, individuals also assign themes to certain blocks (e.g., “creative work,” “email,” “meetings”) to group similar tasks and streamline mental focus. It’s important to leave buffer time between blocks to handle unexpected tasks or breaks. Weekly reviews can help you identify where time was wasted and adjust future plans. Digital tools like Google Calendar or Notion, and analog planners alike, support this system. Ultimately, time blocking gives structure to your day, aligns daily actions with long-term goals, and fosters deep, focused work. It’s particularly effective for professionals managing complex projects or balancing multiple responsibilities.',
+'video32.mp4'),
+
+(33, 'Batching and deep work are two productivity techniques designed to help individuals focus better and produce higher-quality results. Batching involves grouping similar tasks and completing them together to reduce mental load. For example, answering emails at designated times rather than constantly checking your inbox. Deep work, on the other hand, refers to focused, uninterrupted work on cognitively demanding tasks. This requires eliminating distractions and working in extended time blocks. To achieve deep work, you may need to turn off notifications, use website blockers, or create a dedicated workspace. Both batching and deep work help improve efficiency and output by leveraging your brain’s natural focus rhythms. They are especially beneficial for writers, programmers, designers, and others in creative or analytical fields. Practicing these techniques consistently can dramatically improve productivity, reduce stress, and lead to more meaningful work outcomes.',
+'video33.mp4'),
+
+(34, 'Reviewing your productivity is a critical step in continual improvement. It allows you to evaluate how effectively you’ve used your time and whether your efforts aligned with your goals. Weekly or daily reviews help identify what worked well, what didn’t, and what can be improved. This process can include checking off completed tasks, reflecting on challenges, and analyzing how distractions affected focus. It’s also a time to celebrate wins and revise your approach for the upcoming period. Tools like journaling, productivity apps, or simple spreadsheets can support this habit. Regular reviews foster greater self-awareness and discipline. Over time, they help individuals refine their systems, eliminate inefficiencies, and stay motivated. Ultimately, productivity reviews are not just about measuring output but ensuring that your work is intentional and impactful.',
+'video34.mp4'),
+
+(35, 'Motivating and inspiring your team is one of the most important leadership responsibilities. Motivation is not just about financial incentives—it involves creating a sense of purpose, belonging, and recognition. Great leaders connect daily work to larger organizational goals, making employees feel their contributions matter. They also empower team members by providing autonomy, offering growth opportunities, and acknowledging accomplishments. Inspiration, on the other hand, comes from the leader’s own passion, vision, and authenticity. When leaders model resilience, positivity, and strong values, it encourages others to do the same. Open communication, trust, and empathy are key to building a motivated team culture. By investing in people, listening to their ideas, and supporting their development, leaders cultivate loyalty and high performance. Ultimately, a motivated team is more productive, engaged, and innovative.',
+'video35.mp4'),
+
+(36, 'Conflict resolution is a vital skill in any team environment. Differences in perspectives, communication styles, or goals can lead to tension and disagreements. However, when managed constructively, conflict can lead to better ideas and stronger relationships. The first step is identifying the root cause and ensuring that all parties feel heard. Active listening, empathy, and remaining calm are essential during conflict discussions. Solutions should focus on common goals and mutual benefit. Techniques like mediation, using “I” statements, and setting ground rules can facilitate productive dialogue. Leaders play a key role by modeling respectful behavior, addressing issues early, and fostering a safe environment for open communication. Avoiding conflict, on the other hand, often leads to unresolved tension and decreased team morale. Embracing conflict as an opportunity for growth leads to healthier, more collaborative teams.',
+'video36.mp4'),
+
+(37, 'Leading through change requires adaptability, clear communication, and empathy. In a constantly evolving business environment, change is inevitable—whether due to market shifts, organizational restructuring, or technological advancements. Leaders must help their teams navigate uncertainty and remain focused. This involves explaining the reasons for change, setting expectations, and providing support throughout the transition. Transparency is crucial—people are more willing to embrace change when they understand its purpose. Empathetic leadership also acknowledges the emotional responses to change and provides space for feedback and concerns. By involving team members in the change process, leaders build trust and increase buy-in. Successful change leadership includes celebrating small wins, monitoring progress, and staying flexible. Ultimately, leaders who guide others through change with vision and compassion create resilient, future-ready teams.',
+'video37.mp4'),
+
+(38, 'Resilience in leadership is the capacity to recover from setbacks, stay optimistic in the face of adversity, and adapt to challenges. Resilient leaders maintain perspective, regulate their emotions, and remain solution-focused even under pressure. This mindset not only helps them cope personally but also sets the tone for their teams. Building resilience involves developing emotional intelligence, practicing self-care, and cultivating a strong support network. Leaders should also encourage open dialogue, create psychological safety, and normalize learning from failure. Resilient organizations are built by resilient leaders who foster a growth mindset and continuous improvement. In a volatile and unpredictable world, resilience is more than just endurance—it’s about evolving, innovating, and thriving through change.',
+'video38.mp4'),
+
+(39, 'Emotional intelligence (EQ) is the ability to recognize, understand, and manage your emotions and those of others. It plays a key role in leadership, teamwork, and interpersonal relationships. Leaders with high EQ communicate more effectively, resolve conflicts with empathy, and build stronger connections with their teams. The five core components of EQ are self-awareness, self-regulation, motivation, empathy, and social skills. Developing EQ requires reflection, feedback, and practice. For example, journaling can enhance self-awareness, while mindfulness supports emotional regulation. EQ also involves active listening and recognizing non-verbal cues in others. In today’s collaborative work environments, technical skills alone are not enough—emotional intelligence is a critical differentiator for effective leadership and personal growth.',
+'video39.mp4'),
+
+(40, 'Understanding the workplace importance of emotional intelligence (EQ) helps employees and leaders alike foster stronger collaboration and a positive culture. EQ enhances communication, builds trust, and minimizes conflict. In high-pressure settings, individuals with strong EQ can remain calm, empathetic, and constructive. Teams led by emotionally intelligent leaders tend to be more cohesive and engaged. Developing EQ in the workplace can include training, coaching, and feedback. It also involves modeling behavior such as giving recognition, showing appreciation, and managing stress effectively. EQ is especially important in customer-facing roles, where empathy and clarity affect client satisfaction. As work environments become more diverse and complex, emotional intelligence will continue to be a critical asset for success.',
+'video40.mp4'),
+
+(41, 
+'Effective communication is a critical skill for any leader. It involves not just conveying a message, but ensuring that the message is understood and acted upon in the way it was intended. Good communication starts with clarity—leaders must be able to express ideas, goals, and feedback in a manner that is easy to understand. This requires not only a strong command of language, but also empathy, active listening, and non-verbal awareness. Leaders must tailor their communication styles depending on the audience and the context. For example, delivering performance feedback requires a different tone and approach than sharing a company vision. Moreover, communication in leadership is not one-way—it requires building open channels where team members feel safe to share ideas, raise concerns, and contribute to decision-making. Utilizing storytelling can also enhance communication by making messages more memorable and emotionally impactful. Effective leaders regularly check for understanding, encourage dialogue, and are receptive to feedback themselves. As organizations grow in complexity, communication becomes even more vital to ensure alignment, motivation, and collaboration across teams. Leaders who excel in communication often build stronger trust, foster better working environments, and drive superior results.', 
+'https://www.example.com/video41'),
+
+(42, 
+'Decision-making is a core responsibility of any leader. It involves selecting the best course of action among multiple alternatives and often requires balancing risk, time constraints, and available information. Good decision-makers do not rely solely on intuition; they gather and analyze data, consult with stakeholders, and anticipate potential outcomes. The most effective leaders also consider the long-term impact of their decisions on people, processes, and organizational goals. Decision-making styles vary: some leaders are more democratic and seek input from their teams, while others may take a more autocratic or data-driven approach depending on the situation. Regardless of style, transparency in the decision-making process builds credibility and trust. Leaders should also be willing to revisit and revise decisions when new information emerges. Learning from past decisions, both good and bad, is critical to continuous improvement. Creating a culture where it’s safe to make mistakes and learn from them encourages innovation and growth. Tools like decision matrices, SWOT analysis, and scenario planning can support structured decision-making. Ultimately, leaders must take accountability for their choices and remain committed to seeing them through.', 
+'https://www.example.com/video42'),
+
+(43, 
+'Delegation and empowerment are essential skills for effective leadership. Delegation involves assigning tasks and responsibilities to others, freeing the leader to focus on strategic initiatives. However, effective delegation goes beyond merely passing on work—it requires matching the right tasks to the right people based on their strengths, experience, and development goals. Empowerment, on the other hand, means giving team members the authority, resources, and confidence to make decisions and take ownership of their work. Empowered employees are more engaged, motivated, and productive because they feel trusted and valued. Leaders must provide clear expectations, support, and feedback while avoiding micromanagement. Regular check-ins help ensure progress and offer opportunities for coaching without undermining autonomy. Empowering others also fosters innovation, as people are more likely to share ideas and take initiative when they feel their contributions matter. Leaders who master delegation and empowerment build stronger, more capable teams that can operate effectively even in the leader’s absence.', 
+'https://www.example.com/video43'),
+
+(44, 
+'Motivating and inspiring teams is a core function of leadership. A motivated team is one that is committed to organizational goals, works collaboratively, and demonstrates resilience in the face of challenges. Motivation can be intrinsic, such as finding meaning and satisfaction in the work itself, or extrinsic, like financial rewards and recognition. Effective leaders understand what drives their team members and tailor their approach accordingly. They articulate a compelling vision, recognize contributions, provide growth opportunities, and foster a culture of trust and transparency. Inspiration, however, goes beyond motivation. Inspiring leaders lead by example, communicate passionately, and connect emotionally with their teams. They challenge the status quo and encourage others to reach their full potential. Creating a sense of purpose and belonging helps teams feel aligned and energized. Recognizing small wins, celebrating progress, and showing genuine appreciation are simple yet powerful ways to keep morale high. In short, leaders who consistently motivate and inspire unlock the full potential of their teams.', 
+'https://www.example.com/video44'),
+
+(45, 
+'Conflict resolution is a necessary leadership skill in any team environment. Conflict is inevitable when individuals with diverse perspectives, experiences, and communication styles work together. However, not all conflict is negative—when managed well, it can lead to creative solutions, improved relationships, and stronger teams. The key is addressing issues early before they escalate. Leaders should create a safe environment where concerns can be raised respectfully. Active listening, empathy, and neutrality are essential during conflict resolution. It’s important to separate the problem from the people, focus on interests rather than positions, and seek win-win outcomes. Conflict styles such as avoiding, accommodating, competing, compromising, and collaborating each have their place depending on the context. Leaders should model constructive conflict behavior and train their teams in conflict management techniques. By promoting open communication, setting clear expectations, and encouraging mutual respect, leaders can transform conflict into an opportunity for growth and innovation.', 
+'https://www.example.com/video45'),
+
+(46, 
+'Leading through change is one of the most challenging yet vital responsibilities of a leader. In today’s fast-paced business environment, organizations must continuously adapt to evolving markets, technologies, and customer needs. Change can create uncertainty and resistance among employees, making leadership support critical. Effective change leaders communicate the rationale behind change clearly, involve key stakeholders in planning, and provide consistent updates throughout the transition. They anticipate and address resistance by empathizing with concerns, offering support, and involving employees in shaping the change process. It’s also important to maintain a clear vision, demonstrate commitment, and celebrate progress along the way. Change leadership requires resilience, flexibility, and the ability to inspire confidence even during difficult times. By being transparent and approachable, leaders build trust and help their teams embrace change as a path to opportunity and growth.', 
+'https://www.example.com/video46'),
+
+(47, 
+'Resilience in leadership is the ability to maintain focus, energy, and a positive mindset in the face of adversity. Leaders often deal with high-pressure situations, unexpected setbacks, and complex decisions. Resilient leaders do not allow failures to define them; instead, they view challenges as learning opportunities. Building resilience involves emotional regulation, optimism, adaptability, and strong social support systems. Leaders can develop these traits through mindfulness, reflection, physical well-being, and time management. Supporting others resilience is also key—leaders must create environments where employees feel psychologically safe, supported, and encouraged to take calculated risks. They role-model composure, perseverance, and accountability, which inspires others to do the same. During crises, resilient leaders provide calm, clarity, and direction. They communicate honestly, offer hope, and lead with empathy. Resilience not only enhances individual well-being but also contributes to long-term organizational success and sustainability.', 
+'https://www.example.com/video47'),
+
+(48, 
+'Emotional Intelligence (EQ) is the ability to recognize, understand, manage, and influence emotions in oneself and others. It is widely considered a vital leadership trait that impacts communication, decision-making, team dynamics, and conflict resolution. EQ consists of five core components: self-awareness, self-regulation, motivation, empathy, and social skills. Self-aware leaders understand their emotions and how they affect others. Self-regulation allows them to control impulses and respond constructively. Motivation drives them to pursue goals with passion and persistence. Empathy helps leaders connect with others on a deeper level, fostering trust and inclusion. Lastly, social skills enable effective communication, collaboration, and influence. Leaders with high EQ build stronger relationships, resolve conflicts more effectively, and create positive workplace cultures. Unlike IQ, EQ can be developed through practice, feedback, and reflection. Training programs, coaching, and mindfulness are useful tools to enhance emotional intelligence over time.', 
+'https://www.example.com/video48'),
+
+(49, 
+'Emotional Intelligence (EQ) plays a crucial role in the modern workplace. It affects how individuals interact with colleagues, manage stress, and perform under pressure. Leaders with high EQ create inclusive and psychologically safe environments where people feel heard, respected, and valued. This, in turn, enhances engagement, collaboration, and performance. EQ also supports ethical decision-making and reduces burnout by encouraging empathy and balance. Organizations that prioritize EQ in hiring, training, and culture development tend to have lower turnover rates and higher employee satisfaction. From navigating team dynamics to handling customer complaints, EQ enables professionals to respond thoughtfully rather than react impulsively. In conflict situations, those with strong EQ can de-escalate tension and find constructive paths forward. Encouraging emotional intelligence at all levels promotes resilience, well-being, and a stronger organizational identity. As the business world becomes more complex, EQ will continue to be a key differentiator for leadership success.', 
+'https://www.example.com/video49'),
+
+(50, 
+'Developing self-awareness at work is essential for personal growth and professional effectiveness. Self-awareness involves understanding your strengths, weaknesses, emotions, values, and impact on others. In the workplace, self-aware individuals are better able to manage stress, communicate effectively, and build positive relationships. They are more open to feedback and demonstrate higher levels of accountability. Leaders with self-awareness can recognize their leadership style, biases, and blind spots, allowing them to adjust their approach as needed. Tools like personality assessments, journaling, reflection exercises, and 360-degree feedback help individuals enhance their self-understanding. By regularly seeking input and observing one’s behavior in different situations, professionals can identify patterns and improve their responses. Self-awareness also contributes to emotional intelligence, decision-making, and leadership effectiveness. When teams are composed of self-aware members, collaboration improves, and conflicts are resolved more constructively. It is a foundational skill that supports lifelong learning and career advancement.', 
+'https://www.example.com/video50'),
+
+(51, 
+'Self-regulation is the ability to control your emotions, thoughts, and behaviors in different situations. It is a vital component of emotional intelligence and directly impacts performance, relationships, and stress management. In the workplace, individuals who can self-regulate are more reliable, adaptable, and composed under pressure. They respond to challenges with thoughtfulness rather than impulsivity. Leaders who demonstrate self-regulation foster trust, as they remain calm and objective even during crises. Strategies for improving self-regulation include mindfulness, deep breathing, reframing negative thoughts, and maintaining a healthy work-life balance. Setting clear goals and tracking progress also supports better self-control. It’s important to recognize triggers that lead to stress or frustration and to develop healthy coping mechanisms. Organizations can support self-regulation by promoting well-being, offering flexible work options, and encouraging open dialogue. Ultimately, self-regulation empowers individuals to stay focused, make rational decisions, and contribute positively to team dynamics.', 
+'https://www.example.com/video51'),
+
+(52, 
+'Practicing empathy in professional settings strengthens relationships, enhances communication, and improves teamwork. Empathy is the ability to understand and share the feelings of others. In a diverse workplace, empathy allows individuals to connect across differences in background, experience, and perspective. Empathetic leaders are better able to support their teams, resolve conflicts, and make inclusive decisions. Empathy involves active listening, asking thoughtful questions, and being present in conversations. It also means recognizing non-verbal cues and responding with compassion. Cultivating empathy starts with self-awareness and a willingness to see things from another person’s point of view. Creating a culture of empathy in the workplace leads to higher employee engagement, customer satisfaction, and innovation. Training programs, team-building exercises, and leadership modeling can all foster empathy at scale. In today’s interconnected world, empathy is not just a soft skill—it is a business imperative.', 
+'https://www.example.com/video52'),
+
+(53, 
+'Building strong work relationships is crucial for a successful and fulfilling career. Positive relationships at work contribute to better collaboration, increased morale, and higher productivity. Trust, respect, and open communication form the foundation of strong professional bonds. Individuals should strive to be dependable, supportive, and respectful in all interactions. Active listening, empathy, and showing appreciation help strengthen connections. Conflict is natural, but how it is handled determines the health of a relationship. Addressing issues early, offering constructive feedback, and being willing to compromise are key to maintaining trust. Leaders play a pivotal role by setting the tone for respectful communication and team unity. Networking, mentoring, and team-building activities also foster meaningful relationships. In remote or hybrid work environments, intentional efforts such as virtual check-ins and collaboration tools help maintain connection. Strong work relationships not only improve job performance but also enhance job satisfaction and personal well-being.', 
+'https://www.example.com/video53'),
+
+(54, 
+'Problem solving is a fundamental skill in both professional and personal life. It involves identifying challenges, analyzing root causes, and finding effective solutions. The problem-solving process typically includes defining the problem clearly, gathering information, brainstorming possible solutions, selecting the best option, and implementing it. Reflection and learning from the outcome are also essential. Strong problem solvers remain calm under pressure, approach challenges methodically, and are open to feedback. Tools like the 5 Whys, Fishbone Diagram, and SWOT analysis can aid in structuring the problem-solving process. In a team setting, involving multiple perspectives often leads to more innovative solutions. Leaders should encourage a problem-solving mindset by fostering psychological safety and supporting experimentation. Effective problem solving boosts efficiency, reduces risk, and drives continuous improvement. It’s a skill that becomes stronger with practice and experience.', 
+'https://www.example.com/video54'),
+
+(55, 
+'Defining the problem clearly is the first and arguably most important step in the problem-solving process. Many efforts to fix an issue fail because the real problem was never accurately identified. A well-defined problem provides focus and direction for finding a solution. It involves asking the right questions, gathering facts, and distinguishing symptoms from root causes. A clear problem statement should be specific, measurable, and framed without assumptions. For example, instead of saying “Sales are down,” a clearer statement would be “Sales of product X declined by 15% in Q2 compared to Q1 in region Y.” By narrowing the scope, teams can target their analysis and solutions effectively. Visualization tools, data analysis, and stakeholder interviews help clarify complex issues. Leaders should guide their teams through this phase with patience and objectivity. A clear understanding of the problem lays the groundwork for innovation and successful outcomes.', 
+'https://www.example.com/video55'),
+
+(56,
+'Root cause analysis (RCA) is a structured approach used to identify the fundamental reason a problem occurs. Unlike treating symptoms, RCA focuses on finding the origin of a problem to prevent recurrence. One popular method is the "5 Whys" technique, where you repeatedly ask "why" to each answer until you uncover the core issue. For example, if a product is delayed, asking why might lead you from missed deadlines to poor planning to lack of resource allocation. Other RCA tools include fishbone diagrams (Ishikawa), fault tree analysis, and Pareto analysis. The effectiveness of RCA depends on accurate data, cross-functional input, and a commitment to follow through on solutions. In organizations, RCA should be a regular part of problem-solving efforts—not just after major failures but also for ongoing process improvement. Leaders play a key role by fostering a culture that investigates issues without blame, encouraging transparency and continuous learning. Ultimately, solving root causes leads to greater efficiency, reduced costs, and higher customer satisfaction.',
+'https://www.example.com/video56'),
+
+(57,
+'Brainstorming is a creative problem-solving technique that encourages the generation of multiple ideas before evaluating them. The goal is to unlock innovation by allowing participants to think freely, without immediate judgment or criticism. In a brainstorming session, it’s important to create a psychologically safe environment where all contributions are welcomed. Effective brainstorming includes clear problem definition, time-boxing, and a facilitator to guide the process. Variations such as brainwriting (writing ideas down before sharing), mind mapping, and SCAMPER technique (Substitute, Combine, Adapt, Modify, Put to another use, Eliminate, Reverse) add structure and variety to sessions. After ideas are generated, teams can evaluate them using criteria like feasibility, impact, and alignment with goals. Digital tools such as Miro or MURAL can support remote brainstorming. By encouraging diverse perspectives and deferring judgment, brainstorming can lead to breakthrough solutions and team engagement. It remains one of the most accessible and effective methods for generating creative options to business challenges.',
+'https://www.example.com/video57'),
+
+(58,
+'Evaluating potential solutions is a critical step in the problem-solving process. After generating multiple ideas through brainstorming or analysis, it’s important to assess which solutions are most viable, effective, and aligned with strategic goals. Key criteria include feasibility (can it be implemented with current resources?), impact (will it solve the root problem?), cost, time, and stakeholder support. Tools such as decision matrices and cost-benefit analysis can help compare options objectively. Involving cross-functional stakeholders in the evaluation process ensures diverse perspectives and strengthens buy-in. Testing ideas on a small scale (e.g., through pilot programs or prototypes) before full implementation can reduce risk. Leaders must also consider potential unintended consequences and ensure the chosen solution aligns with organizational values and culture. Documenting the rationale for the chosen approach is essential for transparency and accountability. A structured, data-informed evaluation process not only improves decision quality but also boosts the success rate of implementation.',
+'https://www.example.com/video58'),
+
+(59,
+'Action planning and implementation turn ideas into results. After selecting the best solution to a problem, a detailed action plan ensures that everyone knows what needs to be done, by whom, and by when. A strong plan includes specific tasks, assigned responsibilities, deadlines, required resources, and success metrics. Tools like Gantt charts, project management software, and RACI matrices (Responsible, Accountable, Consulted, Informed) help clarify roles and timelines. It’s also important to establish checkpoints for progress reviews, identify potential risks, and create contingency plans. Clear communication and documentation ensure that all stakeholders are aligned and informed. During implementation, leaders must monitor progress, address barriers quickly, and motivate team members. Celebrating small wins can maintain momentum. Ultimately, a good plan is dynamic—it should evolve based on feedback and real-world conditions. With solid planning and execution, even the most ambitious solutions can lead to sustainable change and improvement.',
+'https://www.example.com/video59'),
+
+(60,
+'Monitoring and adapting solutions is the final, but ongoing, phase of the problem-solving process. Even well-implemented solutions may need adjustments due to unforeseen challenges or changes in context. Continuous monitoring involves tracking key performance indicators (KPIs) that measure whether the solution is working as intended. This can include both quantitative data (like performance metrics or financial indicators) and qualitative feedback (such as employee or customer satisfaction). Leaders should set regular review intervals and create feedback loops that allow for quick course corrections. Flexibility is key—solutions should be adapted, scaled, or replaced as necessary based on results. Transparency in this phase fosters trust and ensures accountability. Organizations that embrace monitoring and learning tend to innovate faster and maintain a competitive edge. Documenting lessons learned also builds organizational knowledge and informs future initiatives. Adaptability is not a sign of failure, but a strength in dynamic environments where change is constant.',
+'https://www.example.com/video60'),
+
+(61,
+'Critical thinking is the process of actively analyzing, evaluating, and synthesizing information to guide decision-making and problem-solving. It involves questioning assumptions, identifying biases, and considering multiple perspectives before arriving at conclusions. In the workplace, critical thinking helps professionals navigate complexity, avoid costly errors, and make well-reasoned choices. Unlike passive acceptance of information, critical thinking requires a healthy level of skepticism and curiosity. It encourages evidence-based reasoning and logical consistency. Leaders with strong critical thinking skills can evaluate data effectively, anticipate consequences, and adapt strategies as needed. Training in critical thinking often includes exercises in logic, argument evaluation, and case analysis. Cultivating this skill fosters innovation, improves collaboration, and enhances communication. In a rapidly changing world, critical thinking is essential not only for leaders but for every team member tasked with making decisions in uncertain or ambiguous environments.',
+'https://www.example.com/video61'),
+
+(62,
+'Objective analysis is the practice of examining facts and evidence without allowing personal feelings, opinions, or biases to interfere. In decision-making, objective analysis ensures that choices are based on data and logic rather than intuition or pressure. Leaders must be able to distinguish between subjective impressions and measurable realities. This involves critical thinking, asking the right questions, and validating sources. Tools like statistical analysis, performance metrics, and data visualization aid in interpreting complex information. Being objective also means acknowledging uncertainty and being open to alternative viewpoints. It fosters fairness, credibility, and trust—especially in high-stakes or controversial decisions. In team settings, promoting objectivity can improve group decision-making and reduce conflict. Ultimately, objective analysis leads to better outcomes, higher accountability, and a culture of integrity. It also strengthens the organization’s ability to learn from mistakes and improve over time.',
+'https://www.example.com/video62'),
+
+(63,
+'Identifying arguments and premises is a foundational critical thinking skill. An argument consists of one or more premises that support a conclusion. Understanding how arguments are structured helps individuals evaluate their strength and validity. For example, a valid argument must have logically connected premises and a conclusion that follows from them. In workplace scenarios, identifying arguments allows team members to engage in productive debate, spot faulty reasoning, and build stronger cases for action. Common mistakes include confusing correlation with causation, appealing to authority without evidence, or relying on emotional rhetoric. Practicing argument analysis involves listening actively, breaking down statements, and asking clarifying questions. This skill is particularly valuable in negotiations, strategic planning, and conflict resolution. Teaching teams to identify arguments improves collaboration and decision-making, ensuring that discussions are based on logic rather than assumptions. Over time, this leads to a more thoughtful, analytical culture where sound reasoning drives success.',
+'https://www.example.com/video63'),
+
+(64,
+'Evaluating evidence and sources is essential in an age where misinformation spreads rapidly. Professionals must be able to assess the reliability, relevance, and credibility of data before using it to inform decisions. This involves checking the author’s credentials, publication date, supporting references, and potential biases. Primary sources are generally more trustworthy than secondary interpretations, and peer-reviewed materials carry more weight than opinion pieces. Evaluating evidence also means considering whether the information is consistent with other known facts and whether it logically supports a claim. In business, decisions based on poor data can lead to financial loss, legal issues, or reputational damage. Leaders should encourage a culture where team members question sources and verify information. Training in research literacy, critical reading, and fact-checking tools helps build this competency. Ultimately, high standards for evidence safeguard the quality of decision-making and strengthen organizational integrity.',
+'https://www.example.com/video64'),
+
+(65,
+'Cognitive biases are mental shortcuts that can lead to flawed reasoning and poor decisions. These biases are natural—they help us process information quickly—but they often distort reality. Common biases include confirmation bias (favoring information that supports existing beliefs), availability bias (overestimating events that come easily to mind), and anchoring bias (relying too heavily on the first piece of information encountered). In leadership, being unaware of biases can result in unfair treatment, missed opportunities, or strategic errors. The first step in overcoming bias is awareness. Leaders can mitigate bias by seeking diverse perspectives, using structured decision-making processes, and encouraging debate. Tools like checklists, devil’s advocacy, and pre-mortems can help expose and correct cognitive blind spots. Training in bias recognition enhances objectivity and fairness, leading to better outcomes. Building awareness of biases across teams also strengthens organizational resilience and adaptability in a complex world.',
+'https://www.example.com/video65'),
+
+(66,
+'Applying critical thinking to decision-making enhances clarity, reduces risk, and supports better outcomes. Instead of reacting impulsively, critical thinkers pause to gather information, consider alternatives, and evaluate potential consequences. They ask probing questions, seek evidence, and weigh trade-offs. This process improves the quality of both individual and group decisions. For example, when faced with a budget cut, a critical thinker might evaluate which programs deliver the most value rather than implementing across-the-board reductions. Leaders who model critical thinking foster a culture of thoughtful inquiry, where employees are encouraged to challenge assumptions and propose innovative solutions. Using frameworks like the decision tree, SWOT analysis, and cost-benefit analysis can structure thinking and reduce emotional influence. Over time, applying critical thinking builds confidence, enhances problem-solving capacity, and contributes to long-term success in dynamic environments.',
+'https://www.example.com/video66'),
+
+(67,
+'The communication process involves the exchange of information between a sender and a receiver, aiming for mutual understanding. It consists of key elements: the message, the sender, the receiver, the medium (e.g., spoken, written), and feedback. Noise—such as distractions, misunderstandings, or language barriers—can interfere with this process. Effective communication requires clarity, active listening, and consideration of the audience’s perspective. In professional environments, communication skills impact every aspect of teamwork, leadership, and customer interaction. Non-verbal cues like tone, body language, and facial expressions also play an important role. Ensuring that feedback is incorporated confirms that the message was understood. Leaders should foster open communication channels and model transparency, empathy, and respect. By mastering the communication process, individuals and organizations build stronger relationships, increase efficiency, and reduce conflict. Training in communication skills can greatly enhance overall performance and workplace harmony.',
+'https://www.example.com/video67'),
+
+(68,
+'Barriers to effective communication can significantly hinder understanding and collaboration in the workplace. These barriers may be physical (like noise or poor technology), psychological (such as stress or prejudice), semantic (confusing language or jargon), or cultural (differences in values or communication styles). Recognizing and addressing these barriers is essential for effective leadership and teamwork. Strategies include simplifying language, active listening, using visual aids, checking for understanding, and promoting a culture of openness. Leaders can reduce communication barriers by encouraging feedback, clarifying expectations, and fostering psychological safety. In diverse teams, cultural awareness and sensitivity training can improve mutual understanding. By proactively addressing communication challenges, organizations enhance clarity, reduce conflict, and increase productivity. Ultimately, strong communication is not only about speaking well but also about ensuring messages are received and understood as intended.',
+'https://www.example.com/video68'),
+
+(69,
+'Verbal communication is the use of spoken language to convey meaning, ideas, and intentions. Mastering verbal communication requires clarity, tone, pace, and articulation. In a professional setting, how you say something often matters as much as what you say. Good verbal communicators are concise, persuasive, and attentive to their audience. They adjust their speech based on context—whether leading a meeting, resolving a conflict, or presenting to executives. Active listening is equally important—it shows respect, ensures mutual understanding, and builds rapport. Leaders should model strong verbal communication by being intentional, inclusive, and responsive. Training in public speaking, storytelling, and negotiation can strengthen this skill. Verbal communication also enhances collaboration, customer service, and team dynamics. In short, it is a foundational skill that supports nearly every aspect of professional success.',
+'https://www.example.com/video69'),
+
+(70,
+'Non-verbal communication includes all forms of communication without spoken words—such as body language, facial expressions, posture, gestures, and eye contact. These cues often reveal more than verbal language and can either reinforce or contradict what’s being said. For example, crossed arms may signal defensiveness, while open posture conveys approachability. In professional settings, understanding and using non-verbal cues effectively is critical. Leaders who maintain eye contact, smile appropriately, and use confident gestures build trust and engagement. Misreading non-verbal signals can lead to misunderstanding or conflict, especially in multicultural environments where body language meanings vary. Being aware of your own non-verbal habits and reading others’ signals can greatly enhance communication. Training and practice can improve your ability to send and interpret non-verbal messages. Ultimately, mastering non-verbal communication leads to more authentic interactions and stronger relationships.',
+'https://www.example.com/video70'),
+
+(71,
+'Active listening is a foundational communication skill that involves fully concentrating, understanding, responding, and remembering what the speaker says. Unlike passive hearing, active listening requires deliberate effort and attention. It includes verbal cues like summarizing or asking clarifying questions, and non-verbal cues such as nodding, eye contact, and open body language. Active listening helps build trust, resolve conflict, and ensure mutual understanding. In professional settings, it can lead to better teamwork, fewer misunderstandings, and stronger client relationships. Barriers to active listening include distractions, assumptions, multitasking, and internal bias. To practice active listening, individuals should minimize distractions, be patient, avoid interrupting, and mentally engage with the speaker’s message. Leaders who model active listening show respect, increase employee engagement, and create inclusive environments. This skill is especially vital during performance reviews, conflict resolution, and feedback conversations. When teams embrace active listening, collaboration improves and miscommunication decreases.',
+'https://www.example.com/video71'),
+
+(72,
+'Constructive feedback is essential for personal growth, team development, and organizational improvement. Giving and receiving feedback effectively can enhance performance, motivation, and relationships. Constructive feedback focuses on behaviors and outcomes rather than personal attributes. It is specific, timely, and framed in a way that encourages improvement. Using the "SBI" model (Situation-Behavior-Impact) helps provide clear and actionable input. For example: “In yesterday’s meeting (Situation), you interrupted Sarah several times (Behavior), which made it hard for her to share her ideas (Impact).” Feedback should also include suggestions for improvement and be delivered in a respectful, private setting. Equally important is receiving feedback with an open mind, without defensiveness, and viewing it as an opportunity to grow. Leaders should foster a culture where feedback is normalized, frequent, and expected. Encouraging two-way feedback helps teams continuously adapt, innovate, and build stronger working relationships.',
+'https://www.example.com/video72'),
+
+(73,
+'Communication during difficult conversations is a vital skill for professionals, particularly in leadership roles. These conversations may involve delivering bad news, addressing performance issues, or handling conflicts. Successful communication in such scenarios requires preparation, empathy, and emotional intelligence. Start by clearly identifying the purpose of the conversation and planning the key messages. Choose an appropriate time and private setting to ensure a respectful dialogue. Use “I” statements to express concerns without sounding accusatory—for example, “I noticed a pattern…” rather than “You always…” Listen actively and validate the other person’s feelings, even if you disagree. Stay calm and open, and focus on solving the issue rather than assigning blame. Follow up after the conversation to ensure progress and maintain trust. Avoiding difficult conversations can lead to bigger problems over time. Leaders who handle them with care strengthen team dynamics and foster a culture of openness and accountability.',
+'https://www.example.com/video73'),
+
+(74,
+'Cross-cultural communication refers to the ability to effectively communicate with people from different cultural backgrounds. As workplaces become more globalized and diverse, this skill is increasingly important. Cultural differences can affect communication styles, tone, gestures, time perception, decision-making, and expectations. Misunderstandings may arise when one interprets behavior through the lens of their own culture. To improve cross-cultural communication, it’s essential to develop cultural awareness, show empathy, and practice active listening. Avoid assumptions and ask clarifying questions when needed. Use clear, simple language and be mindful of idioms or jargon that might not translate well. Non-verbal communication also varies across cultures, so its important to understand cultural norms related to eye contact, personal space, and gestures. Organizations can support this skill through cultural sensitivity training and inclusive practices. Leaders who communicate effectively across cultures build stronger global teams, foster inclusion, and enhance collaboration.',
+'https://www.example.com/video74'),
+
+(75,
+'Productivity is often misunderstood as simply doing more in less time, but true productivity is about achieving meaningful results efficiently. It involves working smarter, not harder, and aligning your tasks with your goals and values. Productive individuals focus on high-impact activities, manage their energy effectively, and minimize distractions. Key principles include setting clear priorities, breaking large tasks into smaller steps, using systems to track progress, and protecting deep work time. Common barriers to productivity include multitasking, lack of direction, poor planning, and digital distractions. Tools like the Eisenhower Matrix, Pomodoro Technique, and time-blocking can help individuals manage their workload. Reflecting on daily accomplishments and adjusting habits regularly also enhances productivity. Leaders can support productive teams by setting clear expectations, reducing unnecessary meetings, and fostering a culture that values focus and results over busyness. In essence, true productivity leads to better performance, satisfaction, and well-being.',
+'https://www.example.com/video75'),
+
+(76,
+'Identifying your productivity style helps tailor your work habits to your strengths and preferences. People vary in how they approach tasks—some thrive on structure and detailed planning, while others prefer flexibility and creative flow. Understanding whether you’re a morning person or a night owl, whether you prefer working in silence or with background noise, and whether you’re deadline-driven or proactive can significantly affect your efficiency. Personality traits also influence productivity—introverts may prefer solo work, while extroverts may gain energy from collaboration. By aligning your work style with your natural rhythms, you can optimize performance and reduce stress. Self-assessment tools like the Kolbe Index, DISC, or Myers-Briggs can provide insights into your productivity tendencies. Teams can benefit by recognizing and respecting different working styles and assigning tasks accordingly. Ultimately, knowing your productivity style leads to more sustainable habits, better time management, and improved outcomes.',
+'https://www.example.com/video76'),
+
+(77,
+'Goal setting is a powerful productivity tool that provides direction, motivation, and a sense of accomplishment. The SMART framework—Specific, Measurable, Achievable, Relevant, and Time-bound—helps ensure goals are clear and actionable. Vague goals like “be more productive” are less effective than SMART goals like “write a project outline by Friday.” Setting short-term and long-term goals provides both focus and big-picture perspective. Writing goals down, breaking them into smaller tasks, and tracking progress increases the likelihood of success. Review goals regularly to assess whether they’re still aligned with your values and priorities. Goal setting also enhances self-discipline and time management. Leaders can help their teams by aligning individual goals with organizational objectives, providing feedback, and celebrating milestones. In both personal and professional contexts, goal setting is a habit that empowers individuals to turn intentions into results and continuously improve.',
+'https://www.example.com/video77'),
+
+(78,
+'Prioritization frameworks help individuals and teams focus on what truly matters, especially when faced with competing demands. One of the most well-known tools is the Eisenhower Matrix, which categorizes tasks into four quadrants based on urgency and importance. This helps users distinguish between tasks that need immediate attention, those that can be scheduled, delegated, or even eliminated. Another popular method is the ABCDE method, which ranks tasks by importance. The Pareto Principle (80/20 rule) suggests focusing on the 20% of tasks that yield 80% of results. Prioritization is not just about doing things right—it’s about doing the right things. It requires regular reflection and the courage to say no to low-value activities. Technology tools like task managers and planners can support this process. In teams, alignment on priorities ensures that effort is directed toward shared goals. Practicing effective prioritization reduces stress, increases productivity, and ensures meaningful progress.',
+'https://www.example.com/video78');
+
+UPDATE LessonContent
+SET VideoURL = 'https://www.youtube.com/watch?v=sCQ0VYNCmKw'
+WHERE LessonID BETWEEN 1 AND 78;
 
 INSERT INTO Quizzes (LessonID, CourseID, QuizName, Subject, Level, NumQuestions, DurationMinutes, PassRate, QuizType, QuestionOrder, Status) VALUES
 -- Quizzes for Course 1: Strategic Leadership
