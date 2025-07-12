@@ -848,39 +848,59 @@ VALUES
 (6, 'Enhance Your EQ for Workplace Success', 'Emotional intelligence improves teamwork, communication, and leadership.', 'media/sliders/image3.png', 0),
 (7, 'Become a Pro at Problem Solving', 'Tackle complex problems with confidence using structured problem-solving tools.', 'media/sliders/image4.png', 1);
 
-INSERT INTO Chapter (CourseID, Title, ChapterOrder) VALUES
-(1, 'Foundations of Strategic Leadership', 1),
-(1, 'Developing Vision and Strategy', 2),
-(1, 'Executing and Adapting Strategy', 3),
-(2, 'Understanding Time and Priorities', 1),
-(2, 'Effective Planning and Techniques', 2),
-(2, 'Overcoming Obstacles to Productivity', 3),
-(3, 'Basics of Self-Awareness', 1),
-(3, 'Developing Internal Awareness', 2),
-(3, 'Applying Self-Awareness in Life', 3),
-(4, 'Preparation and Audience Analysis', 1),
-(4, 'Structuring and Delivering Your Message', 2),
-(4, 'Handling Nerves and Engaging Audience', 3),
-(5, 'The Essence of Leadership', 1),
-(5, 'Key Leadership Skills', 2),
-(5, 'Building and Inspiring Your Team', 3),
-(5, 'Leading Through Challenges', 4),
-(6, 'Introduction to Emotional Intelligence', 1),
-(6, 'Self-Management and Awareness', 2),
-(6, 'Social Awareness and Relationship Management', 3),
-(7, 'Defining and Analyzing Problems', 1),
-(7, 'Generating and Evaluating Solutions', 2),
-(7, 'Implementing and Reviewing Solutions', 3),
-(8, 'Foundations of Critical Thinking', 1),
-(8, 'Analyzing Arguments and Evidence', 2),
-(8, 'Making Informed Decisions', 3),
-(9, 'Fundamentals of Communication', 1),
-(9, 'Verbal and Non-Verbal Communication', 2),
-(9, 'Listening and Feedback Skills', 3),
-(9, 'Advanced Communication Strategies', 4),
-(10, 'Understanding Productivity Basics', 1),
-(10, 'Goal Setting and Prioritization', 2),
-(10, 'Advanced Planning and Execution', 3);
+INSERT INTO Chapter (CourseID, Title, ChapterOrder, Status) VALUES
+-- Chapters for 'Strategic Leadership' (CourseID 1)
+(1, 'Foundations of Strategic Leadership', 1, 1),
+(1, 'Developing Vision and Strategy', 2, 1),
+(1, 'Executing and Adapting Strategy', 3, 1),
+
+-- Chapters for 'Time Management Mastery' (CourseID 2)
+(2, 'Understanding Time and Priorities', 1, 1),
+(2, 'Effective Planning and Techniques', 2, 1),
+(2, 'Overcoming Obstacles to Productivity', 3, 1),
+
+-- Chapters for 'Mastering Self-Awareness' (CourseID 3)
+(3, 'Basics of Self-Awareness', 1, 1),
+(3, 'Developing Internal Awareness', 2, 1),
+(3, 'Applying Self-Awareness in Life', 3, 1),
+
+-- Chapters for 'Public Speaking Essentials' (CourseID 4)
+(4, 'Preparation and Audience Analysis', 1, 1),
+(4, 'Structuring and Delivering Your Message', 2, 1),
+(4, 'Handling Nerves and Engaging Audience', 3, 1),
+
+-- Chapters for 'Leadership Fundamentals' (CourseID 5)
+(5, 'The Essence of Leadership', 1, 1),
+(5, 'Key Leadership Skills', 2, 1),
+(5, 'Building and Inspiring Your Team', 3, 1),
+(5, 'Leading Through Challenges', 4, 1),
+
+-- Chapters for 'Emotional Intelligence at Work' (CourseID 6)
+(6, 'Introduction to Emotional Intelligence', 1, 1),
+(6, 'Self-Management and Awareness', 2, 1),
+(6, 'Social Awareness and Relationship Management', 3, 1),
+
+-- Chapters for 'Problem Solving Techniques' (CourseID 7)
+(7, 'Defining and Analyzing Problems', 1, 1),
+(7, 'Generating and Evaluating Solutions', 2, 1),
+(7, 'Implementing and Reviewing Solutions', 3, 1),
+
+-- Chapters for 'Critical Thinking Skills' (CourseID 8)
+(8, 'Foundations of Critical Thinking', 1, 1),
+(8, 'Analyzing Arguments and Evidence', 2, 1),
+(8, 'Making Informed Decisions', 3, 1),
+
+-- Chapters for 'Effective Communication Skills' (CourseID 9)
+(9, 'Fundamentals of Communication', 1, 1),
+(9, 'Verbal and Non-Verbal Communication', 2, 1),
+(9, 'Listening and Feedback Skills', 3, 1),
+(9, 'Advanced Communication Strategies', 4, 1),
+
+-- Chapters for 'Productivity & Planning Bootcamp' (CourseID 10)
+(10, 'Understanding Productivity Basics', 1, 1),
+(10, 'Goal Setting and Prioritization', 2, 1),
+(10, 'Advanced Planning and Execution', 3, 1);
+
 
 
 

@@ -116,6 +116,7 @@ CREATE TABLE Chapter (
   CourseID INT NOT NULL,
   Title NVARCHAR(255) NOT NULL,
   ChapterOrder INT NOT NULL,
+   Status BIT DEFAULT 1,-- Thời điểm cập nhật cuối cùng
   FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 
