@@ -23,6 +23,9 @@ CREATE TABLE Blog (
     BlogID INT PRIMARY KEY IDENTITY(1,1),
     UserID INT,
     Title NVARCHAR(255),
+	BriefInfo NVARCHAR(500),
+	Description NVARCHAR(MAX),
+	Status NVARCHAR(50),
     Date DATE,
     Category NVARCHAR(255),
     ImageURL NVARCHAR(255),
@@ -246,88 +249,26 @@ CREATE TABLE PaymentTransaction (
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
-CREATE TABLE Posts (
-    PostID INT PRIMARY KEY IDENTITY(1,1),
-    Title NVARCHAR(255),
-    BriefInfo NVARCHAR(500),
-    Description NVARCHAR(MAX),
-	Postinfo NVARCHAR(MAX),
-    Category NVARCHAR(100),
-    Status NVARCHAR(50),
-    IsFeatured BIT DEFAULT 0,
-    ThumbnailURL NVARCHAR(255),
-    CreatedDate DATETIME DEFAULT GETDATE()
-);
+
+-- Bảng blog (Blog)
+
 -- Bảng lưu các video trong bài viết
-CREATE TABLE PostVideos (
+CREATE TABLE BlogVideos (
     VideoID INT PRIMARY KEY IDENTITY(1,1),
-    PostID INT FOREIGN KEY REFERENCES Posts(PostID),
+    BlogID INT FOREIGN KEY REFERENCES Blog(BlogID),
     VideoURL NVARCHAR(255),
     Description NVARCHAR(255)
 );
 -- Bảng lưu các hình ảnh phụ
-CREATE TABLE PostImages (
+CREATE TABLE BlogImages (
     ImageID INT PRIMARY KEY IDENTITY(1,1),
-    PostID INT FOREIGN KEY REFERENCES Posts(PostID),
+    BlogID INT FOREIGN KEY REFERENCES Blog(BlogID),
     ImageURL NVARCHAR(255),
     Description NVARCHAR(255)
 );
 
-INSERT INTO Posts (Title, BriefInfo, Description, Category, Status, IsFeatured, ThumbnailURL, Postinfo)
-VALUES (
-    'Remote Work Communication',
-    'Learn how to maintain clear and effective communication with your team members when working remotely.',
-    'Remote work has become increasingly common, but it presents unique challenges for team communication. This post explores strategies for maintaining clear and effective communication in remote teams.',
-    'Workplace',
-    'Published',
-    1,
-    'media/post/thumbnail1.png',
-    'Remote Work: The Future of Work Is Here
-Remote work — once a perk — is now a core part of modern professional life. Enabled by technology, it offers flexibility, autonomy, and access to global talent like never before.
 
-Benefits
-Flexibility: Work from anywhere, manage your own schedule.
 
-Productivity: Fewer office distractions and commute time.
-
-Cost savings: Reduced overhead for companies; savings on travel and meals for employees.
-
-Work-life balance: More time for family, health, and personal growth.
-
-Challenges
-Communication gaps if not managed with the right tools.
-
-Loneliness & isolation without social interaction.
-
-Overworking due to lack of boundaries between home and work.
-
-Best Practices
-Use tools like Slack, Zoom, Notion, Trello for collaboration.
-
-Set clear expectations and measurable goals.
-
-Encourage regular check-ins and virtual team building.
-
-Maintain a dedicated workspace to separate personal and professional life.
-
-“Remote work isn’t just a trend — it’s a transformation.”'
-);
-
--- Video chính
-INSERT INTO PostVideos (PostID, VideoURL, Description)
-VALUES (1, 'media/post/communication.mp4', 'Explain the post');
-
--- Hình ảnh minh họa chủ đề
-INSERT INTO PostImages (PostID, ImageURL, Description)
-VALUES (1, 'media/post/topic1.png', 'Topic of the post');
-
--- Hình ảnh quảng bá khóa học
-INSERT INTO PostImages (PostID, ImageURL, Description)
-VALUES (1, 'media/post/logo-course.png', 'Logo of the course advertised');
-
--- Video quảng cáo
-INSERT INTO PostVideos (PostID, VideoURL, Description)
-VALUES (1, 'media/post/advertise.mp4', 'Advertise course');
 
 --Trigger (để cuối)
 CREATE TRIGGER UpdateCourseDate
