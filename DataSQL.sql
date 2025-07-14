@@ -1857,11 +1857,11 @@ INSERT INTO QuestionOptions (QuestionID, OptionContent, IsCorrect) VALUES
 (119, 'Scatter Plot', 0);
 
 -- Video chính
-INSERT INTO BlogVideos (PostID, VideoURL, Description)
+INSERT INTO BlogVideos (BlogID, VideoURL, Description)
 VALUES (1, 'media/post/communication.mp4', 'Explain the post');
 VALUES (1, 'media/post/advertise.mp4', 'Advertise course');
 
 -- Hình ảnh minh họa chủ đề
-INSERT INTO BlogImages (PostID, ImageURL, Description)
+INSERT INTO BlogImages (BlogID, ImageURL, Description)
 VALUES (1, 'media/post/topic1.png', 'Topic of the post');
 VALUES (1, 'media/post/logo-course.png', 'Logo of the course advertised');
