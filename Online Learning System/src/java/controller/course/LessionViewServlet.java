@@ -88,6 +88,7 @@ public class LessionViewServlet extends HttpServlet {
                     }
                     chapterContentMap.put(chap, contentList);
                 }
+                List<Quiz> courseQuiz = quizDao.getQuizByCourseID(courseID);
                 // catch lession
                 String lessonIDStr = request.getParameter("lessonID");
                 if (lessonIDStr != null && !lessonIDStr.isEmpty()) {
@@ -103,7 +104,7 @@ public class LessionViewServlet extends HttpServlet {
                 request.setAttribute("chapter", chapter);
                 request.setAttribute("chapterContent", chapterContentMap);
                 request.setAttribute("courseID", courseID);
-
+                request.setAttribute("courseQuiz", courseQuiz);
                 request.getRequestDispatcher("lessonView.jsp").forward(request, response);
                 return;
             }

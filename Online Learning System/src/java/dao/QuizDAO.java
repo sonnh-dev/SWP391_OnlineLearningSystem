@@ -733,4 +733,37 @@ public class QuizDAO extends DBContextF {
 
         return quizzes;
     }
+    
+     public List<Quiz> getQuizByCourseID(int CourseID) {
+        List<Quiz> quizzes = new ArrayList<>();
+        String sql = "SELECT * FROM Quizzes WHERE CourseID = ?";
+
+        try (Connection con = dbContext.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, CourseID);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Quiz quiz = new Quiz();
+                    quiz.setQuizID(rs.getInt("QuizID"));
+                    quiz.setLessonID(rs.getInt("LessonID"));
+                    quiz.setCourseID(rs.getInt("CourseID"));
+                    quiz.setQuizName(rs.getString("QuizName"));
+                    quiz.setSubject(rs.getString("Subject"));
+                    quiz.setLevel(rs.getString("Level"));
+                    quiz.setNumQuestions(rs.getInt("NumQuestions"));
+                    quiz.setDurationMinutes(rs.getInt("DurationMinutes"));
+                    quiz.setPassRate(rs.getDouble("PassRate"));
+                    quiz.setQuizType(rs.getString("QuizType"));
+                    quiz.setQuestionOrder(rs.getInt("QuestionOrder"));
+                    quiz.setCreatedAt(rs.getDate("CreatedAt"));
+                    quiz.setUpdatedAt(rs.getDate("UpdatedAt"));
+                    quiz.setStatus(rs.getBoolean("Status"));
+                    quizzes.add(quiz);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+        }
+
+        return quizzes;
+    }
 }

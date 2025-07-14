@@ -42,6 +42,34 @@
                         <div class="bg-success rounded-pill h-100 transition-all" style="width: ${percentCompleted}%;"></div>
                     </div>
                 </div>
+                <div class="flex-grow-1 mt-3">
+                    <!-- Quiz Button -->
+                    <button
+                        class="w-100 text-start d-flex justify-content-between align-items-center p-3 bg-light border-bottom border-0"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#quizSection" aria-expanded="false"
+                        aria-controls="quizSection">
+                        <h5 class="fw-semibold text-dark m-0" style="font-size: 16px;">Course Quiz</h5>
+                        <i class="bi bi-chevron-down text-primary chapter-icon"></i>
+                    </button>
+
+                    <!-- Quiz List -->
+                    <div class="collapse" id="quizSection">
+                        <c:forEach var="quiz" items="${courseQuiz}">
+                            <a href="quizLesson?quizId=${quiz.quizID}" class="lesson-item d-flex align-items-center px-3 py-2 bg-light text-decoration-none" style="cursor: pointer;">
+                                <div class="icon-wrapper rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center me-2"
+                                     style="width: 15px; height: 15px;">
+                                    <i class="bi bi-question-circle"></i>
+                                </div>
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <span class="text-truncate" style="color: #1e293b;">
+                                        Quiz: ${quiz.quizName}
+                                    </span>
+                                    <span class="badge bg-warning text-dark ms-2">${quiz.quizType}</span>
+                                </div>
+                            </a>
+                        </c:forEach>
+                    </div>
+                </div>
                 <!-- Chapter-->
                 <c:forEach var="chapter" items="${chapter}">
                     <div class="flex-grow-1">
@@ -53,7 +81,6 @@
                             <h5 class="fw-semibold text-dark m-0" style="font-size: 16px;">${chapter.title}</h5>
                             <i class="bi bi-chevron-down text-primary chapter-icon"></i>
                         </button>
-
                         <!-- Chapter Lessons and Quizzes -->
                         <div class="collapse" id="chapter${chapter.chapterID}">
                             <c:forEach var="item" items="${chapterContent[chapter]}">
@@ -75,7 +102,7 @@
                                     </c:when>
                                     <c:when test="${item.type == 'quiz'}">
                                         <c:set var="quiz" value="${item.data}" />
-                                        <a href="quizLesson?quizId=${lesson.lessonID}" class="lesson-item d-flex align-items-center px-3 py-2 bg-light" style="cursor: pointer;">
+                                            <a href="quizLesson?quizId=${quiz.quizID}" class="lesson-item d-flex align-items-center px-3 py-2 bg-light" style="cursor: pointer;">
                                             <div class="icon-wrapper rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center me-2"
                                                  style="width: 15px; height: 15px;">
                                                 <i class="bi bi-question-circle"></i>
