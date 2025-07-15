@@ -8,7 +8,7 @@ import dao.QuizDAO;
 import model.Question;
 import model.Quiz;
 import model.QuizAttempt;
-import model.QuizAttemptDetail; // Make sure this is correctly imported
+import model.QuizAttemptDetail; 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,7 +25,11 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Account;
 
+        
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024, // 1MB
         maxFileSize = 10 * 1024 * 1024, // 10MB
@@ -33,16 +37,29 @@ import java.nio.file.Paths;
 )
 @WebServlet(name = "QuizHandleServlet", urlPatterns = {"/quizHandle"})
 public class QuizHandleServlet extends HttpServlet {
-
+    
+   private static final Logger LOGGER = Logger.getLogger(QuizHandleServlet.class.getName());
+   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        Integer userID = (Integer) session.getAttribute("userID");
-        // Simulate userID if not logged in (in a real app, redirect to login)
+         HttpSession session = request.getSession();
+        
+        // --- SỬA ĐỔI CHỦ YẾU Ở ĐÂY: Lấy userID từ session ---
+        Integer userID = null;
+        Object authObject = session.getAttribute("auth"); // Lấy đối tượng 'auth' từ session (đã lưu trong LoginServlet)
+        if (authObject instanceof Account) { // Kiểm tra xem đối tượng có phải là Account không
+            userID = ((Account) authObject).getId(); // Lấy ID từ đối tượng Account
+        }
+
+        // Nếu userID vẫn là null, tức là người dùng chưa đăng nhập hoặc session đã hết hạn
         if (userID == null) {
-            userID = 1; // Simulate userID 1 for testing
-            session.setAttribute("userID", userID);
+            
+            LOGGER.log(Level.WARNING, "User not logged in. Redirecting to login page for quizHandle.");
+            // Chuyển hướng đến trang đăng nhập, kèm theo các tham số để quay lại trang này sau khi đăng nhập thành công
+            String originalQuizId = request.getParameter("quizId");
+            response.sendRedirect(request.getContextPath() + "/LoginServlet?redirect=quizHandle&quizId=" + (originalQuizId != null ? originalQuizId : ""));
+            return; // Dừng xử lý
         }
 
         String quizIdStr = request.getParameter("quizId");
@@ -271,53 +288,54 @@ public class QuizHandleServlet extends HttpServlet {
     // --- calculateScore method (updated for camelCase consistency) ---
     // Trong QuizHandleServlet.java
     private double calculateScore(QuizDAO quizDAO, int attemptId, List<Question> questions, int quizId) throws SQLException, ClassNotFoundException {
-    if (questions == null || questions.isEmpty()) {
-        return 0.0;
-    }
-
-    int correctCount = 0;
-    int scoredQuestionsCount = 0; // Đếm số câu hỏi có thể chấm điểm tự động (chỉ trắc nghiệm/True-False)
-
-    Map<Integer, List<Integer>> correctOptionsMap = quizDAO.getCorrectAnswersForQuiz(quizId);
-
-    List<QuizAttemptDetail> userAttemptDetails = quizDAO.getQuizAttemptDetailsForAttempt(attemptId);
-    
-    // Chuyển chi tiết bài làm của người dùng thành một Map để dễ dàng tra cứu các lựa chọn
-    Map<Integer, List<Integer>> userSelectedOptionsMap = new java.util.HashMap<>();
-
-    for(QuizAttemptDetail detail : userAttemptDetails){
-        // Chỉ quan tâm các lựa chọn đã chọn (SelectedOptionID) cho câu trắc nghiệm
-        if(detail.getSelectedOptionId() != null){
-            userSelectedOptionsMap.computeIfAbsent(detail.getQuestionId(), k -> new ArrayList<>()).add(detail.getSelectedOptionId());
+        if (questions == null || questions.isEmpty()) {
+            return 0.0;
         }
-    }
 
-    for (Question q : questions) {
-        // Chỉ chấm điểm tự động cho câu hỏi Multiple Choice hoặc True/False
-        if ("Multiple Choice".equals(q.getQuestionType()) || "True/False".equals(q.getQuestionType())) {
-            
-            List<Integer> userSelected = userSelectedOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
-            List<Integer> correct = correctOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
+        int correctCount = 0;
+        int scoredQuestionsCount = 0; // Đếm số câu hỏi có thể chấm điểm tự động (chỉ trắc nghiệm/True-False)
 
-            Collections.sort(userSelected);
-            Collections.sort(correct);
+        Map<Integer, List<Integer>> correctOptionsMap = quizDAO.getCorrectAnswersForQuiz(quizId);
 
-            if (!userSelected.isEmpty() && userSelected.equals(correct)) {
-                correctCount++; 
+        List<QuizAttemptDetail> userAttemptDetails = quizDAO.getQuizAttemptDetailsForAttempt(attemptId);
+
+        // Chuyển chi tiết bài làm của người dùng thành một Map để dễ dàng tra cứu các lựa chọn
+        Map<Integer, List<Integer>> userSelectedOptionsMap = new java.util.HashMap<>();
+
+        for (QuizAttemptDetail detail : userAttemptDetails) {
+            // Chỉ quan tâm các lựa chọn đã chọn (SelectedOptionID) cho câu trắc nghiệm
+            if (detail.getSelectedOptionId() != null) {
+                userSelectedOptionsMap.computeIfAbsent(detail.getQuestionId(), k -> new ArrayList<>()).add(detail.getSelectedOptionId());
             }
-            
-            scoredQuestionsCount++; 
         }
- 
-    }
-    
-    if (scoredQuestionsCount == 0) {
-        return 0.0;
+
+        for (Question q : questions) {
+            // Chỉ chấm điểm tự động cho câu hỏi Multiple Choice hoặc True/False
+            if ("Multiple Choice".equals(q.getQuestionType()) || "True/False".equals(q.getQuestionType())) {
+
+                List<Integer> userSelected = userSelectedOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
+                List<Integer> correct = correctOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
+
+                Collections.sort(userSelected);
+                Collections.sort(correct);
+
+                if (!userSelected.isEmpty() && userSelected.equals(correct)) {
+                    correctCount++;
+                }
+
+                scoredQuestionsCount++;
+            }
+
+        }
+
+        if (scoredQuestionsCount == 0) {
+            return 0.0;
+        }
+
+        // Trả về điểm phần trăm
+        return (double) correctCount / scoredQuestionsCount * 100;
     }
 
-    // Trả về điểm phần trăm
-    return (double) correctCount / scoredQuestionsCount * 100;
-}
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

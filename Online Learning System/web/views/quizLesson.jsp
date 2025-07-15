@@ -126,7 +126,7 @@
         <% } %>
 
         <hr>
-        <a href="index.jsp">← Về trang chủ</a>
+        <a href="${pageContext.request.contextPath}/home">← Về trang chủ</a>
     </div>
         <%@include file="../includes/foot.jsp" %>
 </body>
