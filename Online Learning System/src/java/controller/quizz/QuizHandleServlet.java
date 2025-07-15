@@ -269,57 +269,55 @@ public class QuizHandleServlet extends HttpServlet {
     }
 
     // --- calculateScore method (updated for camelCase consistency) ---
+    // Trong QuizHandleServlet.java
     private double calculateScore(QuizDAO quizDAO, int attemptId, List<Question> questions, int quizId) throws SQLException, ClassNotFoundException {
-        if (questions == null || questions.isEmpty()) {
-            return 0.0;
-        }
-
-        int correctCount = 0;
-        int scoredQuestionsCount = 0; // Count only questions that can be auto-scored
-
-        // Get all correct answers for the quiz
-        Map<Integer, List<Integer>> correctOptionsMap = quizDAO.getCorrectAnswersForQuiz(quizId);
-        // Get all user answers for this attempt
-        List<QuizAttemptDetail> userAttemptDetails = quizDAO.getQuizAttemptDetailsForAttempt(attemptId);
-
-        // Convert userAttemptDetails to maps for easy lookup
-        Map<Integer, List<Integer>> userSelectedOptionsMap = new java.util.HashMap<>();
-        // No need for userAnswerTextMap here as short answers are not auto-scored
-
-        for (QuizAttemptDetail detail : userAttemptDetails) {
-            if (detail.getSelectedOptionId() != null) {
-                // Corrected: use getQuestionId()
-                userSelectedOptionsMap.computeIfAbsent(detail.getQuestionId(), k -> new ArrayList<>()).add(detail.getSelectedOptionId());
-            }
-            // userAnswerText details are not needed for this auto-scoring logic
-        }
-
-        for (Question q : questions) {
-            // Only score Multiple Choice / True/False questions automatically
-            if ("Multiple Choice".equals(q.getQuestionType()) || "True/False".equals(q.getQuestionType())) {
-                // Corrected: use getQuestionId()
-                List<Integer> userSelected = userSelectedOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
-                List<Integer> correct = correctOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
-                // Sort lists to ensure correct comparison for multiple correct options
-                Collections.sort(userSelected);
-                Collections.sort(correct);
-
-                if (userSelected.equals(correct)) {
-                    correctCount++;
-                }
-                scoredQuestionsCount++; // Increment count only for scored questions
-            }
-            // Short Answer/Essay questions are not automatically scored here
-        }
-
-        // Avoid division by zero if there are no auto-scorable questions
-        if (scoredQuestionsCount == 0) {
-            return 0.0;
-        }
-
-        return (double) correctCount / scoredQuestionsCount * 100;
+    if (questions == null || questions.isEmpty()) {
+        return 0.0;
     }
 
+    int correctCount = 0;
+    int scoredQuestionsCount = 0; // Đếm số câu hỏi có thể chấm điểm tự động (chỉ trắc nghiệm/True-False)
+
+    Map<Integer, List<Integer>> correctOptionsMap = quizDAO.getCorrectAnswersForQuiz(quizId);
+
+    List<QuizAttemptDetail> userAttemptDetails = quizDAO.getQuizAttemptDetailsForAttempt(attemptId);
+    
+    // Chuyển chi tiết bài làm của người dùng thành một Map để dễ dàng tra cứu các lựa chọn
+    Map<Integer, List<Integer>> userSelectedOptionsMap = new java.util.HashMap<>();
+
+    for(QuizAttemptDetail detail : userAttemptDetails){
+        // Chỉ quan tâm các lựa chọn đã chọn (SelectedOptionID) cho câu trắc nghiệm
+        if(detail.getSelectedOptionId() != null){
+            userSelectedOptionsMap.computeIfAbsent(detail.getQuestionId(), k -> new ArrayList<>()).add(detail.getSelectedOptionId());
+        }
+    }
+
+    for (Question q : questions) {
+        // Chỉ chấm điểm tự động cho câu hỏi Multiple Choice hoặc True/False
+        if ("Multiple Choice".equals(q.getQuestionType()) || "True/False".equals(q.getQuestionType())) {
+            
+            List<Integer> userSelected = userSelectedOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
+            List<Integer> correct = correctOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
+
+            Collections.sort(userSelected);
+            Collections.sort(correct);
+
+            if (!userSelected.isEmpty() && userSelected.equals(correct)) {
+                correctCount++; 
+            }
+            
+            scoredQuestionsCount++; 
+        }
+ 
+    }
+    
+    if (scoredQuestionsCount == 0) {
+        return 0.0;
+    }
+
+    // Trả về điểm phần trăm
+    return (double) correctCount / scoredQuestionsCount * 100;
+}
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
