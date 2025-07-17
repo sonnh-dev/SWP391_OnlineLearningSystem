@@ -44,7 +44,7 @@
                 
                 <div class="actions">
                     <a href="${pageContext.request.contextPath}/admin/editUser?userId=<%= user.getUserId() %>" class="edit-btn">Edit User</a>
-                    <a href="${pageContext.request.contextPath}/admin/addUser" class="add-btn">Add New User</a>
+                    <a href="${pageContext.request.contextPath}/admin/addUsers" class="add-btn">Add New User</a>
                     <a href="${pageContext.request.contextPath}/admin/users" class="back-btn">Back to List</a>
                 </div>
             </div>

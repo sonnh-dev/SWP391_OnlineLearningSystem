@@ -116,10 +116,6 @@
                     <option value="false">Inactive</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Image: </label>
-                <input type="file" class="form-control" name="image" value="${c.image}" required/>
-            </div>
             <div>
                 <label for="address">Address:</label>
                 <input type="text" id="address" name="address">

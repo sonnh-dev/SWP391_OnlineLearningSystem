@@ -1,6 +1,6 @@
 <%-- File: web/users/editUser.jsp --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="models.User"%>
+<%@page import="model.User"%>
 <!DOCTYPE html>
 <html>
     <head>
