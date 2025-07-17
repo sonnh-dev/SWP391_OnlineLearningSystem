@@ -83,7 +83,7 @@
         </style>
     </head>
     <body class="bg-gray-100 font-sans leading-normal tracking-normal">
-        <%@include file="../includes/navbar.jsp" %>
+  
         <div class="min-h-screen bg-gray-100">
             <header class="bg-indigo-600 text-white p-4 shadow-md">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -161,9 +161,9 @@
                                 <select id="level" name="level"
                                         class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 <%= canEdit ? "" : "bg-gray-100 cursor-not-allowed"%>"
                                         <%= canEdit ? "" : "disabled"%>>
-                                    <option value="Dễ" <%= (quiz != null && "Dễ".equals(quiz.getLevel())) ? "selected" : ""%>>Dễ</option>
-                                    <option value="Trung bình" <%= (quiz != null && "Trung bình".equals(quiz.getLevel())) ? "selected" : ""%>>Trung bình</option>
-                                    <option value="Khó" <%= (quiz != null && "Khó".equals(quiz.getLevel())) ? "selected" : ""%>>Khó</option>
+                                    <option value="Beginner" <%= (quiz != null && "Beginner".equals(quiz.getLevel())) ? "selected" : ""%>>Beginner</option>
+                                    <option value="Intermediate" <%= (quiz != null && "Intermediate".equals(quiz.getLevel())) ? "selected" : ""%>>Intermediate</option>
+                                    <option value="Advanced" <%= (quiz != null && "Advanced".equals(quiz.getLevel())) ? "selected" : ""%>>Advanced</option>
                                 </select>
                             </div>
                             <div>
@@ -192,9 +192,9 @@
                                 <select id="quizType" name="quizType"
                                         class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 <%= canEdit ? "" : "bg-gray-100 cursor-not-allowed"%>"
                                         <%= canEdit ? "" : "disabled"%>>
-                                    <option value="Luyện tập" <%= (quiz != null && "Luyện tập".equals(quiz.getQuizType())) ? "selected" : ""%>>Luyện tập</option>
-                                    <option value="Kiểm tra" <%= (quiz != null && "Kiểm tra".equals(quiz.getQuizType())) ? "selected" : ""%>>Kiểm tra</option>
-                                    <option value="Thi cuối khóa" <%= (quiz != null && "Thi cuối khóa".equals(quiz.getQuizType())) ? "selected" : ""%>>Thi cuối khóa</option>
+                                    <option value="Course Assessment" <%= (quiz != null && "Course Assessment".equals(quiz.getQuizType())) ? "selected" : ""%>>Course Assessment</option>
+                                    <option value="Practice" <%= (quiz != null && "Practice".equals(quiz.getQuizType())) ? "selected" : ""%>>Practice</option>
+                                    <option value="Learn" <%= (quiz != null && "Learn".equals(quiz.getQuizType())) ? "selected" : ""%>>Learn</option>
                                 </select>
                             </div>
 
@@ -418,6 +418,6 @@
                 }
             });
         </script>
-        <%@include file="../includes/foot.jsp" %>
+        
     </body>
 </html>

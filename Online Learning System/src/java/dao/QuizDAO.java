@@ -28,7 +28,7 @@ import model.QuizAttemptDetail;
  */
 public class QuizDAO extends DBContextF {
 
-    public List<Quiz> getAllQuizzes(String searchName, String subject, String quizType, int offset, int pageSize) {
+   public List<Quiz> getAllQuizzes(String searchName, String subject, String quizType, int offset, int pageSize) {
         List<Quiz> quizzes = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -46,7 +46,12 @@ public class QuizDAO extends DBContextF {
             sql.append(" AND QuizType = ?");
         }
 
-        sql.append(" ORDER BY QuizID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        sql.append(" ORDER BY QuizID"); // Luôn sắp xếp để kết quả nhất quán
+
+        // Thêm OFFSET và FETCH NEXT CHỈ KHI pageSize > 0 (có phân trang)
+        if (pageSize > 0) {
+            sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        }
 
         try {
             conn = getConnection();
@@ -63,8 +68,11 @@ public class QuizDAO extends DBContextF {
                 ps.setString(paramIndex++, quizType);
             }
 
-            ps.setInt(paramIndex++, offset);
-            ps.setInt(paramIndex++, pageSize);
+            // Chỉ đặt tham số offset và pageSize khi có phân trang
+            if (pageSize > 0) {
+                ps.setInt(paramIndex++, offset);
+                ps.setInt(paramIndex++, pageSize);
+            }
 
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -80,9 +88,9 @@ public class QuizDAO extends DBContextF {
                 quizzes.add(quiz);
             }
         } catch (SQLException e) {
-            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, "SQL Exception in getAllQuizzes", e);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, "Class Not Found Exception in getAllQuizzes", ex);
         } finally {
             closeResources(conn, ps, rs);
         }
