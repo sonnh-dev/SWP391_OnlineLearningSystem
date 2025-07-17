@@ -74,16 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
         currentQuizType = document.getElementById('quizType').value.toLowerCase();
 
         filteredQuizzes = allQuizzes.filter(quizRow => {
-            const quizName = quizRow.querySelector('td[data-col-index="1"]').textContent.toLowerCase();
-            const subject = quizRow.querySelector('td[data-col-index="2"]').textContent.toLowerCase();
-            const quizType = quizRow.querySelector('td[data-col-index="7"]').textContent.toLowerCase();
+        const quizName = quizRow.querySelector('td[data-col-index="1"]').textContent.toLowerCase();
+        // Cắt bỏ khoảng trắng thừa (trim) trước khi chuyển sang chữ thường
+        const subject = quizRow.querySelector('td[data-col-index="2"]').textContent.trim().toLowerCase();
+        const quizType = quizRow.querySelector('td[data-col-index="7"]').textContent.trim().toLowerCase();
 
-            const matchesSearch = !currentSearchName || quizName.includes(currentSearchName);
-            const matchesSubject = !currentSubject || subject === currentSubject;
-            const matchesQuizType = !currentQuizType || quizType === currentQuizType;
+        const matchesSearch = !currentSearchName || quizName.includes(currentSearchName);
+        // Cắt bỏ khoảng trắng thừa (trim) từ giá trị dropdown (nếu có)
+        const matchesSubject = !currentSubject || subject === currentSubject.trim();
+        const matchesQuizType = !currentQuizType || quizType === currentQuizType.trim();
 
-            return matchesSearch && matchesSubject && matchesQuizType;
-        });
+        return matchesSearch && matchesSubject && matchesQuizType;
+    });
         
         // 2. Xây dựng phân trang dựa trên filteredQuizzes
         buildPagination(Math.ceil(filteredQuizzes.length / rowsPerPage));

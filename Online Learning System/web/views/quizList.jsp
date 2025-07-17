@@ -136,15 +136,19 @@
                                 <label for="quizType" class="block text-sm font-medium text-gray-700 mb-1">Quiz Type</label>
                                 <select name="quizType" id="quizType" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                                     <option value="">All Types</option>
-                                    <option value="Luyện tập" <%= "Luyện tập".equals(request.getAttribute("quizType")) ? "selected" : ""%>>Luyện tập</option>
-                                    <option value="Kiểm tra" <%= "Kiểm tra".equals(request.getAttribute("quizType")) ? "selected" : ""%>>Kiểm tra</option>
+                                    <option value="Course Assessment" <%= "Course Assessment".equals(request.getAttribute("quizType")) ? "selected" : ""%>>Course Assessment</option>
+                                    <option value="Practice" <%= "Practice".equals(request.getAttribute("quizType")) ? "selected" : ""%>>Practice</option>
+                                    <option value="Learn" <%= "Learn".equals(request.getAttribute("quizType")) ? "selected" : ""%>>Learn</option>
                                 </select>
                             </div>
+                                
                         </div>
                         <div class="mt-4 flex justify-end">
                             <button type="button" id="resetFilters" class="mr-2 bg-white hover:bg-gray-100 text-gray-700 font-medium py-2 px-4 border border-gray-300 rounded-md">
                                 Reset
                             </button>
+                            
+                            
                             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md">
                                 <i class="fas fa-filter mr-2"></i> Filter/Search
                             </button>
@@ -155,18 +159,18 @@
                 <div class="d-flex align-items-center justify-between pb-3 p-3 rounded-t border bg-white"
                      style="border-color: #dee2e6;">
                     <div style="cursor: pointer; margin-right: 8px;" id="optionCustom">
-                        <i class="fas fa-sliders-h"></i> Tùy chỉnh hiển thị cột và phân trang
+                        <i class="fas fa-sliders-h"></i> Customize column display and pagination
                     </div>
                 </div>
 
                <div id="optionContent" class="px-4 py-3 bg-white border rounded-b mb-4" style="display: none">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="mb-3">
-            <label class="block text-sm font-medium text-gray-700 mb-2 font-bold">Hiển thị thông tin cột:</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2 font-bold">Display column information:</label>
 
             <div class="form-check mb-2">
                 <input class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" type="checkbox" id="info-all" checked>
-                <label class="ml-2 block text-sm text-gray-900" for="info-all">Hiển thị tất cả</label>
+                <label class="ml-2 block text-sm text-gray-900" for="info-all">Show all</label>
             </div>
 
             <div class="grid grid-cols-2 gap-2"> <%-- 2 cột để hiển thị gọn hơn --%>
@@ -181,12 +185,12 @@
             </div>
 
             <div class="mt-4 flex items-center">
-                <label for="rowsPerPage" class="block text-sm font-medium text-gray-700 mr-2 font-bold">Số hàng mỗi trang:</label>
+                <label for="rowsPerPage" class="block text-sm font-medium text-gray-700 mr-2 font-bold">Number of rows per page:</label>
                 <select id="rowsPerPage" class="block w-auto py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     <option value="5" selected>5</option>
                     <option value="10" >10</option>
                     <option value="20">20</option>
-                    <option value="all">Tất cả</option>
+                    <option value="all">All</option>
                 </select>
             </div>
         </div>
