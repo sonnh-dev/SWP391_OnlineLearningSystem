@@ -4,7 +4,7 @@
 <%@page import="model.Question" %>
 <%@page import="model.Quiz" %>
 <%@page import="model.QuizAttempt" %>
-<%@page import="model.Option" %> <%-- Đảm bảo import class Option của bạn --%>
+<%@page import="model.Option" %> <%-- Ensure your Option class is imported --%>
 <%@page import="java.util.List" %>
 <%@page import="java.util.Map" %>
 <%@page import="java.util.Collections" %>
@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="css/style.css">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
         <style>
-            /* CSS được sử dụng lại từ quizHandle.jsp */
+            /* CSS reused from quizHandle.jsp */
             body {
                 font-family: 'Inter', sans-serif;
                 margin: 0;
@@ -48,7 +48,7 @@
                 color: #1e2a38;
             }
 
-            /* CSS riêng cho quizReview.jsp */
+            /* Specific CSS for quizReview.jsp */
             .review-info {
                 background-color: #e9ecef;
                 padding: 15px 20px;
@@ -99,15 +99,15 @@
                 position: relative;
             }
             .review-question-card .option.correct {
-                background-color: #d4edda; /* Màu xanh lá nhạt */
+                background-color: #d4edda; /* Light green */
                 border-color: #28a745;
             }
             .review-question-card .option.user-selected {
-                background-color: #cfe2ff; /* Màu xanh lam nhạt */
+                background-color: #cfe2ff; /* Light blue */
                 border-color: #0d6efd;
             }
             .review-question-card .option.incorrect-selected {
-                background-color: #f8d7da; /* Màu đỏ nhạt */
+                background-color: #f8d7da; /* Light red */
                 border-color: #dc3545;
             }
             .review-question-card .option span {
@@ -134,7 +134,7 @@
                 padding: 15px;
                 margin-top: 15px;
                 border-radius: 8px;
-                display: none; /* Mặc định ẩn */
+                display: none; /* Hidden by default */
                 font-size: 0.95em;
                 line-height: 1.5;
                 color: #34495e;
@@ -143,22 +143,22 @@
                 color: #007bff;
             }
 
-            /* Styles cho câu trả lời tự luận */
+            /* Styles for essay answers */
             .user-text-answer, .answer-key-content {
                 border: 1px dashed #a0a0a0;
                 padding: 15px;
                 background-color: #f0f0f0;
                 border-radius: 8px;
                 margin-top: 10px;
-                white-space: pre-wrap; /* Giữ khoảng trắng và xuống dòng */
-                word-wrap: break-word; /* Ngắt từ dài */
+                white-space: pre-wrap; /* Preserve whitespace and line breaks */
+                word-wrap: break-word; /* Break long words */
             }
             .answer-key-content {
-                background-color: #e0f7fa; /* Màu xanh lam nhạt hơn cho đáp án */
+                background-color: #e0f7fa; /* Lighter blue for answer key */
                 border-color: #00bcd4;
             }
 
-            /* Popup styles - Tái sử dụng từ quizHandle.jsp */
+            /* Popup styles - Reused from quizHandle.jsp */
             .popup-overlay {
                 display: none;
                 position: fixed;
@@ -278,7 +278,7 @@
     </head>
     <body>
         <%
-            // Đảm bảo các biến này không null để tránh lỗi NullPointerException trong JSP
+            // Ensure these variables are not null to avoid NullPointerExceptions in JSP
             Quiz quiz = (Quiz) request.getAttribute("quiz");
             QuizAttempt attempt = (QuizAttempt) request.getAttribute("attempt");
             List<Question> questions = (List<Question>) request.getAttribute("questions");
@@ -292,29 +292,31 @@
                 correctOptionsMap = Collections.emptyMap();
             }
 
-            // Kiểm tra cơ bản để ngăn NPE nếu quiz hoặc attempt là null
+            // Basic check to prevent NPE if quiz or attempt are null
             if (quiz == null || attempt == null) {
-                // Chuyển hướng về trang lỗi thân thiện hơn
-                response.sendRedirect("error.jsp?errorMessage=Không tìm thấy thông tin quiz hoặc bài làm.");
-                return; // Dừng xử lý JSP
+                // Redirect to a more user-friendly error page
+                response.sendRedirect("error.jsp?errorMessage=Quiz or attempt information not found.");
+                return; // Stop JSP processing
             }
         %>
         <div class="review-container">
             <div class="header">
-                <h1>Xem lại bài Quiz: <%= quiz.getQuizName()%></h1>
+                <h1>Review Quiz: <%= quiz.getQuizName()%></h1>
+
             </div>
 
             <div class="review-info">
-                <p>Điểm của bạn: <strong><%= String.format("%.2f", attempt.getScore())%></strong></p>
-                <p>Trạng thái:
+                <p>Your Score: <strong><%= String.format("%.2f", attempt.getScore())%></strong></p>
+                <p>Status:
                     <span class="<%= (attempt.getIsPassed() != null && attempt.getIsPassed()) ? "pass" : "fail"%>">
-                        <%= (attempt.getIsPassed() != null && attempt.getIsPassed()) ? "ĐẠT" : "CHƯA ĐẠT"%>
+                        <%= (attempt.getIsPassed() != null && attempt.getIsPassed()) ? "PASSED" : "FAILED"%>
                     </span>
                 </p>
-                <p>Thời gian làm bài: <%= attempt.getStartTime()%> - <%= (attempt.getEndTime() != null ? attempt.getEndTime() : "N/A")%></p>
+                <p>Time Taken: <%= attempt.getStartTime()%> - <%= (attempt.getEndTime() != null ? attempt.getEndTime() : "N/A")%></p>
+
             </div>
 
-            <button class="explanation-btn" onclick="showReviewResultPopup()">Xem tổng quan kết quả (Review Result)</button>
+            <button class="explanation-btn" onclick="showReviewResultPopup()">View Overall Result</button>
 
             <div id="quizReviewQuestions">
                 <%
@@ -327,74 +329,79 @@
                         List<Integer> correctOptions = correctOptionsMap.getOrDefault(q.getQuestionID(), Collections.emptyList());
                         String answerKey = q.getAnswerKey();
 
-                        boolean isCorrectlyAnswered = false; // Mặc định là false cho tự luận
+                        boolean isCorrectlyAnswered = false; // Default to false for essay questions
                         if ("Multiple Choice".equals(questionType) || "True/False".equals(questionType)) {
-                            // So sánh các lựa chọn đã chọn với đáp án đúng cho câu trắc nghiệm
+                            // Compare selected options with correct answers for multiple choice questions
                             List<Integer> sortedUserSelected = new ArrayList<>(userSelected);
                             List<Integer> sortedCorrectOptions = new ArrayList<>(correctOptions);
                             Collections.sort(sortedUserSelected);
                             Collections.sort(sortedCorrectOptions);
                             isCorrectlyAnswered = sortedUserSelected.equals(sortedCorrectOptions);
                         }
-                        // Đối với câu tự luận, trạng thái đúng/sai cần chấm thủ công,
-                        // nên không hiển thị "Đúng/Sai" tự động ở đây.
+                        // For essay questions, correct/incorrect status needs manual grading,
+                        // so it's not automatically displayed here.
                 %>
                 <div class="review-question-card" id="question<%= qNum%>">
-                    <p class="question-content">Câu hỏi <%= qNum%>: <%= q.getQuestionContent()%>
-                        <% if ("Multiple Choice".equals(questionType) || "True/False".equals(questionType)) {%>
+                    <p class="question-content">Question <%= qNum%>: <%= q.getQuestionContent()%>
+                        <% if ("Multiple Choice".equals(questionType) || "True/False".equals(questionType)) {
+                                if (userSelected != null && !userSelected.isEmpty()) {%>
                         <span class="question-status" style="color: <%= isCorrectlyAnswered ? "green" : "red"%>;">
-                            (<%= isCorrectlyAnswered ? "Đúng" : "Sai"%>)
+                            (<%= isCorrectlyAnswered ? "Correct" : "Incorrect"%>)
                         </span>
-                        <% } else { %>
-                        <span class="question-status" style="color: #6c757d;">(Chấm điểm thủ công)</span>
+                        <%  } else { %>
+                        <span class="question-status" style="color: #6c757d;">(Not Answered)</span>
+                        <%  }
+                        } else { %>
+                        <span class="question-status" style="color: #6c757d;">(Manual Grading Required)</span>
                         <% } %>
                     </p>
+
                     <div class="options">
                         <%
                             if ("Multiple Choice".equals(questionType) || "True/False".equals(questionType)) {
-                                // Hiển thị lựa chọn và trạng thái cho câu hỏi trắc nghiệm
+                                // Display options and status for multiple choice questions
                                 for (QuestionOption opt : q.getOptions()) {
                                     String optionClass = "option";
                                     boolean isUserSelectedThisOption = userSelected.contains(opt.getOptionID());
                                     boolean isCorrectOption = correctOptions.contains(opt.getOptionID());
 
                                     if (isCorrectOption) {
-                                        optionClass += " correct"; // Lựa chọn này là đáp án đúng
+                                        optionClass += " correct"; // This option is the correct answer
                                     }
-                                    if (isUserSelectedThisOption) { // Nếu người dùng đã chọn lựa chọn này
+                                    if (isUserSelectedThisOption) { // If the user selected this option
                                         if (isCorrectOption) {
-                                            optionClass += " user-selected"; // Người dùng chọn đúng
+                                            optionClass += " user-selected"; // User selected correctly
                                         } else {
-                                            optionClass += " incorrect-selected"; // Người dùng chọn sai
+                                            optionClass += " incorrect-selected"; // User selected incorrectly
                                         }
                                     }
                         %>
                         <div class="<%= optionClass%>">
                             <%= opt.getOptionContent()%>
-                            <% if (isCorrectOption) { %> <span>(Đáp án đúng)</span> <% } %>
-                            <% if (isUserSelectedThisOption) { %> <span>(Lựa chọn của bạn)</span> <% } %>
+                            <% if (isCorrectOption) { %> <span>(Correct Answer)</span> <% } %>
+                            <% if (isUserSelectedThisOption) { %> <span>(Your Answer)</span> <% } %>
                         </div>
                         <%
-                            }
-                        } else if ("Short Answer".equals(questionType) || "Essay".equals(questionType)) {
-                            // Hiển thị câu trả lời tự luận của người dùng
+                                }
+                            } else if ("Short Answer".equals(questionType) || "Essay".equals(questionType)) {
+                                // Display user's essay answer
                         %>
-                        <p><strong>Câu trả lời của bạn:</strong></p>
+                        <p><strong>Your Answer:</strong></p>
                         <div class="user-text-answer">
-                            <%= (userAnswerText != null && !userAnswerText.trim().isEmpty() ? userAnswerText : "Chưa trả lời")%>
+                            <%= (userAnswerText != null && !userAnswerText.trim().isEmpty() ? userAnswerText : "Not Answered")%>
                         </div>
 
-                        <%-- ✅ Thêm phần hiển thị file đính kèm nếu có --%>
+                        <%-- ✅ Add section to display attached file if available --%>
                         <%
                             String uploadedFile = q.getUploadedFilePath();
                             if (uploadedFile != null && !uploadedFile.trim().isEmpty()) {
                         %>
                         <div style="margin-top: 10px;">
-                            <strong>Tệp đính kèm:</strong>
+                            <strong>Attached File:</strong>
                             <% if (uploadedFile.endsWith(".jpg") || uploadedFile.endsWith(".jpeg") || uploadedFile.endsWith(".png") || uploadedFile.endsWith(".gif")) {%>
                             <div><img src="<%= request.getContextPath() + "/uploads/" + uploadedFile%>" alt="Uploaded Image" style="max-width:100%; border: 1px solid #ccc; margin-top: 8px;"/></div>
                                 <% } else {%>
-                            <div><a href="<%= request.getContextPath() + "/uploads/" + uploadedFile%>" target="_blank">Tải xuống file</a></div>
+                            <div><a href="<%= request.getContextPath() + "/uploads/" + uploadedFile%>" target="_blank">Download file</a></div>
                             <% } %>
                         </div>
                         <%
@@ -405,11 +412,11 @@
                             }
                         %>
                     </div>
-                    <%-- Nút giải thích chỉ hiển thị khi có AnswerKey --%>
+                    <%-- Explanation button only displays when an AnswerKey exists --%>
                     <% if (answerKey != null && !answerKey.trim().isEmpty()) {%>
-                    <button class="explanation-btn" onclick="toggleExplanation(this)">Xem giải thích / Đáp án mẫu</button>
+                    <button class="explanation-btn" onclick="toggleExplanation(this)">View Explanation / Sample Answer</button>
                     <div class="explanation-content">
-                        <strong>Đáp án mẫu:</strong><br>
+                        <strong>Sample Answer:</strong><br>
                         <%= answerKey%>
                     </div>
                     <% } %>
@@ -420,23 +427,23 @@
             </div>
 
             <div class="footer">
-                <a href="quizLesson?quizId=<%= quiz.getQuizID()%>">Quay lại trang Quiz Lesson</a>
+                <a href="quizLesson?quizId=<%= quiz.getQuizID()%>">Back to Quiz Lesson page</a>
             </div>
         </div>
 
         <div id="reviewResultPopup" class="popup-overlay">
             <div class="popup-content">
                 <span class="popup-close" onclick="hideReviewResultPopup()">&times;</span>
-                <h3>Xem tổng quan kết quả</h3>
+                <h3>View Overall Results</h3>
                 <div class="filter-options">
-                    <button onclick="filterReviewQuestions('all')">Tất cả</button>
-                    <button onclick="filterReviewQuestions('answered')">Đã trả lời</button>
-                    <button onclick="filterReviewQuestions('incorrect')">Sai</button>
-                    <button onclick="filterReviewQuestions('marked')">Đánh dấu</button>
+                    <button onclick="filterReviewQuestions('all')">All</button>
+                    <button onclick="filterReviewQuestions('answered')">Answered</button>
+                    <button onclick="filterReviewQuestions('incorrect')">Incorrect</button>
+                    <button onclick="filterReviewQuestions('marked')">Marked</button>
                 </div>
                 <div class="question-numbers-grid">
                     <%
-                        // Lặp qua danh sách câu hỏi để tạo các liên kết số câu hỏi trong pop-up
+                        // Loop through the list of questions to create question number links in the pop-up
                         if (questions != null) {
                             for (int i = 0; i < questions.size(); i++) {
                                 Question q = questions.get(i);
@@ -452,7 +459,7 @@
                                     isAnswered = (userAnswerText != null && !userAnswerText.trim().isEmpty());
                                 }
 
-                                // Xác định nếu câu trả lời sai (chỉ cho câu trắc nghiệm)
+                                // Determine if the answer is incorrect (only for multiple choice questions)
                                 boolean isIncorrect = false;
                                 if ("Multiple Choice".equals(qType) || "True/False".equals(qType)) {
                                     List<Integer> sortedUserSelected = new ArrayList<>(userSelected);
@@ -464,7 +471,7 @@
                                         isIncorrect = true;
                                     }
                                 }
-                                // Câu tự luận không tự động xác định là 'sai' ở đây
+                                // Essay questions are not automatically determined as 'incorrect' here
 
                                 String statusClass = "";
                                 if (isAnswered) {
@@ -494,19 +501,19 @@
         </div>
 
         <script>
-            // Hiển thị/ẩn nội dung giải thích (Explanation)
+            // Show/hide explanation content
             function toggleExplanation(button) {
                 const explanationContent = button.nextElementSibling;
                 if (explanationContent.style.display === "block") {
                     explanationContent.style.display = "none";
-                    button.innerText = "Xem giải thích / Đáp án mẫu";
+                    button.innerText = "View Explanation / Sample Answer";
                 } else {
                     explanationContent.style.display = "block";
-                    button.innerText = "Ẩn giải thích / Đáp án mẫu";
+                    button.innerText = "Hide Explanation / Sample Answer";
                 }
             }
 
-            // Chức năng Pop-up (tái sử dụng từ quizHandle.jsp)
+            // Pop-up functions (reused from quizHandle.jsp)
             function showReviewResultPopup() {
                 document.getElementById('reviewResultPopup').style.display = 'flex';
             }
@@ -514,13 +521,13 @@
                 document.getElementById('reviewResultPopup').style.display = 'none';
             }
 
-            // Lọc câu hỏi trong Pop-up "Xem tổng quan kết quả"
+            // Filter questions in the "View Overall Results" pop-up
             function filterReviewQuestions(filterType) {
                 const questionLinks = document.querySelectorAll('#reviewResultPopup .question-numbers-grid a');
                 questionLinks.forEach(link => {
                     const isAnswered = link.getAttribute('data-answered') === 'true';
                     const isIncorrect = link.getAttribute('data-incorrect') === 'true';
-                    const isMarked = link.getAttribute('data-marked') === 'true'; // Cần triển khai tính năng đánh dấu
+                    const isMarked = link.getAttribute('data-marked') === 'true'; // Needs implementation for marked feature
 
                     let show = false;
                     if (filterType === 'all') {
@@ -541,13 +548,13 @@
                 });
             }
 
-            // Hàm cuộn đến câu hỏi cụ thể (được sử dụng bởi các liên kết trong pop-up)
+            // Function to scroll to a specific question (used by links in the pop-up)
             function navigateToQuestion(questionNumber) {
                 const element = document.getElementById('question' + questionNumber);
                 if (element) {
                     element.scrollIntoView({behavior: 'smooth', block: 'start'});
                 }
-                // Ẩn pop-up sau khi điều hướng (nếu cần)
+                // Hide pop-up after navigation (if needed)
                 // hideReviewResultPopup();
             }
         </script>

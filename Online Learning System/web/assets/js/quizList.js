@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const paginationInfoTotal = document.getElementById('pagination-info-total');
 
     // --- Biến trạng thái ---
-    let visibleColumns = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8]); // Ban đầu, tất cả các cột đều hiển thị
+    let visibleColumns = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8]); 
     let currentPage = 1;
     let rowsPerPage = parseInt(rowsPerPageSelect.value); // Lấy giá trị ban đầu từ select
     let allQuizzes = quizRows; // Giữ một bản sao của tất cả các hàng ban đầu để lọc/phân trang
@@ -258,11 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPage = 1; // Reset về trang 1 khi có bộ lọc mới
         applyAllFiltersAndPagination();
     });
-    
-    // --- Chạy khi DOM tải xong ---
+
     tableView.classList.remove('hidden'); // Đảm bảo bảng luôn hiển thị
     
-    // Khởi tạo rowsPerPage từ giá trị mặc định của select
     rowsPerPage = parseInt(rowsPerPageSelect.value);
 
     // Lấy tất cả hàng ban đầu

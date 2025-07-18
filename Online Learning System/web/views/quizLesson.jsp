@@ -85,7 +85,7 @@
     <%@include file="../includes/head.jsp" %>
 </head>
 <body>
-     <%@include file="../includes/navbar.jsp" %>
+     
     <div class="container">
         <h1>Bài Quiz: ${quiz.quizName}</h1>
 

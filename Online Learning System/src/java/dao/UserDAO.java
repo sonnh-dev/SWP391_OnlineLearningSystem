@@ -29,79 +29,81 @@ public class UserDAO extends DBContext2 {
 
         try {
             con = db.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT userId, firstName, lastName, gender, email, phoneNumber, role, status FROM Users WHERE 1=1 ");
+            StringBuilder sql = new StringBuilder(
+                    "SELECT userId, firstName, lastName, gender, email, phoneNumber, role, status FROM Users WHERE 1=1 "
+            );
 
             // Filtering
-            if (genderFilter != null && !genderFilter.isEmpty() && !genderFilter.equals("all")) {
+            if (genderFilter != null && !genderFilter.equals("all")) {
                 sql.append(" AND gender = ? ");
             }
-            if (roleFilter != null && !roleFilter.isEmpty() && !roleFilter.equals("all")) {
+            if (roleFilter != null && !roleFilter.equals("all")) {
                 sql.append(" AND role = ? ");
             }
-            if (statusFilter != null && !statusFilter.isEmpty() && !statusFilter.equals("all")) {
-                sql.append(" AND status = ? "); // status là boolean
+            if (statusFilter != null && !statusFilter.equals("all")) {
+                sql.append(" AND status = ? ");
             }
 
             // Searching
+            String likeKeyword = "%" + searchKeyword.toLowerCase() + "%";
             if (searchKeyword != null && !searchKeyword.isEmpty()) {
                 switch (searchBy) {
                     case "fullName":
-                        sql.append(" AND (firstName LIKE ? OR lastName LIKE ?) ");
+                        sql.append(" AND (LOWER(CONCAT(firstName, ' ', lastName)) COLLATE Vietnamese_CI_AI LIKE ? ");
+                        sql.append(" OR LOWER(CONCAT(lastName, ' ', firstName)) COLLATE Vietnamese_CI_AI LIKE ?) ");
+                        break;
+                    case "firstName":
+                        sql.append(" AND LOWER(firstName) COLLATE Vietnamese_CI_AI LIKE ? ");
+                        break;
+                    case "lastName":
+                        sql.append(" AND LOWER(lastName) COLLATE Vietnamese_CI_AI LIKE ? ");
                         break;
                     case "email":
-                        sql.append(" AND email LIKE ? ");
+                        sql.append(" AND LOWER(email) LIKE ? ");
                         break;
                     case "mobile":
                         sql.append(" AND phoneNumber LIKE ? ");
                         break;
                     default:
-                        // Search across multiple fields if no specific searchBy is provided
-                        sql.append(" AND (firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ?) ");
+                        sql.append(" AND (LOWER(firstName) COLLATE Vietnamese_CI_AI LIKE ? ");
+                        sql.append(" OR LOWER(lastName) COLLATE Vietnamese_CI_AI LIKE ? ");
+                        sql.append(" OR LOWER(email) LIKE ? ");
+                        sql.append(" OR phoneNumber LIKE ?) ");
                         break;
                 }
             }
 
             // Sorting
-            if (sortBy != null && !sortBy.isEmpty()) {
-                sql.append(" ORDER BY ").append(sortBy);
-                if (sortOrder != null && sortOrder.equalsIgnoreCase("desc")) {
-                    sql.append(" DESC ");
-                } else {
-                    sql.append(" ASC ");
-                }
-            } else {
-                // Default sort by userId if no sort parameter is provided
-                sql.append(" ORDER BY userId ASC ");
-            }
+            sql.append(" ORDER BY ").append(sortBy != null ? sortBy : "userId");
+            sql.append(" ").append("desc".equalsIgnoreCase(sortOrder) ? "DESC" : "ASC");
 
-            // Pagination (for SQL Server, adjust for other DBs like MySQL LIMIT)
+            // Pagination
             sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
             ps = con.prepareStatement(sql.toString());
             int paramIndex = 1;
 
-            // Set filter parameters
-            if (genderFilter != null && !genderFilter.isEmpty() && !genderFilter.equals("all")) {
+            // Set filter params
+            if (!genderFilter.equals("all")) {
                 ps.setString(paramIndex++, genderFilter);
             }
-            if (roleFilter != null && !roleFilter.isEmpty() && !roleFilter.equals("all")) {
+            if (!roleFilter.equals("all")) {
                 ps.setString(paramIndex++, roleFilter);
             }
-            if (statusFilter != null && !statusFilter.isEmpty() && !statusFilter.equals("all")) {
+            if (!statusFilter.equals("all")) {
                 ps.setBoolean(paramIndex++, Boolean.parseBoolean(statusFilter));
             }
 
-            // Set search parameters
+            // Set search params
             if (searchKeyword != null && !searchKeyword.isEmpty()) {
-                String likeKeyword = "%" + searchKeyword + "%";
                 switch (searchBy) {
                     case "fullName":
                         ps.setString(paramIndex++, likeKeyword);
                         ps.setString(paramIndex++, likeKeyword);
                         break;
+                    case "firstName":
+                    case "lastName":
                     case "email":
-                        ps.setString(paramIndex++, likeKeyword);
-                        break;
                     case "mobile":
                         ps.setString(paramIndex++, likeKeyword);
                         break;
@@ -114,7 +116,7 @@ public class UserDAO extends DBContext2 {
                 }
             }
 
-            // Set pagination parameters
+            // Set pagination params
             ps.setInt(paramIndex++, (pageIndex - 1) * pageSize);
             ps.setInt(paramIndex++, pageSize);
 
@@ -132,6 +134,7 @@ public class UserDAO extends DBContext2 {
                 );
                 users.add(user);
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -149,6 +152,7 @@ public class UserDAO extends DBContext2 {
                 Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+
         return users;
     }
 
@@ -334,7 +338,7 @@ public class UserDAO extends DBContext2 {
             con = db.getConnection();
             String sql = "SELECT userId, firstName, lastName, gender, email, phoneNumber, role, status, avatarUrl, address, dateOfBirth FROM Users WHERE email = ?";
             ps = con.prepareStatement(sql);
-             ps.setString(1, mail);
+            ps.setString(1, mail);
             rs = ps.executeQuery();
             if (rs.next()) {
                 user = new User(
