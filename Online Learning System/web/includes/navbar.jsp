@@ -56,6 +56,9 @@
                                         <button type="submit" class="dropdown-item w-100 text-start">My Registration</button>
                                     </form>
                                 </li>
+                                <c:if test="${user.role == 'admin'}">
+                                          <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/users">Manage User</a></li>
+                                </c:if>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="logout">Logout</a></li>
                             </ul>

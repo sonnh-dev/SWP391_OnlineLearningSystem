@@ -110,7 +110,7 @@ public class CourseRegisterServlet extends HttpServlet {
             } catch (MessagingException ex) {
                 Logger.getLogger(CourseRegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
-            user = new User(0, firstName, lastName, gender, email, mobile, "user", true, "default.png", password, null, null);
+            user = new User(0, firstName, lastName, gender, email, mobile, "User", true, "media/users/user_1.png", password, null, null);
             try {
                 userDAO.addUser(user);
                 response.setContentType("text/html;charset=UTF-8");
