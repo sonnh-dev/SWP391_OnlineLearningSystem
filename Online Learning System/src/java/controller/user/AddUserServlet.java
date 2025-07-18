@@ -1,7 +1,11 @@
 // File: src/main/java/com/yourcompany/yourproject/controller/AddUserServlet.java
 package controller.user;
 
+import config.EmailSender;
+import config.PasswordGenerator;
+import controller.course.CourseRegisterServlet;
 import dao.UserDAO;
+import jakarta.mail.MessagingException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -31,7 +35,7 @@ public class AddUserServlet extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             request.setCharacterEncoding("UTF-8"); // Đảm bảo nhận tiếng Việt
-            
+
             // Lấy thông tin từ form
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
@@ -53,32 +57,36 @@ public class AddUserServlet extends HttpServlet {
                     return;
                 }
             }
-            
-            // Tạo mật khẩu ngẫu nhiên cho người dùng mới
-            String generatedPassword = UUID.randomUUID().toString().substring(0, 8); // Mật khẩu 8 ký tự
-            // Trong thực tế, bạn sẽ băm mật khẩu này và lưu băm vào DB
-            // String hashedPassword = HashUtil.hashPassword(generatedPassword);
-            
+
+// Tạo 1 mật khẩu ngẫu nhiên duy nhất (có thể dùng PasswordGenerator hoặc UUID)
+            String password = PasswordGenerator.generatePassword(); // 8–10 ký tự
+
+// Gửi mật khẩu qua email
+            try {
+                EmailSender.sendPassword(email, password);
+            } catch (MessagingException ex) {
+                Logger.getLogger(AddUserServlet.class.getName()).log(Level.SEVERE, "Failed to send password email", ex);
+            }
+
+// Tạo user và set mật khẩu thô
             User newUser = new User(firstName, lastName, gender, email, phoneNumber, role, status, avatarUrl, address, dateOfBirth);
-            newUser.setPassword(generatedPassword); // Đặt mật khẩu đã tạo
-            
+            newUser.setPassword(password); // Không hash, lưu thẳng
+
             UserDAO userDAO = new UserDAO();
             boolean success = userDAO.addUser(newUser);
-            
+
             if (success) {
-                // Gửi email mật khẩu cho người dùng (cần triển khai logic gửi email)
-                // sendEmail(newUser.getEmail(), "Your New Account Password", "Your password is: " + generatedPassword);
-                request.setAttribute("successMessage", "User added successfully. Password for " + newUser.getEmail() + " is: " + generatedPassword + ". (In real app, this would be emailed).");
-                response.sendRedirect("users?message=User added successfully and password generated.");
+                response.sendRedirect("users?message=User added successfully and password sent.");
             } else {
-                request.setAttribute("errorMessage", "Failed to add user. Email might already exist or other database error.");
+                request.setAttribute("errorMessage", "Failed to add user. Email may already exist.");
                 request.getRequestDispatcher("/users/addUsers.jsp").forward(request, response);
             }
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AddUserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     // Một phương thức giả định để gửi email (cần triển khai thực tế với JavaMail API)
     // private void sendEmail(String toEmail, String subject, String content) {
     //    // Implement email sending logic here using JavaMail API
