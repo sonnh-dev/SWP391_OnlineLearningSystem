@@ -178,33 +178,112 @@ public class LessonHierarchyDao extends context2 {
         }
         return groups;
     }
+
     public void toggleStatus(int id, String type) {
-    String sql = "";
-    String column = "";
+        String sql = "";
+        String column = "";
 
-    switch (type) {
-        case "Subject Topic":
-            sql = "UPDATE Chapter SET Status = NOT Status WHERE ChapterID = ?";
-            break;
-        case "Lesson":
-            sql = "UPDATE Lesson SET Status = NOT Status WHERE LessonID = ?";
-            break;
-        case "Quiz":
-        case "Independent Quiz":
-            sql = "UPDATE Quizzes SET Status = NOT Status WHERE QuizID = ?";
-            break;
-        default:
-            return;
+        switch (type) {
+            case "Subject Topic":
+                sql = "UPDATE Chapter SET Status = NOT Status WHERE ChapterID = ?";
+                break;
+            case "Lesson":
+                sql = "UPDATE Lesson SET Status = NOT Status WHERE LessonID = ?";
+                break;
+            case "Quiz":
+            case "Independent Quiz":
+                sql = "UPDATE Quizzes SET Status = NOT Status WHERE QuizID = ?";
+                break;
+            default:
+                return;
+        }
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    try (Connection conn = getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, id);
-        ps.executeUpdate();
-    } catch (Exception e) {
-        e.printStackTrace();
+    public model.Lesson getLessonById(int lessonId) {
+        model.Lesson lesson = null;
+        try (Connection conn = getConnection()) {
+            String sql = "SELECT LessonID, ChapterID, Title, LessonOrder, Status, IsFree FROM Lesson WHERE LessonID = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, lessonId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                lesson = new model.Lesson();
+                lesson.setLessonID(rs.getInt("LessonID"));
+                lesson.setChapterID(rs.getInt("ChapterID"));
+                lesson.setTitle(rs.getString("Title"));
+                lesson.setLessonOrder(rs.getInt("LessonOrder"));
+                lesson.setStatus(rs.getObject("Status") != null ? rs.getBoolean("Status") : null);
+                lesson.setIsFree(rs.getObject("IsFree") != null ? rs.getBoolean("IsFree") : null);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lesson;
     }
-}
 
+    public model.LessonContent getLessonContentById(int lessonId) {
+        model.LessonContent lessonContent = null;
+        try (Connection conn = getConnection()) {
+            String sql = "SELECT LessonID, VideoURL, DocContent FROM LessonContent WHERE LessonID = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, lessonId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                lessonContent = new model.LessonContent();
+                lessonContent.setLessonID(rs.getInt("LessonID"));
+                lessonContent.setVideoURL(rs.getString("VideoURL"));
+                lessonContent.setDocContent(rs.getString("DocContent"));
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lessonContent;
+    }
 
+    public boolean updateLesson(model.Lesson lesson) {
+        boolean success = false;
+        try (Connection conn = getConnection()) {
+            String sql = "UPDATE Lesson SET Title = ?, ChapterID = ?, LessonOrder = ?, Status = ?, IsFree = ? WHERE LessonID = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, lesson.getTitle());
+            ps.setInt(2, lesson.getChapterID());
+            ps.setInt(3, lesson.getLessonOrder());
+            ps.setBoolean(4, lesson.getStatus() != null ? lesson.getStatus() : false);
+            
+            ps.setInt(6, lesson.getLessonID());
+            success = ps.executeUpdate() > 0;
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
+
+    public boolean updateLessonContent(model.LessonContent lessonContent) {
+        boolean success = false;
+        try (Connection conn = getConnection()) {
+            String sql = "UPDATE LessonContent SET VideoURL = ?, DocContent = ? WHERE LessonID = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, lessonContent.getVideoURL());
+            ps.setString(2, lessonContent.getDocContent());
+            ps.setInt(3, lessonContent.getLessonID());
+            success = ps.executeUpdate() > 0;
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
 }

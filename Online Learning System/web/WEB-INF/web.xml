@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-       <servlet>
+<web-app version="6.0"
+         xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+
+    <!-- Authentication -->
+    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controller.auth.LoginServlet</servlet-class>
     </servlet>
@@ -12,6 +17,8 @@
         <servlet-name>VerifyEmailServlet</servlet-name>
         <servlet-class>controller.auth.VerifyEmailServlet</servlet-class>
     </servlet>
+
+    <!-- Blog -->
     <servlet>
         <servlet-name>BlogListServlet</servlet-name>
         <servlet-class>controller.blog.BlogListServlet</servlet-class>
@@ -20,6 +27,12 @@
         <servlet-name>PostServlet</servlet-name>
         <servlet-class>controller.blog.PostServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditPostServlet</servlet-name>
+        <servlet-class>controller.post.EditPostServlet</servlet-class>
+    </servlet>
+
+    <!-- Slider -->
     <servlet>
         <servlet-name>SliderListServlet</servlet-name>
         <servlet-class>controller.slider.SliderListServlet</servlet-class>
@@ -32,11 +45,9 @@
         <servlet-name>SliderDetailServlet</servlet-name>
         <servlet-class>controller.slider.SliderDetailServlet</servlet-class>
     </servlet>
-     <servlet>
-        <servlet-name>EditPostServlet</servlet-name>
-        <servlet-class>controller.post.EditPostServlet</servlet-class>
-    </servlet>
-     <servlet>
+
+    <!-- Subject Lesson -->
+    <servlet>
         <servlet-name>ToggleLessonStatusServlet</servlet-name>
         <servlet-class>controller.subjectLesson.ToggleLessonStatusServlet</servlet-class>
     </servlet>
@@ -45,13 +56,30 @@
         <servlet-class>controller.subjectLesson.LessonHierarchyServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>SubmitLessonServlet</servlet-name>
+        <servlet-class>controller.subjectLesson.SubmitLessonServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateLessonServlet</servlet-name>
+        <servlet-class>controller.subjectLesson.UpdateLessonServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddLessonServlet</servlet-name>
+        <servlet-class>controller.subjectLesson.AddLessonServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditLessonServlet</servlet-name>
+        <servlet-class>controller.subjectLesson.EditLessonServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>LessonListServlet</servlet-name>
         <servlet-class>controller.subjectLesson.LessonListServlet</servlet-class>
     </servlet>
+
+    <!-- Servlet Mappings -->
     <servlet-mapping>
-        
         <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/LoginServlet</url-pattern>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
@@ -63,11 +91,15 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BlogListServlet</servlet-name>
-        <url-pattern>/BlogListServlet</url-pattern>
+        <url-pattern>/blog-list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>PostServlet</servlet-name>
         <url-pattern>/post</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditPostServlet</servlet-name>
+        <url-pattern>/edit-post</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SliderListServlet</servlet-name>
@@ -81,20 +113,33 @@
         <servlet-name>SliderDetailServlet</servlet-name>
         <url-pattern>/slider-detail</url-pattern>
     </servlet-mapping>
-        <servlet-mapping>
-        <servlet-name>EditPostServlet</servlet-name>
-        <url-pattern>/EditPostServlet</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ToggleLessonStatusServlet</servlet-name>
-        <url-pattern>/ToggleLessonStatusServlet</url-pattern>
+        <url-pattern>/toggle-lesson-status</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LessonHierarchyServlet</servlet-name>
         <url-pattern>/lesson-hierarchy</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>LessonListServlet</servlet-name>
-        <url-pattern>/LessonListServlet</url-pattern>
+        <servlet-name>SubmitLessonServlet</servlet-name>
+        <url-pattern>/submit-lesson</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateLessonServlet</servlet-name>
+        <url-pattern>/update-lesson</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddLessonServlet</servlet-name>
+        <url-pattern>/add-lesson</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditLessonServlet</servlet-name>
+        <url-pattern>/edit-lesson</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LessonListServlet</servlet-name>
+        <url-pattern>/lesson-list</url-pattern>
+    </servlet-mapping>
+
 </web-app>

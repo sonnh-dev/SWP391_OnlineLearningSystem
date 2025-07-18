@@ -11,6 +11,7 @@
         table { width: 100%; border-collapse: collapse; }
         th, td { border: 1px solid #aaa; padding: 8px; text-align: left; }
         .inactive { color: red; }
+        .active { color: green; }
         .top-actions {
             display: flex;
             justify-content: space-between;
@@ -24,19 +25,33 @@
             gap: 10px;
             flex-grow: 1;
         }
-        .pagination { margin-top: 10px; }
+        .pagination { margin-top: 10px; text-align: center; }
         .pagination form { display: inline; }
-        .pagination button { padding: 5px 10px; margin-right: 5px; }
-
+        .pagination button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: default;
+        }
         .settings-icon {
             position: fixed;
             bottom: 20px;
             right: 20px;
             cursor: pointer;
-            width: 24px;
-            height: 24px;
+            font-size: 24px;
+            background: white;
+            padding: 5px 8px;
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            text-align: center;
+            line-height: 1;
+            z-index: 200;
         }
-
         .settings-panel {
             position: fixed;
             bottom: 60px;
@@ -49,28 +64,20 @@
             z-index: 100;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
         }
-
         .settings-panel label {
             display: flex;
             align-items: center;
             margin-bottom: 5px;
             gap: 8px;
         }
-
-        .settings-panel input[type="checkbox"] {
-            width: 14px;
-            height: 14px;
-        }
-
-        .settings-panel input[type="number"] {
-            width: 50px;
-        }
+        .settings-panel input[type="checkbox"] { width: 14px; height: 14px; }
+        .settings-panel input[type="number"] { width: 50px; }
     </style>
 </head>
 <body>
 
 <h2>Subject Lessons</h2>
-<p>Subject name: &lt;<%= request.getAttribute("subjectName") != null ? request.getAttribute("subjectName") : "Name of Subject" %>&gt;</p>
+<p>Subject name: <<%= request.getAttribute("subjectName") != null ? request.getAttribute("subjectName") : "Name of Subject" %>></p>
 
 <%
     List<String> lessonGroups = (List<String>) request.getAttribute("lessonGroups");
@@ -86,11 +93,11 @@
     try { rowsPerPage = Integer.parseInt(request.getParameter("rowsPerPage")); } catch (Exception ignored) {}
     try { currentPage = Integer.parseInt(request.getParameter("page")); } catch (Exception ignored) {}
 
-    boolean showLesson = request.getParameter("showLesson") == null || "true".equals(request.getParameter("showLesson"));
-    boolean showStatus = request.getParameter("showStatus") == null || "true".equals(request.getParameter("showStatus"));
-    boolean showAction = request.getParameter("showAction") == null || "true".equals(request.getParameter("showAction"));
-    boolean showOrder = request.getParameter("showOrder") != null;
-    boolean showType = request.getParameter("showType") != null;
+    boolean showLesson = true;
+    boolean showStatus = true;
+    boolean showAction = true;
+    boolean showOrder = true;
+    boolean showType = true;
 
     int totalItems = lessons != null ? lessons.size() : 0;
     int totalPages = (int) Math.ceil((double) totalItems / rowsPerPage);
@@ -120,15 +127,14 @@
         </select>
 
         <input type="text" name="search" placeholder="Type lesson name to search" value="<%= search %>" />
-
         <input type="hidden" name="subjectId" value="<%= subjectId %>" />
         <input type="hidden" name="page" value="1" />
         <input type="hidden" name="rowsPerPage" value="<%= rowsPerPage %>" />
-        <% if (showLesson) { %><input type="hidden" name="showLesson" value="true"/><% } %>
-        <% if (showStatus) { %><input type="hidden" name="showStatus" value="true"/><% } %>
-        <% if (showAction) { %><input type="hidden" name="showAction" value="true"/><% } %>
-        <% if (showOrder) { %><input type="hidden" name="showOrder" value="true"/><% } %>
-        <% if (showType) { %><input type="hidden" name="showType" value="true"/><% } %>
+        <input type="hidden" name="showLesson" value="true"/>
+        <input type="hidden" name="showStatus" value="true"/>
+        <input type="hidden" name="showAction" value="true"/>
+        <input type="hidden" name="showOrder" value="true"/>
+        <input type="hidden" name="showType" value="true"/>
         <button type="submit">🔍</button>
     </form>
 
@@ -141,11 +147,11 @@
     <thead>
     <tr>
         <th>ID</th>
-        <% if (showLesson) { %><th>Lesson</th><% } %>
-        <% if (showOrder) { %><th>Order</th><% } %>
-        <% if (showType) { %><th>Type</th><% } %>
-        <% if (showStatus) { %><th>Status</th><% } %>
-        <% if (showAction) { %><th>Action</th><% } %>
+        <th>Lesson</th>
+        <th>Order</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -156,18 +162,16 @@
     %>
         <tr>
             <td><%= item.getId() %></td>
-            <% if (showLesson) { %><td><%= item.getName() %></td><% } %>
-            <% if (showOrder) { %><td><%= item.getOrder() %></td><% } %>
-            <% if (showType) { %><td><%= item.getType() %></td><% } %>
-            <% if (showStatus) { %><td><%= item.isStatus() ? "Active" : "Inactive" %></td><% } %>
-            <% if (showAction) { %>
+            <td><%= item.getName() %></td>
+            <td><%= item.getOrder() %></td>
+            <td><%= item.getType() %></td>
+            <td><%= item.isStatus() ? "Active" : "Inactive" %></td>
             <td>
-                <a href="EditLessonServlet?id=<%= item.getId() %>">Edit</a>
-                <a href="ToggleLessonStatusServlet?id=<%= item.getId() %>&subjectId=<%= subjectId %>&page=<%= currentPage %>" class="<%= item.isStatus() ? "inactive" : "" %>">
+                <a href="EditLessonServlet?id=<%= item.getId() %>&type=<%= item.getType().toLowerCase() %>&subjectId=<%= subjectId %>">Edit</a> |
+                <a href="ToggleLessonStatusServlet?id=<%= item.getId() %>&subjectId=<%= subjectId %>&status=<%= item.isStatus() ? 0 : 1 %>&page=<%= currentPage %>" class="<%= item.isStatus() ? "inactive" : "active" %>">
                     <%= item.isStatus() ? "Inactive" : "Activate" %>
                 </a>
             </td>
-            <% } %>
         </tr>
     <%
             }
@@ -180,34 +184,36 @@
     </tbody>
 </table>
 
+<!-- Pagination -->
 <div class="pagination">
     <% for (int i = 1; i <= totalPages; i++) { %>
         <form method="get" action="LessonListServlet">
             <input type="hidden" name="page" value="<%= i %>"/>
-            <input type="hidden" name="subjectId" value="<%= subjectId %>"/>
-            <input type="hidden" name="statusFilter" value="<%= statusFilter %>"/>
-            <input type="hidden" name="lessonGroup" value="<%= selectedGroup %>"/>
-            <input type="hidden" name="search" value="<%= search %>"/>
             <input type="hidden" name="rowsPerPage" value="<%= rowsPerPage %>"/>
-            <% if (showLesson) { %><input type="hidden" name="showLesson" value="true"/><% } %>
-            <% if (showStatus) { %><input type="hidden" name="showStatus" value="true"/><% } %>
-            <% if (showAction) { %><input type="hidden" name="showAction" value="true"/><% } %>
-            <% if (showOrder) { %><input type="hidden" name="showOrder" value="true"/><% } %>
-            <% if (showType) { %><input type="hidden" name="showType" value="true"/><% } %>
-            <button type="submit"><%= i %></button>
+            <input type="hidden" name="subjectId" value="<%= subjectId %>"/>
+            <input type="hidden" name="lessonGroup" value="<%= selectedGroup %>"/>
+            <input type="hidden" name="statusFilter" value="<%= statusFilter %>"/>
+            <input type="hidden" name="search" value="<%= search %>"/>
+            <input type="hidden" name="showLesson" value="true"/>
+            <input type="hidden" name="showStatus" value="true"/>
+            <input type="hidden" name="showAction" value="true"/>
+            <input type="hidden" name="showOrder" value="true"/>
+            <input type="hidden" name="showType" value="true"/>
+            <button type="submit" <%= i == currentPage ? "disabled" : "" %>><%= i %></button>
         </form>
     <% } %>
 </div>
 
+<!-- Settings Panel -->
 <div class="settings-panel" id="settingsPanel">
     <form method="get" action="LessonListServlet">
         <strong>Col</strong><br/>
         <label><input type="checkbox" checked disabled> ID</label>
-        <label><input type="checkbox" name="showLesson" value="true" <%= showLesson ? "checked" : "" %>> Lesson</label>
-        <label><input type="checkbox" name="showOrder" value="true" <%= showOrder ? "checked" : "" %>> Order</label>
-        <label><input type="checkbox" name="showType" value="true" <%= showType ? "checked" : "" %>> Type</label>
-        <label><input type="checkbox" name="showStatus" value="true" <%= showStatus ? "checked" : "" %>> Status</label>
-        <label><input type="checkbox" name="showAction" value="true" <%= showAction ? "checked" : "" %>> Action</label>
+        <label><input type="checkbox" name="showLesson" value="true" checked> Lesson</label>
+        <label><input type="checkbox" name="showOrder" value="true" checked> Order</label>
+        <label><input type="checkbox" name="showType" value="true" checked> Type</label>
+        <label><input type="checkbox" name="showStatus" value="true" checked> Status</label>
+        <label><input type="checkbox" name="showAction" value="true" checked> Action</label>
         <br/>
         <strong>Row</strong><br/>
         <input type="number" name="rowsPerPage" min="1" max="100" value="<%= rowsPerPage %>"/>
@@ -221,7 +227,7 @@
     </form>
 </div>
 
-<img src="gear-icon.png" class="settings-icon" onclick="toggleSettings()" alt="Settings"/>
+<div class="settings-icon" onclick="toggleSettings()">⚙️</div>
 
 <script>
     function toggleSettings() {
@@ -238,7 +244,7 @@
     });
 
     function openLessonForm() {
-        alert("TODO: Show add lesson form here.");
+        window.location.href = "AddLessonServlet?subjectId=<%= subjectId %>";
     }
 </script>
 
