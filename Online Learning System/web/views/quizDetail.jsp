@@ -7,13 +7,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Quiz Details</title>
-        <%-- Nhúng Tailwind CSS (sử dụng CDN cho đơn giản) --%>
+        <%-- Include Tailwind CSS (using CDN for simplicity) --%>
         <script src="https://cdn.tailwindcss.com"></script>
-        <%-- Nhúng Font Awesome (sử dụng CDN cho các biểu tượng) --%>
+        <%-- Include Font Awesome (using CDN for icons) --%>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <style>
-            /* Các CSS tùy chỉnh nếu cần */
-            /* Để các option-row có khoảng cách trong phần questions list */
+            /* Custom CSS if needed */
+            /* For spacing in question list option-rows */
             .question-row {
                 @apply hover:bg-gray-50;
             }
@@ -29,12 +29,12 @@
             .question-row td:last-child {
                 @apply font-medium;
             }
-            /* Style cho nút "Delete" trong bảng câu hỏi */
+            /* Style for "Delete" button in the question table */
             .question-row form button {
                 @apply text-red-600 hover:text-red-900 ml-2;
             }
 
-            /* Tooltip cho nút Edit/Delete (nếu cần dùng) */
+            /* Tooltip for Edit/Delete buttons (if needed) */
             .tooltip {
                 position: relative;
                 display: inline-block;
@@ -49,7 +49,7 @@
                 padding: 5px 0;
                 position: absolute;
                 z-index: 1;
-                bottom: 125%; /* Tooltip ở trên nút */
+                bottom: 125%; /* Tooltip above the button */
                 left: 50%;
                 margin-left: -70px;
                 opacity: 0;
@@ -70,27 +70,27 @@
                 opacity: 1;
             }
 
-            /* CSS cho tabs */
+            /* CSS for tabs */
             .tab-button.active {
                 @apply border-b-2 border-indigo-500 text-indigo-600;
             }
             .tab-content {
-                display: none; /* Mặc định ẩn tất cả nội dung tab */
+                display: none; /* Hide all tab content by default */
             }
             .tab-content.active {
-                display: block; /* Hiển thị nội dung tab đang hoạt động */
+                display: block; /* Show active tab content */
             }
         </style>
     </head>
     <body class="bg-gray-100 font-sans leading-normal tracking-normal">
-  
+    
         <div class="min-h-screen bg-gray-100">
             <header class="bg-indigo-600 text-white p-4 shadow-md">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <%
                         Quiz quiz = (Quiz) request.getAttribute("quiz");
                         Boolean canEditObj = (Boolean) request.getAttribute("canEdit");
-                        boolean canEdit = (canEditObj != null) ? canEditObj : false; // tránh NullPointerException
+                        boolean canEdit = (canEditObj != null) ? canEditObj : false; // avoid NullPointerException
                         String pageTitle = (quiz == null || quiz.getQuizID() == 0) ? "Add New Quiz" : "Edit Quiz";
                     %>
 
@@ -99,7 +99,7 @@
             </header>
 
             <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <%-- Hiển thị thông báo lỗi/thành công --%>
+                <%-- Display error/success messages --%>
                 <% if (request.getAttribute("errorMessage") != null) {%>
                 <p class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                     <%= request.getAttribute("errorMessage")%>
@@ -115,15 +115,15 @@
                     <div class="border-b border-gray-200">
                         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
                             <button type="button" id="tab-details-btn"
-                                    class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 active"
-                                    data-tab="details">
-                                <i class="fas fa-info-circle mr-2"></i>Chi tiết Quiz
+                                        class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 active"
+                                        data-tab="details">
+                                <i class="fas fa-info-circle mr-2"></i>Quiz Details
                             </button>
                             <% if (quiz != null && quiz.getQuizID() > 0) { %>
                             <button type="button" id="tab-questions-btn"
-                                    class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                    data-tab="questions">
-                                <i class="fas fa-question-circle mr-2"></i>Quản lý Câu hỏi
+                                        class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                        data-tab="questions">
+                                <i class="fas fa-question-circle mr-2"></i>Manage Questions
                             </button>
                             <% }%>
                         </nav>
@@ -153,7 +153,7 @@
                                     <option value="Problem Solving" <%= (quiz != null && "Problem Solving".equals(quiz.getSubject())) ? "selected" : ""%>>Problem Solving</option>
                                     <option value="Emotional Intelligence" <%= (quiz != null && "Emotional Intelligence".equals(quiz.getSubject())) ? "selected" : ""%>>Emotional Intelligence</option>
                                     <option value="Communication" <%= (quiz != null && "Communication".equals(quiz.getSubject())) ? "selected" : ""%>>Communication</option>
-                                    <%-- Thêm các Subject khác từ DB hoặc tĩnh --%>
+                                    <%-- Add other Subjects from DB or static --%>
                                 </select>
                             </div>
                             <div>
@@ -212,7 +212,7 @@
                         <div class="mt-6 flex justify-end space-x-3">
                             <% if (canEdit) { %>
                             <button type="submit"
-                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                 <i class="fas fa-save mr-2"></i> Save Quiz
                             </button>
                             <% } else { %>
@@ -238,7 +238,7 @@
                         </a>
                     </p>
 
-                    <%-- Bảng hiển thị danh sách câu hỏi của Quiz này --%>
+                    <%-- Table to display the list of questions for this Quiz --%>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
@@ -260,7 +260,7 @@
                                     <td><%= q.getQuestionContent()%></td>
                                     <td>
                                         <%= q.getQuestionType()%>
-                                        <%-- Hiển thị các lựa chọn của câu hỏi nếu cần --%>
+                                        <%-- Display question options if needed --%>
                                         <%--
                                         <% if (q.getOptions() != null && !q.getOptions().isEmpty()) { %>
                                             <ul class="list-disc list-inside text-xs mt-1 text-gray-600">
@@ -285,8 +285,8 @@
                                     </td>
                                 </tr>
                                 <%
-                                    }
-                                } else {
+                                        }
+                                    } else {
                                 %>
                                 <tr>
                                     <td colspan="4" class="px-6 py-4 text-center text-gray-500">No questions added yet.</td>
@@ -308,8 +308,8 @@
             </main>
         </div>
 
-        <%-- Có thể thêm Modal xác nhận xóa câu hỏi nếu muốn cải thiện UX tương tự trang Quizzes List --%>
-        <%-- Ví dụ: --%>
+        <%-- You can add a delete question confirmation Modal if you want to improve UX similar to the Quizzes List page --%>
+        <%-- Example: --%>
         <div id="deleteQuestionModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -324,11 +324,11 @@
                             </div>
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                    Xóa câu hỏi
+                                    Delete Question
                                 </h3>
                                 <div class="mt-2">
                                     <p class="text-sm text-gray-500">
-                                        Bạn có chắc chắn muốn xóa câu hỏi này và tất cả các lựa chọn của nó không? Thao tác này không thể hoàn tác.
+                                        Are you sure you want to delete this question and all its options? This action cannot be undone.
                                     </p>
                                 </div>
                             </div>
@@ -340,11 +340,11 @@
                             <input type="hidden" name="questionId" id="modalQuestionId">
                             <input type="hidden" name="quizId" id="modalQuizIdForQuestionDelete">
                             <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                                Xóa
+                                Delete
                             </button>
                         </form>
                         <button type="button" id="cancelQuestionDelete" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                            Hủy
+                            Cancel
                         </button>
                     </div>
                 </div>
@@ -352,7 +352,7 @@
         </div>
 
         <script>
-            // JavaScript cho Modal xác nhận xóa câu hỏi
+            // JavaScript for Delete Question Confirmation Modal
             const deleteQuestionModal = document.getElementById('deleteQuestionModal');
             const cancelQuestionDeleteBtn = document.getElementById('cancelQuestionDelete');
             const modalQuestionId = document.getElementById('modalQuestionId');
@@ -372,11 +372,11 @@
 
             cancelQuestionDeleteBtn.addEventListener('click', hideDeleteQuestionModal);
 
-            // Bổ sung: Thay thế onsubmit trong form xóa câu hỏi bằng modal
+            // Addition: Replace onsubmit in question delete form with modal
             document.querySelectorAll('form[action="${pageContext.request.contextPath}/questions"][method="POST"]').forEach(form => {
                 if (form.querySelector('input[name="action"][value="deleteQuestion"]')) {
                     form.onsubmit = function (event) {
-                        event.preventDefault(); // Ngăn form submit mặc định
+                        event.preventDefault(); // Prevent default form submission
                         const questionId = this.querySelector('input[name="questionId"]').value;
                         const quizId = this.querySelector('input[name="quizId"]').value;
                         showDeleteQuestionModal(questionId, quizId);
@@ -384,7 +384,7 @@
                 }
             });
 
-            // --- JavaScript cho Tabbed Sections ---
+            // --- JavaScript for Tabbed Sections ---
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
 

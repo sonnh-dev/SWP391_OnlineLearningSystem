@@ -85,9 +85,9 @@
     <%@include file="../includes/head.jsp" %>
 </head>
 <body>
-     
+    
     <div class="container">
-        <h1>Bài Quiz: ${quiz.quizName}</h1>
+        <h1>Quiz: ${quiz.quizName}</h1>
 
         <%
             Boolean showResultSubForm = (Boolean) request.getAttribute("showResultSubForm");
@@ -96,37 +96,37 @@
         %>
 
         <% if (showResultSubForm != null && showResultSubForm) { %>
-            <h2>Kết quả lần làm bài gần nhất</h2>
-            <p>Điểm của bạn: <strong><%= String.format("%.2f", lastAttempt.getScore()) %></strong></p>
-            <p>Trạng thái: <strong><%= (lastAttempt.getIsPassed() != null && lastAttempt.getIsPassed()) ? "ĐẠT" : "CHƯA ĐẠT" %></strong></p>
-            <p>Thời gian làm bài: <strong><%= lastAttempt.getStartTime() %> - <%= (lastAttempt.getEndTime() != null ? lastAttempt.getEndTime() : "Đang làm dở") %></strong></p>
+            <h2>Most Recent Attempt Result</h2>
+            <p>Your Score: <strong><%= String.format("%.2f", lastAttempt.getScore()) %></strong></p>
+            <p>Status: <strong><%= (lastAttempt.getIsPassed() != null && lastAttempt.getIsPassed()) ? "PASSED" : "FAILED" %></strong></p>
+            <p>Time Taken: <strong><%= lastAttempt.getStartTime() %> - <%= (lastAttempt.getEndTime() != null ? lastAttempt.getEndTime() : "In Progress") %></strong></p>
             
             <form action="quizReview" method="GET">
                 <input type="hidden" name="attemptId" value="<%= lastAttempt.getAttemptId() %>">
-                <button type="submit">Xem lại bài (Review Test)</button>
+                <button type="submit">Review Test</button>
             </form>
             <form action="quizHandle" method="GET">
                 <input type="hidden" name="quizId" value="<%= quiz.getQuizID() %>">
-                <button type="submit">Làm lại bài (Redo Test)</button>
+                <button type="submit">Redo Test</button>
             </form>
         <% } else { %>
-            <h2>Chi tiết Quiz</h2>
-            <p><strong>Tên Quiz:</strong> <%= quiz.getQuizName() %></p>
-            <p><strong>Chủ đề:</strong> <%= quiz.getSubject() %></p>
-            <p><strong>Mức độ:</strong> <%= quiz.getLevel() %></p>
-            <p><strong>Số câu hỏi:</strong> <%= quiz.getNumQuestions() %></p>
-            <p><strong>Thời lượng:</strong> <%= quiz.getDurationMinutes() %> phút</p>
-            <p><strong>Tỷ lệ đạt:</strong> <%= String.format("%.0f%%", quiz.getPassRate()) %></p>
-            <p><strong>Loại Quiz:</strong> <%= quiz.getQuizType() %></p>
+            <h2>Quiz Details</h2>
+            <p><strong>Quiz Name:</strong> <%= quiz.getQuizName() %></p>
+            <p><strong>Subject:</strong> <%= quiz.getSubject() %></p>
+            <p><strong>Level:</strong> <%= quiz.getLevel() %></p>
+            <p><strong>Number of Questions:</strong> <%= quiz.getNumQuestions() %></p>
+            <p><strong>Duration:</strong> <%= quiz.getDurationMinutes() %> minutes</p>
+            <p><strong>Pass Rate:</strong> <%= String.format("%.0f%%", quiz.getPassRate()) %></p>
+            <p><strong>Quiz Type:</strong> <%= quiz.getQuizType() %></p>
 
             <form action="quizHandle" method="GET">
                 <input type="hidden" name="quizId" value="${quizId}">
-                <button type="submit">Bắt đầu làm bài (Start Test)</button>
+                <button type="submit">Start Test</button>
             </form>
         <% } %>
 
         <hr>
-        <a href="${pageContext.request.contextPath}/home">← Về trang chủ</a>
+        <a href="${pageContext.request.contextPath}/home">← Back to Home</a>
     </div>
         <%@include file="../includes/foot.jsp" %>
 </body>
