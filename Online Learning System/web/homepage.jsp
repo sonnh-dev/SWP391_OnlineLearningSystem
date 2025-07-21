@@ -88,7 +88,7 @@
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2 class="section-title h3 fw-bold">Featured Subjects</h2>
-                        <a href="#" class="text-decoration-none text-primary">View All</a>
+                        <a href="CourseList" class="text-decoration-none text-primary">View All</a>
                     </div>
                     <div class="row row-cols-md-3 g-4">
                         <c:forEach var="course" items="${featuredCourse}">
