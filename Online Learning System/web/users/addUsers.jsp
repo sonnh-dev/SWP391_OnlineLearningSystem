@@ -132,5 +132,6 @@
         <div class="back-link">
             <a href="${pageContext.request.contextPath}/admin/users">Back to Users List</a>
         </div>
+         <%@include file="../includes/foot.jsp" %>
     </body>
 </html>

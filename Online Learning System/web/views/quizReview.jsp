@@ -103,8 +103,8 @@
                 border-color: #28a745;
             }
             .review-question-card .option.user-selected {
-                background-color: #cfe2ff; /* Light blue */
-                border-color: #0d6efd;
+                background-color: #cfe2ff; /* Light blue, can be overridden by correct/incorrect */
+                border: 2px solid #0d6efd; /* Blue border for selected */
             }
             .review-question-card .option.incorrect-selected {
                 background-color: #f8d7da; /* Light red */
@@ -274,7 +274,24 @@
             .filter-options button:hover {
                 background-color: #ddd;
             }
+            /* Đảm bảo các lớp này ưu tiên hơn */
+            .option.correct {
+                background-color: #d4edda !important; /* Luôn màu xanh lá cho đáp án đúng */
+                border-color: #28a745 !important;
+            }
+
+            .option.user-selected {
+                /* background-color được đặt bởi correct/incorrect-selected */
+                border: 2px solid #0d6efd !important; /* Viền xanh cho đáp án người dùng chọn */
+            }
+
+            .option.incorrect-selected {
+                background-color: #f8d7da !important; /* Màu đỏ cho đáp án sai mà người dùng chọn */
+                border-color: #dc3545 !important;
+            }
+
         </style>
+        <%@include file="../includes/navbar.jsp" %>
     </head>
     <body>
         <%
@@ -287,7 +304,11 @@
             if (questions == null) {
                 questions = Collections.emptyList();
             }
-            Map<Integer, List<Integer>> correctOptionsMap = (Map<Integer, List<Integer>>) request.getAttribute("correctOptionsMap");
+            Map<Integer, List<Integer>> correctOptionsMap
+                    = (Map<Integer, List<Integer>>) request.getAttribute("correctAnswers");
+            if (correctOptionsMap == null) {
+                correctOptionsMap = Collections.emptyMap();
+            }
             if (correctOptionsMap == null) {
                 correctOptionsMap = Collections.emptyMap();
             }
@@ -340,7 +361,7 @@
                         }
                         // For essay questions, correct/incorrect status needs manual grading,
                         // so it's not automatically displayed here.
-                %>
+%>
                 <div class="review-question-card" id="question<%= qNum%>">
                     <p class="question-content">Question <%= qNum%>: <%= q.getQuestionContent()%>
                         <% if ("Multiple Choice".equals(questionType) || "True/False".equals(questionType)) {
@@ -366,32 +387,33 @@
                                     boolean isCorrectOption = correctOptions.contains(opt.getOptionID());
 
                                     if (isCorrectOption) {
-                                        optionClass += " correct"; // This option is the correct answer
+                                        optionClass += " correct"; // luôn tô màu xanh cho đáp án đúng
                                     }
-                                    if (isUserSelectedThisOption) { // If the user selected this option
+
+                                    if (isUserSelectedThisOption) {
                                         if (isCorrectOption) {
-                                            optionClass += " user-selected"; // User selected correctly
+                                            optionClass += " user-selected"; // trả lời đúng → thêm viền xanh
                                         } else {
-                                            optionClass += " incorrect-selected"; // User selected incorrectly
+                                            optionClass += " incorrect-selected"; // trả lời sai → tô đỏ đáp án chọn
                                         }
                                     }
                         %>
                         <div class="<%= optionClass%>">
                             <%= opt.getOptionContent()%>
                             <% if (isCorrectOption) { %> <span>(Correct Answer)</span> <% } %>
-                            <% if (isUserSelectedThisOption) { %> <span>(Your Answer)</span> <% } %>
+                            <% if (isUserSelectedThisOption && !isCorrectOption) { %> <span>(Your Incorrect Answer)</span> <% } %>
                         </div>
                         <%
-                                }
-                            } else if ("Short Answer".equals(questionType) || "Essay".equals(questionType)) {
-                                // Display user's essay answer
-                        %>
+                            }
+                        } else if ("Short Answer".equals(questionType) || "Essay".equals(questionType)) {
+                            // Display user's essay answer
+%>
                         <p><strong>Your Answer:</strong></p>
                         <div class="user-text-answer">
                             <%= (userAnswerText != null && !userAnswerText.trim().isEmpty() ? userAnswerText : "Not Answered")%>
                         </div>
 
-                        <%-- ✅ Add section to display attached file if available --%>
+                        <%-- Add section to display attached file if available --%>
                         <%
                             String uploadedFile = q.getUploadedFilePath();
                             if (uploadedFile != null && !uploadedFile.trim().isEmpty()) {
@@ -558,5 +580,6 @@
                 // hideReviewResultPopup();
             }
         </script>
+        <%@include file="../includes/foot.jsp"%>
     </body>
 </html>

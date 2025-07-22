@@ -1,133 +1,88 @@
-<%-- quizLesson.jsp --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.Quiz" %>
 <%@page import="model.QuizAttempt" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
     <title>Quiz Lesson</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CSS + Font -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f8fc;
-            color: #2c3e50;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 700px;
-            margin: 50px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: #007bff;
-        }
-
-        h2 {
-            font-size: 22px;
-            font-weight: 600;
-            margin-top: 20px;
-            color: #34495e;
-        }
-
-        p {
-            font-size: 16px;
-            margin: 10px 0;
-        }
-
-        strong {
-            font-weight: 600;
-        }
-
-        form {
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            border: none;
-            color: white;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        a {
-            display: inline-block;
-            margin-top: 30px;
-            text-decoration: none;
-            color: #007bff;
-            font-weight: 600;
-        }
-
-        hr {
-            margin: 30px 0;
-        }
-    </style>
-    <%@include file="../includes/head.jsp" %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <%@include file="../includes/navbar.jsp" %>
 </head>
-<body>
-    
-    <div class="container">
-        <h1>Quiz: ${quiz.quizName}</h1>
+<body class="bg-gray-100 text-gray-800 font-[Inter]">
 
-        <%
-            Boolean showResultSubForm = (Boolean) request.getAttribute("showResultSubForm");
-            Quiz quiz = (Quiz) request.getAttribute("quiz");
-            QuizAttempt lastAttempt = (QuizAttempt) request.getAttribute("lastAttempt");
-        %>
+<main class="max-w-3xl mx-auto bg-white mt-16 mb-10 px-8 py-10 rounded-lg shadow-md">
+    <%
+        Boolean showResultSubForm = (Boolean) request.getAttribute("showResultSubForm");
+        Quiz quiz = (Quiz) request.getAttribute("quiz");
+        QuizAttempt lastAttempt = (QuizAttempt) request.getAttribute("lastAttempt");
+        int quizId = (Integer) request.getAttribute("quizId");
+    %>
 
-        <% if (showResultSubForm != null && showResultSubForm) { %>
-            <h2>Most Recent Attempt Result</h2>
-            <p>Your Score: <strong><%= String.format("%.2f", lastAttempt.getScore()) %></strong></p>
-            <p>Status: <strong><%= (lastAttempt.getIsPassed() != null && lastAttempt.getIsPassed()) ? "PASSED" : "FAILED" %></strong></p>
-            <p>Time Taken: <strong><%= lastAttempt.getStartTime() %> - <%= (lastAttempt.getEndTime() != null ? lastAttempt.getEndTime() : "In Progress") %></strong></p>
-            
+    <h1 class="text-2xl sm:text-3xl font-bold text-blue-600 mb-6">Quiz: <%= quiz.getQuizName() %></h1>
+
+    <% if (showResultSubForm != null && showResultSubForm) { %>
+        <h2 class="text-xl font-semibold mb-4">📝 Your Last Attempt</h2>
+        <ul class="space-y-2 text-base">
+            <li><strong>Score:</strong> <%= String.format("%.2f", lastAttempt.getScore()) %></li>
+            <li><strong>Status:</strong> 
+                <span class="<%= lastAttempt.getIsPassed() ? "text-green-600 font-semibold" : "text-red-600 font-semibold" %>">
+                    <%= lastAttempt.getIsPassed() ? "PASSED" : "FAILED" %>
+                </span>
+            </li>
+            <li><strong>Time Taken:</strong> <%= lastAttempt.getStartTime() %> → 
+                <%= (lastAttempt.getEndTime() != null ? lastAttempt.getEndTime() : "In Progress") %>
+            </li>
+        </ul>
+
+        <div class="flex flex-wrap gap-4 mt-6">
             <form action="quizReview" method="GET">
                 <input type="hidden" name="attemptId" value="<%= lastAttempt.getAttemptId() %>">
-                <button type="submit">Review Test</button>
+                <button type="submit"
+                        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition">
+                    🔍 Review Attempt
+                </button>
             </form>
             <form action="quizHandle" method="GET">
                 <input type="hidden" name="quizId" value="<%= quiz.getQuizID() %>">
-                <button type="submit">Redo Test</button>
+                <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition">
+                    🔁 Retake Quiz
+                </button>
             </form>
-        <% } else { %>
-            <h2>Quiz Details</h2>
-            <p><strong>Quiz Name:</strong> <%= quiz.getQuizName() %></p>
-            <p><strong>Subject:</strong> <%= quiz.getSubject() %></p>
-            <p><strong>Level:</strong> <%= quiz.getLevel() %></p>
-            <p><strong>Number of Questions:</strong> <%= quiz.getNumQuestions() %></p>
-            <p><strong>Duration:</strong> <%= quiz.getDurationMinutes() %> minutes</p>
-            <p><strong>Pass Rate:</strong> <%= String.format("%.0f%%", quiz.getPassRate()) %></p>
-            <p><strong>Quiz Type:</strong> <%= quiz.getQuizType() %></p>
+        </div>
+    <% } else { %>
+        <h2 class="text-xl font-semibold mb-4">📋 Quiz Details</h2>
+        <ul class="space-y-2 text-base">
+            <li><strong>Subject:</strong> <%= quiz.getSubject() %></li>
+            <li><strong>Level:</strong> <%= quiz.getLevel() %></li>
+            <li><strong>Number of Questions:</strong> <%= quiz.getNumQuestions() %></li>
+            <li><strong>Duration:</strong> <%= quiz.getDurationMinutes() %> minutes</li>
+            <li><strong>Pass Rate:</strong> <%= String.format("%.0f%%", quiz.getPassRate()) %></li>
+            <li><strong>Quiz Type:</strong> <%= quiz.getQuizType() %></li>
+        </ul>
 
-            <form action="quizHandle" method="GET">
-                <input type="hidden" name="quizId" value="${quizId}">
-                <button type="submit">Start Test</button>
-            </form>
-        <% } %>
+        <form action="quizHandle" method="GET" class="mt-6">
+            <input type="hidden" name="quizId" value="<%= quiz.getQuizID() %>">
+            <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition">
+                🚀 Start Quiz
+            </button>
+        </form>
+    <% } %>
 
-        <hr>
-        <a href="${pageContext.request.contextPath}/home">← Back to Home</a>
-    </div>
-        <%@include file="../includes/foot.jsp" %>
+    <hr class="my-10 border-gray-300">
+
+    <a href="<%= request.getContextPath() %>/home" class="text-blue-500 font-semibold hover:underline">
+        ← Back to Home
+    </a>
+</main>
+
+<%@include file="../includes/foot1.jsp" %>
 </body>
 </html>

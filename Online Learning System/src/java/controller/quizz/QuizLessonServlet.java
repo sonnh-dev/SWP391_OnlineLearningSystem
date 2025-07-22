@@ -21,11 +21,8 @@ public class QuizLessonServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
     HttpSession session = request.getSession();
     Integer userID = (Integer) session.getAttribute("userID");
-    // Giả lập userID nếu chưa có session (thực tế cần đăng nhập)
-    if (userID == null) {
-        userID = 1; // Giả lập userID 1 cho mục đích test
-        session.setAttribute("userID", userID);
-    }
+ 
+
     // Lấy tham số quizId từ request
     String quizIdStr = request.getParameter("quizId");
     int quizId;

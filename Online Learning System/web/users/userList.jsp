@@ -253,5 +253,6 @@
                 <% } %>
             <% } %>
         </div>
+         <%@include file="../includes/foot.jsp" %>
     </body>
 </html>

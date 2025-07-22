@@ -47,12 +47,11 @@ public class QuizHandleServlet extends HttpServlet {
         
         // --- SỬA ĐỔI CHỦ YẾU Ở ĐÂY: Lấy userID từ session ---
         Integer userID = null;
-        Object authObject = session.getAttribute("auth"); // Lấy đối tượng 'auth' từ session (đã lưu trong LoginServlet)
-        if (authObject instanceof Account) { // Kiểm tra xem đối tượng có phải là Account không
-            userID = ((Account) authObject).getId(); // Lấy ID từ đối tượng Account
+        Object authObject = session.getAttribute("auth"); 
+        if (authObject instanceof Account) { 
+            userID = ((Account) authObject).getId(); 
         }
 
-        // Nếu userID vẫn là null, tức là người dùng chưa đăng nhập hoặc session đã hết hạn
         if (userID == null) {
             
             LOGGER.log(Level.WARNING, "User not logged in. Redirecting to login page for quizHandle.");

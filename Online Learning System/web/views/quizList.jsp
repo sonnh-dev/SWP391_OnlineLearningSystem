@@ -79,6 +79,7 @@
                 display: none !important;
             }
         </style>
+        <%@include file="../includes/head.jsp" %>
     </head>
     <body class="bg-gray-100 font-sans leading-normal tracking-normal">
        
@@ -403,6 +404,7 @@
         </div>
 
         <script src="${pageContext.request.contextPath}/assets/js/quizList.js"></script>
-     
+      
     </body>
+    <%@include file="../includes/foot1.jsp"%>
 </html>

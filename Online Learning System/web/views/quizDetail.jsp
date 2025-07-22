@@ -81,6 +81,7 @@
                 display: block; /* Show active tab content */
             }
         </style>
+        <%@include file="../includes/head1.jsp"%>
     </head>
     <body class="bg-gray-100 font-sans leading-normal tracking-normal">
     
@@ -418,6 +419,6 @@
                 }
             });
         </script>
-        
+         <%@include file="../includes/foot1.jsp" %>
     </body>
 </html>

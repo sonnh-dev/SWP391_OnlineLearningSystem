@@ -242,6 +242,7 @@
             }
 
         </style>
+        <%@include file="../includes/head1.jsp"%>
     </head>
     <body>
         <%@include file="../includes/navbar.jsp" %>
@@ -561,6 +562,6 @@
             }
 
         </script>
-        <%@include file="../includes/foot.jsp" %>
+        <%@include file="../includes/foot1.jsp" %>
     </body>
 </html>

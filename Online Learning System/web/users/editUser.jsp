@@ -90,5 +90,6 @@
             <p>User not found or an error occurred.</p>
             <a href="${pageContext.request.contextPath}/admin/users">Back to Users List</a>
         <% } %>
+         <%@include file="../includes/foot.jsp" %>
     </body>
 </html>

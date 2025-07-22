@@ -199,6 +199,6 @@
             </main>
 
         </div>
-        
+         <%@include file="../includes/foot1.jsp" %>
     </body>
 </html>
