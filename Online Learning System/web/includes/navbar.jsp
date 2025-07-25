@@ -60,6 +60,11 @@
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/users">Manage User</a></li>
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/quizzes">Manage Quiz</a></li>
                                 </c:if>
+                                    
+                                       <c:if test="${sessionScope.user.role == 'Marketing'}">
+                                           <li><a class="dropdown-item" href="${pageContext.request.contextPath}/slider-list">Manage Slider</a></li>
+                                           <li><a class="dropdown-item" href="${pageContext.request.contextPath}/marketing/post">Manage Post</a></li>
+                                        </c:if>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="logout">Logout</a></li>
                             </ul>

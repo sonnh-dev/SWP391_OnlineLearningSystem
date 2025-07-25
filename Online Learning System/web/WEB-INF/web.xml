@@ -23,15 +23,15 @@
     </servlet>
     <servlet>
         <servlet-name>SliderListServlet</servlet-name>
-        <servlet-class>servlet.SliderListServlet</servlet-class>
+        <servlet-class>controller.slider.SliderListServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditSliderServlet</servlet-name>
-        <servlet-class>servlet.EditSliderServlet</servlet-class>
+        <servlet-class>controller.slider.EditSliderServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SliderDetailServlet</servlet-name>
-        <servlet-class>servlet.SliderDetailServlet</servlet-class>
+        <servlet-class>controller.slider.SliderDetailServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PostDetailServlet</servlet-name>
