@@ -15,6 +15,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Quiz Review</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
         <link rel="stylesheet" href="css/style.css">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
         <style>
@@ -308,7 +312,7 @@
             if (correctOptionsMap == null) {
                 correctOptionsMap = Collections.emptyMap();
             }
-            if (correctOptionsMap == null) {
+            if (correctOptionsMap == null) { // This seems redundant, correctOptionsMap is already checked
                 correctOptionsMap = Collections.emptyMap();
             }
 
@@ -319,10 +323,10 @@
                 return; // Stop JSP processing
             }
         %>
-        <div class="review-container">
+        
+        <div class="container review-container">
             <div class="header">
                 <h1>Review Quiz: <%= quiz.getQuizName()%></h1>
-
             </div>
 
             <div class="review-info">
@@ -333,10 +337,11 @@
                     </span>
                 </p>
                 <p>Time Taken: <%= attempt.getStartTime()%> - <%= (attempt.getEndTime() != null ? attempt.getEndTime() : "N/A")%></p>
-
             </div>
 
-            <button class="explanation-btn" onclick="showReviewResultPopup()">View Overall Result</button>
+            <button class="btn btn-secondary mb-4 explanation-btn" onclick="showReviewResultPopup()">
+                <i class="fas fa-list-ol"></i> View Overall Result
+            </button>
 
             <div id="quizReviewQuestions">
                 <%
@@ -360,7 +365,7 @@
                         }
                         // For essay questions, correct/incorrect status needs manual grading,
                         // so it's not automatically displayed here.
-%>
+                %>
                 <div class="review-question-card" id="question<%= qNum%>">
                     <p class="question-content">Question <%= qNum%>: <%= q.getQuestionContent()%>
                         <% if ("Multiple Choice".equals(questionType) || "True/False".equals(questionType)) {
@@ -403,10 +408,10 @@
                             <% if (isUserSelectedThisOption && !isCorrectOption) { %> <span>(Your Incorrect Answer)</span> <% } %>
                         </div>
                         <%
-                            }
-                        } else if ("Short Answer".equals(questionType) || "Essay".equals(questionType)) {
-                            // Display user's essay answer
-%>
+                                }
+                            } else if ("Short Answer".equals(questionType) || "Essay".equals(questionType)) {
+                                // Display user's essay answer
+                        %>
                         <p><strong>Your Answer:</strong></p>
                         <div class="user-text-answer">
                             <%= (userAnswerText != null && !userAnswerText.trim().isEmpty() ? userAnswerText : "Not Answered")%>
@@ -417,25 +422,22 @@
                             String uploadedFile = q.getUploadedFilePath();
                             if (uploadedFile != null && !uploadedFile.trim().isEmpty()) {
                         %>
-                        <div style="margin-top: 10px;">
+                        <div class="mt-3">
                             <strong>Attached File:</strong>
-                            <% if (uploadedFile.endsWith(".jpg") || uploadedFile.endsWith(".jpeg") || uploadedFile.endsWith(".png") || uploadedFile.endsWith(".gif")) {%>
-                            <div><img src="<%= request.getContextPath() + "/uploads/" + uploadedFile%>" alt="Uploaded Image" style="max-width:100%; border: 1px solid #ccc; margin-top: 8px;"/></div>
-                                <% } else {%>
-                            <div><a href="<%= request.getContextPath() + "/uploads/" + uploadedFile%>" target="_blank">Download file</a></div>
+                            <% if (uploadedFile.matches(".*\\.(jpg|jpeg|png|gif)$")) {%>
+                            <div class="mt-2"><img src="<%= request.getContextPath() + "/uploads/" + uploadedFile%>" alt="Uploaded Image" class="img-fluid" style="border: 1px solid #ccc;"/></div>
+                            <% } else {%>
+                            <div class="mt-2"><a href="<%= request.getContextPath() + "/uploads/" + uploadedFile%>" target="_blank">Download file</a></div>
                             <% } %>
                         </div>
                         <%
                             }
-                        %>
-
-                        <%
                             }
                         %>
                     </div>
                     <%-- Explanation button only displays when an AnswerKey exists --%>
                     <% if (answerKey != null && !answerKey.trim().isEmpty()) {%>
-                    <button class="explanation-btn" onclick="toggleExplanation(this)">View Explanation / Sample Answer</button>
+                    <button class="explanation-btn mt-3" onclick="toggleExplanation(this)">View Explanation / Sample Answer</button>
                     <div class="explanation-content">
                         <strong>Sample Answer:</strong><br>
                         <%= answerKey%>
@@ -447,8 +449,8 @@
                 %>
             </div>
 
-            <div class="footer">
-                <a href="quizLesson?quizId=<%= quiz.getQuizID()%>">Back to Quiz Lesson page</a>
+            <div class="footer text-center mt-5">
+                <a href="quizLesson?quizId=<%= quiz.getQuizID()%>" class="btn btn-primary">Back to Quiz Lesson page</a>
             </div>
         </div>
 
@@ -457,10 +459,10 @@
                 <span class="popup-close" onclick="hideReviewResultPopup()">&times;</span>
                 <h3>View Overall Results</h3>
                 <div class="filter-options">
-                    <button onclick="filterReviewQuestions('all')">All</button>
-                    <button onclick="filterReviewQuestions('answered')">Answered</button>
-                    <button onclick="filterReviewQuestions('incorrect')">Incorrect</button>
-                    <button onclick="filterReviewQuestions('marked')">Marked</button>
+                    <button class="btn btn-light" onclick="filterReviewQuestions('all')">All</button>
+                    <button class="btn btn-light" onclick="filterReviewQuestions('answered')">Answered</button>
+                    <button class="btn btn-light" onclick="filterReviewQuestions('incorrect')">Incorrect</button>
+                    <button class="btn btn-light" onclick="filterReviewQuestions('marked')">Marked</button>
                 </div>
                 <div class="question-numbers-grid">
                     <%
@@ -520,6 +522,9 @@
                 </div>
             </div>
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
         <script>
             // Show/hide explanation content

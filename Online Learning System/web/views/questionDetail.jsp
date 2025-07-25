@@ -158,7 +158,7 @@
                         Quiz parentQuiz = (Quiz) request.getAttribute("parentQuiz");
                         String pageTitle = (question == null || question.getQuestionID() == 0) ? "Add New Question" : "Edit Question";
                     %>
-                    <h1 class="h3 mb-0"><%= pageTitle%> for Quiz: "<%= parentQuiz != null ? parentQuiz.getQuizName() : "N/A"%>"</h1>
+                    <h1 class="h3 mb-0"><%= pageTitle%> for Quiz</h1>
                 </div>
             </header>
 
