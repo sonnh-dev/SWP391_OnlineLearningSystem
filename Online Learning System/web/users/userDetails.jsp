@@ -22,6 +22,7 @@
             .actions .back-btn { background-color: #6c757d; }
             .actions .back-btn:hover { background-color: #5a6268; }
         </style>
+        <%@include file="../includes/navbar.jsp" %>
     </head>
     <body>
         <h1>User Details</h1>

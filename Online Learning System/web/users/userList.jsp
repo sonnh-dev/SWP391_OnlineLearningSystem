@@ -8,12 +8,23 @@
     <head>
         <meta charset="UTF-8">
         <title>Users List - Admin Panel</title>
+
+        <%-- Bootstrap CSS --%>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <%-- Font Awesome CSS for icons in footer --%>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
         <style>
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                margin: 40px;
                 background-color: #f7f9fc;
                 color: #333;
+            }
+
+            /* Apply padding to the main content area to avoid content sticking to the edges */
+            .main-content {
+                padding-top: 40px;
+                padding-bottom: 40px;
             }
 
             h1 {
@@ -157,102 +168,109 @@
                 form.submit();
             }
         </script>
+
     </head>
     <body>
-        <h1>Users List</h1>
+        <div class="container main-content"> <%-- Wrap content in Bootstrap container --%>
+            <h1>Users List</h1>
 
-        <a href="addUsers" class="add-user-btn">+ Add New User</a>
+            <a href="addUsers" class="add-user-btn">+ Add New User</a>
+            <a href="${pageContext.request.contextPath}/home" class="btn btn-secondary">
+                <i class="fas fa-home me-1"></i> Back to Home
+            </a>
+            <div class="filter-search-form">
+                <form id="userListForm" action="${pageContext.request.contextPath}/admin/users" method="get">
+                    <label for="genderFilter">Gender:</label>
+                    <select name="genderFilter" id="genderFilter" onchange="applyFiltersAndSort()">
+                        <option value="all" <%= "all".equals(request.getAttribute("genderFilter")) ? "selected" : ""%>>All</option>
+                        <option value="Male" <%= "Male".equals(request.getAttribute("genderFilter")) ? "selected" : ""%>>Male</option>
+                        <option value="Female" <%= "Female".equals(request.getAttribute("genderFilter")) ? "selected" : ""%>>Female</option>
+                        <option value="Other" <%= "Other".equals(request.getAttribute("genderFilter")) ? "selected" : ""%>>Other</option>
+                    </select>
 
-        <div class="filter-search-form">
-            <form id="userListForm" action="${pageContext.request.contextPath}/admin/users" method="get">
-                <label for="genderFilter">Gender:</label>
-                <select name="genderFilter" id="genderFilter" onchange="applyFiltersAndSort()">
-                    <option value="all" <%= "all".equals(request.getAttribute("genderFilter")) ? "selected" : ""%>>All</option>
-                    <option value="Male" <%= "Male".equals(request.getAttribute("genderFilter")) ? "selected" : ""%>>Male</option>
-                    <option value="Female" <%= "Female".equals(request.getAttribute("genderFilter")) ? "selected" : ""%>>Female</option>
-                    <option value="Other" <%= "Other".equals(request.getAttribute("genderFilter")) ? "selected" : ""%>>Other</option>
-                </select>
+                    <label for="roleFilter">Role:</label>
+                    <select name="roleFilter" id="roleFilter" onchange="applyFiltersAndSort()">
+                        <option value="all" <%= "all".equals(request.getAttribute("roleFilter")) ? "selected" : ""%>>All</option>
+                        <option value="Admin" <%= "Admin".equals(request.getAttribute("roleFilter")) ? "selected" : ""%>>Admin</option>
+                        <option value="User" <%= "User".equals(request.getAttribute("roleFilter")) ? "selected" : ""%>>User</option>
+                    </select>
 
-                <label for="roleFilter">Role:</label>
-                <select name="roleFilter" id="roleFilter" onchange="applyFiltersAndSort()">
-                    <option value="all" <%= "all".equals(request.getAttribute("roleFilter")) ? "selected" : ""%>>All</option>
-                    <option value="Admin" <%= "Admin".equals(request.getAttribute("roleFilter")) ? "selected" : ""%>>Admin</option>
-                    <option value="User" <%= "User".equals(request.getAttribute("roleFilter")) ? "selected" : ""%>>User</option>
-                </select>
+                    <label for="statusFilter">Status:</label>
+                    <select name="statusFilter" id="statusFilter" onchange="applyFiltersAndSort()">
+                        <option value="all" <%= "all".equals(request.getAttribute("statusFilter")) ? "selected" : ""%>>All</option>
+                        <option value="true" <%= "true".equals(request.getAttribute("statusFilter")) ? "selected" : ""%>>Active</option>
+                        <option value="false" <%= "false".equals(request.getAttribute("statusFilter")) ? "selected" : ""%>>Inactive</option>
+                    </select>
 
-                <label for="statusFilter">Status:</label>
-                <select name="statusFilter" id="statusFilter" onchange="applyFiltersAndSort()">
-                    <option value="all" <%= "all".equals(request.getAttribute("statusFilter")) ? "selected" : ""%>>All</option>
-                    <option value="true" <%= "true".equals(request.getAttribute("statusFilter")) ? "selected" : ""%>>Active</option>
-                    <option value="false" <%= "false".equals(request.getAttribute("statusFilter")) ? "selected" : ""%>>Inactive</option>
-                </select>
+                    <label for="search">Search:</label>
+                    <input type="text" name="search" id="search" value="${requestScope.searchKeyword != null ? requestScope.searchKeyword : ''}" placeholder="Enter keyword">
 
-                <label for="search">Search:</label>
-                <input type="text" name="search" id="search" value="${requestScope.searchKeyword != null ? requestScope.searchKeyword : ''}" placeholder="Enter keyword">
+                    <select name="searchBy" id="searchBy">
+                        <option value="firstName" <%= "firstName".equals(request.getAttribute("searchBy")) ? "selected" : ""%>>First Name</option>
+                        <option value="lastName" <%= "lastName".equals(request.getAttribute("searchBy")) ? "selected" : ""%>>Last Name</option>
+                        <option value="email" <%= "email".equals(request.getAttribute("searchBy")) ? "selected" : ""%>>Email</option>
+                        <option value="mobile" <%= "mobile".equals(request.getAttribute("searchBy")) ? "selected" : ""%>>Mobile</option>
+                    </select>
 
-                <select name="searchBy" id="searchBy">
-                    <option value="firstName" <%= "firstName".equals(request.getAttribute("searchBy")) ? "selected" : ""%>>First Name</option>
-                    <option value="lastName" <%= "lastName".equals(request.getAttribute("searchBy")) ? "selected" : ""%>>Last Name</option>
-                    <option value="email" <%= "email".equals(request.getAttribute("searchBy")) ? "selected" : ""%>>Email</option>
-                    <option value="mobile" <%= "mobile".equals(request.getAttribute("searchBy")) ? "selected" : ""%>>Mobile</option>
-                </select>
+                    <button type="submit">Search</button>
 
-                <button type="submit">Search</button>
+                    <input type="hidden" name="sortBy" id="sortBy" value="${requestScope.sortBy != null ? requestScope.sortBy : ''}">
+                    <input type="hidden" name="sortOrder" id="sortOrder" value="${requestScope.sortOrder != null ? requestScope.sortOrder : ''}">
+                    <input type="hidden" name="page" id="page" value="${requestScope.currentPage}">
+                </form>
+            </div>
 
-                <input type="hidden" name="sortBy" id="sortBy" value="${requestScope.sortBy != null ? requestScope.sortBy : ''}">
-                <input type="hidden" name="sortOrder" id="sortOrder" value="${requestScope.sortOrder != null ? requestScope.sortOrder : ''}">
-                <input type="hidden" name="page" id="page" value="${requestScope.currentPage}">
-            </form>
-        </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th onclick="sortTable('userId')">ID</th>
-                    <th onclick="sortTable('firstName')">Full Name</th>
-                    <th onclick="sortTable('gender')">Gender</th>
-                    <th onclick="sortTable('email')">Email</th>
-                    <th onclick="sortTable('phoneNumber')">Mobile</th>
-                    <th onclick="sortTable('role')">Role</th>
-                    <th onclick="sortTable('status')">Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% List<User> users = (List<User>) request.getAttribute("users"); %>
-                <% if (users != null && !users.isEmpty()) { %>
-                    <% for (User user : users) { %>
-                        <tr>
-                            <td><%= user.getUserId() %></td>
-                            <td><%= user.getFullName() %></td>
-                            <td><%= user.getGender() %></td>
-                            <td><%= user.getEmail() %></td>
-                            <td><%= user.getPhoneNumber() %></td>
-                            <td><%= user.getRole() %></td>
-                            <td><%= user.isStatus() ? "Active" : "Inactive" %></td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/admin/userDetails?userId=<%= user.getUserId() %>">View</a> |
-                                <a href="${pageContext.request.contextPath}/admin/editUser?userId=<%= user.getUserId() %>">Edit</a>
-                            </td>
-                        </tr>
+            <table>
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('userId')">ID</th>
+                        <th onclick="sortTable('firstName')">Full Name</th>
+                        <th onclick="sortTable('gender')">Gender</th>
+                        <th onclick="sortTable('email')">Email</th>
+                        <th onclick="sortTable('phoneNumber')">Mobile</th>
+                        <th onclick="sortTable('role')">Role</th>
+                        <th onclick="sortTable('status')">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% List<User> users = (List<User>) request.getAttribute("users"); %>
+                    <% if (users != null && !users.isEmpty()) { %>
+                    <% for (User user : users) {%>
+                    <tr>
+                        <td><%= user.getUserId()%></td>
+                        <td><%= user.getFullName()%></td>
+                        <td><%= user.getGender()%></td>
+                        <td><%= user.getEmail()%></td>
+                        <td><%= user.getPhoneNumber()%></td>
+                        <td><%= user.getRole()%></td>
+                        <td><%= user.isStatus() ? "Active" : "Inactive"%></td>
+                        <td>
+                            <a href="${pageContext.request.contextPath}/admin/userDetails?userId=<%= user.getUserId()%>">View</a> |
+                            <a href="${pageContext.request.contextPath}/admin/editUser?userId=<%= user.getUserId()%>">Edit</a>
+                        </td>
+                    </tr>
                     <% } %>
-                <% } else { %>
+                    <% } else { %>
                     <tr><td colspan="8">No users found.</td></tr>
-                <% } %>
-            </tbody>
-        </table>
+                    <% } %>
+                </tbody>
+            </table>
 
-        <div class="pagination">
-            <% int currentPage = (int) request.getAttribute("currentPage"); %>
-            <% int totalPages = (int) request.getAttribute("totalPages"); %>
-            <% for (int i = 1; i <= totalPages; i++) { %>
-                <% if (i == currentPage) { %>
-                    <span class="current-page"><%= i %></span>
-                <% } else { %>
-                    <a href="javascript:void(0)" onclick="goToPage(<%= i %>)"><%= i %></a>
+            <div class="pagination">
+                <% int currentPage = (int) request.getAttribute("currentPage"); %>
+                <% int totalPages = (int) request.getAttribute("totalPages"); %>
+                <% for (int i = 1; i <= totalPages; i++) { %>
+                <% if (i == currentPage) {%>
+                <span class="current-page"><%= i%></span>
+                <% } else {%>
+                <a href="javascript:void(0)" onclick="goToPage(<%= i%>)"><%= i%></a>
                 <% } %>
-            <% } %>
-        </div>
-         <%@include file="../includes/foot.jsp" %>
+                <% }%>
+            </div>
+        </div> <%-- End of Bootstrap container --%>
+        <%@include file="../includes/foot.jsp" %>
+        <%-- Bootstrap JavaScript (optional, but good practice if you use JS components) --%>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

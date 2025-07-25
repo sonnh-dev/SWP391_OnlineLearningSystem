@@ -11,8 +11,8 @@
     </head>
     <body>
         <!-- Header -->
-        <%@include file="includes/navbar.jsp" %>    
-        <!-- Content -->
+        <%@include file="includes/navbar.jsp" %> 
+        
         <div class="container row mb-5 mx-auto mt-3">
             <!-- Left side -->
             <div class="col-md-9">

@@ -291,7 +291,6 @@
             }
 
         </style>
-        <%@include file="../includes/navbar.jsp" %>
     </head>
     <body>
         <%

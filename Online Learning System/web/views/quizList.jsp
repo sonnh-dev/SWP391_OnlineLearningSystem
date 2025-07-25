@@ -8,34 +8,86 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Quizzes List</title>
+        <title>Quizzes List - Admin Panel</title>
 
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <%-- Bootstrap CSS --%>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <%-- Font Awesome CSS for icons (used in header, table actions, and footer) --%>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
         <style>
-            /* CSS tùy chỉnh cho tooltip */
-            .tooltip {
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f7f9fc; /* Light gray background to match previous page */
+                color: #333;
+            }
+            .main-content {
+                padding-top: 40px;
+                padding-bottom: 40px;
+            }
+            h1 {
+                font-size: 2rem; /* Bootstrap h1 default */
+                margin-bottom: 1.5rem; /* Bootstrap mb-3 */
+                font-weight: 700; /* Bootstrap font-bold */
+            }
+            .header-bg {
+                background-color: #4f46e5; /* Tailwind indigo-600 equivalent */
+            }
+            .btn-success-custom {
+                background-color: #28a745; /* green-500 equivalent */
+                border-color: #28a745;
+                color: white;
+            }
+            .btn-success-custom:hover {
+                background-color: #218838; /* green-600 equivalent */
+                border-color: #218838;
+            }
+            .form-control-custom {
+                border-radius: 0.375rem; /* rounded-md equivalent */
+                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm equivalent */
+                border: 1px solid #ced4da; /* border-gray-300 equivalent */
+            }
+            .form-control-custom:focus {
+                border-color: #6610f2; /* focus:border-indigo-500 equivalent */
+                box-shadow: 0 0 0 0.25rem rgba(102, 16, 242, 0.25); /* focus:ring-indigo-500 equivalent */
+            }
+            .btn-indigo-custom {
+                background-color: #4f46e5; /* indigo-600 equivalent */
+                border-color: #4f46e5;
+                color: white;
+            }
+            .btn-indigo-custom:hover {
+                background-color: #4338ca; /* indigo-700 equivalent */
+                border-color: #4338ca;
+            }
+            .bg-white-shadow {
+                background-color: white;
+                border-radius: 0.5rem; /* rounded-lg equivalent */
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-sm equivalent */
+            }
+
+            /* Custom CSS for tooltip, adapted to Bootstrap context */
+            .tooltip-custom {
                 position: relative;
                 display: inline-block;
             }
-            .tooltip .tooltiptext {
+            .tooltip-custom .tooltiptext {
                 visibility: hidden;
-                width: 160px; /* Tăng chiều rộng để chứa đủ chữ */
+                width: 180px; /* Increased width */
                 background-color: #333;
                 color: #fff;
                 text-align: center;
                 border-radius: 6px;
                 padding: 5px 0;
                 position: absolute;
-                z-index: 1;
-                bottom: 125%; /* Tooltip ở trên nút */
+                z-index: 1050; /* Higher z-index than Bootstrap modals */
+                bottom: 125%; /* Tooltip above button */
                 left: 50%;
-                margin-left: -80px; /* Điều chỉnh lại margin-left */
+                margin-left: -90px; /* Center tooltip */
                 opacity: 0;
                 transition: opacity 0.3s;
             }
-            .tooltip .tooltiptext::after {
+            .tooltip-custom .tooltiptext::after {
                 content: "";
                 position: absolute;
                 top: 100%;
@@ -45,86 +97,251 @@
                 border-style: solid;
                 border-color: #333 transparent transparent transparent;
             }
-            .tooltip:hover .tooltiptext {
+            .tooltip-custom:hover .tooltiptext {
                 visibility: visible;
                 opacity: 1;
             }
-            /* Active page for pagination */
-            .pagination .active {
-                @apply z-10 bg-indigo-50 border-indigo-500 text-indigo-600;
+
+            /* Status badges */
+            .badge-beginner {
+                background-color: #d1fae5; /* green-100 */
+                color: #065f46; /* green-800 */
+                padding: 0.25em 0.6em;
+                border-radius: 0.25rem;
+                font-size: 0.75em;
+                font-weight: 600;
             }
-            /* CSS cho nút active view (chỉ cho List View, Grid View đã bị xóa) */
-            .active-view-btn {
-                background-color: #4f46e5; /* indigo-600 */
-                color: white;
-                border-color: #4f46e5;
+            .badge-intermediate {
+                background-color: #fffde7; /* yellow-100 */
+                color: #92400e; /* yellow-800 */
+                padding: 0.25em 0.6em;
+                border-radius: 0.25rem;
+                font-size: 0.75em;
+                font-weight: 600;
             }
-            .active-view-btn:hover {
-                background-color: #4338ca; /* indigo-700 */
+            .badge-advanced {
+                background-color: #fee2e2; /* red-100 */
+                color: #991b1b; /* red-800 */
+                padding: 0.25em 0.6em;
+                border-radius: 0.25rem;
+                font-size: 0.75em;
+                font-weight: 600;
             }
 
-            .text-indigo-600 {
-                color: #4f46e5;
+            /* Table styling */
+            .table-responsive-custom {
+                overflow-x: auto;
             }
-            .transition {
-                transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                transition-duration: 150ms;
+            .table th, .table td {
+                padding: 0.75rem;
+                vertical-align: top;
+                border-top: 1px solid #dee2e6;
             }
-            .ease-in-out {
-                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            .table th {
+                background-color: #f8f9fa; /* light gray header */
+                font-weight: 600;
+                text-align: left;
+                font-size: 0.75rem; /* text-xs */
+                text-transform: uppercase; /* uppercase */
+                letter-spacing: 0.05em; /* tracking-wider */
+                color: #6c757d; /* text-gray-500 */
             }
-            /* Thêm CSS cho ẩn cột */
+            .table tbody tr:hover {
+                background-color: #f8f9fa; /* hover:bg-gray-50 */
+            }
+
+            /* Pagination styling */
+            .pagination-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.75rem 1.5rem;
+                border-top: 1px solid #dee2e6;
+                background-color: white;
+            }
+            .pagination-info {
+                font-size: 0.875rem; /* text-sm */
+                color: #495057; /* text-gray-700 */
+            }
+            .pagination-info .font-weight-bold {
+                font-weight: 700;
+            }
+            .pagination-links .page-item .page-link {
+                color: #6c757d; /* text-gray-700 */
+                background-color: white;
+                border: 1px solid #dee2e6;
+                border-radius: 0.25rem;
+                margin-left: -1px; /* To make them touch */
+            }
+            .pagination-links .page-item:first-child .page-link {
+                border-top-left-radius: 0.25rem;
+                border-bottom-left-radius: 0.25rem;
+            }
+            .pagination-links .page-item:last-child .page-link {
+                border-top-right-radius: 0.25rem;
+                border-bottom-right-radius: 0.25rem;
+            }
+            .pagination-links .page-item.active .page-link {
+                z-index: 1;
+                color: #fff;
+                background-color: #4f46e5; /* indigo-600 */
+                border-color: #4f46e5;
+            }
+            .pagination-links .page-item.disabled .page-link {
+                color: #6c757d;
+                pointer-events: none;
+                background-color: #fff;
+                border-color: #dee2e6;
+                opacity: 0.65;
+            }
+            .pagination-links .page-link:hover {
+                z-index: 2;
+                color: #4338ca; /* indigo-700 */
+                background-color: #e9ecef;
+                border-color: #dee2e6;
+            }
+
+            /* Column Customization Panel */
+            #optionContent {
+                border: 1px solid #dee2e6; /* border-gray-200 */
+                padding: 1rem; /* p-4 */
+                background-color: white; /* bg-white */
+                border-radius: 0.5rem; /* rounded-lg */
+                margin-bottom: 1rem; /* mb-4 */
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-sm */
+            }
+            #optionCustom {
+                cursor: pointer;
+                margin-right: 0.5rem;
+                padding: 0.5rem;
+                border: 1px solid #dee2e6;
+                border-radius: 0.25rem;
+                background-color: white;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: #495057;
+            }
+            #optionCustom:hover {
+                background-color: #f8f9fa;
+            }
             .hidden-column {
                 display: none !important;
             }
-        </style>
-        <%@include file="../includes/head.jsp" %>
+            /* Styling for the modal (delete confirmation) */
+            .modal-dialog {
+                max-width: 500px; /* sm:max-w-lg */
+            }
+            .modal-content {
+                border-radius: 0.5rem; /* rounded-lg */
+                overflow: hidden; /* overflow-hidden */
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-xl */
+            }
+            .modal-header {
+                padding: 1.25rem 1.5rem; /* px-4 pt-5 pb-4 sm:p-6 sm:pb-4 */
+                background-color: #fff;
+                border-bottom: none;
+            }
+            .modal-body {
+                padding: 0 1.5rem 1rem;
+            }
+            .modal-footer {
+                padding: 0.75rem 1.5rem; /* px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse */
+                background-color: #f8f9fa; /* bg-gray-50 */
+                border-top: none;
+                display: flex;
+                justify-content: flex-end; /* sm:flex-row-reverse */
+            }
+            .modal-icon-wrapper {
+                margin: auto; /* mx-auto */
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 3rem; /* h-12 */
+                width: 3rem; /* w-12 */
+                border-radius: 9999px; /* rounded-full */
+                background-color: #fee2e2; /* bg-red-100 */
+                margin-bottom: 0.75rem; /* mt-3 */
+            }
+            .modal-icon {
+                color: #ef4444; /* text-red-600 */
+            }
+            .modal-title-text {
+                font-size: 1.125rem; /* text-lg */
+                line-height: 1.75rem; /* leading-6 */
+                font-weight: 500; /* font-medium */
+                color: #1a202c; /* text-gray-900 */
+            }
+            .modal-description-text {
+                margin-top: 0.5rem; /* mt-2 */
+                font-size: 0.875rem; /* text-sm */
+                color: #6b7280; /* text-gray-500 */
+            }
+            .btn-danger-custom {
+                background-color: #ef4444; /* red-600 */
+                border-color: #ef4444;
+                color: white;
+            }
+            .btn-danger-custom:hover {
+                background-color: #dc2626; /* red-700 */
+                border-color: #dc2626;
+            }
+            .btn-outline-secondary-custom {
+                background-color: white;
+                border-color: #ced4da; /* gray-300 */
+                color: #495057; /* gray-700 */
+            }
+            .btn-outline-secondary-custom:hover {
+                background-color: #f8f9fa; /* gray-50 */
+            }
+        </style> 
     </head>
     <body class="bg-gray-100 font-sans leading-normal tracking-normal">
-       
+
         <div class="min-h-screen bg-gray-100">
-            <header class="bg-indigo-600 text-white p-4 shadow-md">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                    <h1 class="text-3xl font-bold">Quizzes List</h1>
+            <header class="header-bg text-white p-4 shadow-sm">
+                <div class="container d-flex justify-content-between align-items-center">
+                    <h1 class="text-white my-0">Quizzes List</h1> <%-- Use Bootstrap heading and remove margin for alignment --%>
                     <%-- Nút thêm mới --%>
                     <a href="${pageContext.request.contextPath}/quizDetail"
-                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        <i class="fas fa-plus mr-2"></i> Add New Quiz
+                       class="btn btn-success-custom d-inline-flex align-items-center">
+                        <i class="fas fa-plus me-2"></i> Add New Quiz
+                    </a>
+                    <a href="${pageContext.request.contextPath}/home" class="btn btn-secondary">
+                        <i class="fas fa-home me-1"></i> Back to Home
                     </a>
                 </div>
             </header>
 
-            <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <main class="container main-content">
                 <% if (request.getAttribute("errorMessage") != null) {%>
-                <p class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <div class="alert alert-danger" role="alert">
                     <%= request.getAttribute("errorMessage")%>
-                </p>
+                </div>
                 <% } %>
                 <% if (request.getAttribute("successMessage") != null) {%>
-                <p class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <div class="alert alert-success" role="alert">
                     <%= request.getAttribute("successMessage")%>
-                </p>
+                </div>
                 <% }%>
 
-                <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <div class="bg-white-shadow p-4 mb-4"> <%-- Replaced shadow-sm p-6 with p-4 mb-4 for consistency --%>
                     <form action="${pageContext.request.contextPath}/quizzes" method="GET" id="filterForm">
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                            <div class="col-span-1 md:col-span-2">
-                                <label for="searchName" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-search text-gray-400"></i>
-                                    </div>
+                        <div class="row g-3 align-items-end"> <%-- Use Bootstrap row and gap --%>
+                            <div class="col-12 col-md-6"> <%-- col-span-1 md:col-span-2 --%>
+                                <label for="searchName" class="form-label mb-1">Search</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-search text-muted"></i></span>
                                     <input type="text" name="searchName" id="searchName"
-                                           class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                           class="form-control form-control-custom"
                                            placeholder="Search by quiz name..."
                                            value="${searchName != null ? searchName : ''}">
                                 </div>
                             </div>
-                            <div>
-                                <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                                <select name="subject" id="subject" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <div class="col-12 col-md-3">
+                                <label for="subject" class="form-label mb-1">Subject</label>
+                                <select name="subject" id="subject" class="form-select form-control-custom">
                                     <option value="">All Subjects</option>
                                     <option value="Leadership" <%= "Leadership".equals(request.getAttribute("subject")) ? "selected" : ""%>>Leadership</option>
                                     <option value="Time Management" <%= "Time Management".equals(request.getAttribute("subject")) ? "selected" : ""%>>Time Management</option>
@@ -133,158 +350,121 @@
                                     <option value="Communication" <%= "Communication".equals(request.getAttribute("subject")) ? "selected" : ""%>>Communication</option>
                                 </select>
                             </div>
-                            <div>
-                                <label for="quizType" class="block text-sm font-medium text-gray-700 mb-1">Quiz Type</label>
-                                <select name="quizType" id="quizType" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <div class="col-12 col-md-3">
+                                <label for="quizType" class="form-label mb-1">Quiz Type</label>
+                                <select name="quizType" id="quizType" class="form-select form-control-custom">
                                     <option value="">All Types</option>
                                     <option value="Course Assessment" <%= "Course Assessment".equals(request.getAttribute("quizType")) ? "selected" : ""%>>Course Assessment</option>
                                     <option value="Practice" <%= "Practice".equals(request.getAttribute("quizType")) ? "selected" : ""%>>Practice</option>
                                     <option value="Learn" <%= "Learn".equals(request.getAttribute("quizType")) ? "selected" : ""%>>Learn</option>
                                 </select>
                             </div>
-                                
                         </div>
-                        <div class="mt-4 flex justify-end">
-                            <button type="button" id="resetFilters" class="mr-2 bg-white hover:bg-gray-100 text-gray-700 font-medium py-2 px-4 border border-gray-300 rounded-md">
+                        <div class="mt-4 d-flex justify-content-end">
+                            <button type="button" id="resetFilters" class="btn btn-outline-secondary me-2">
                                 Reset
                             </button>
-                            
-                            
-                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md">
-                                <i class="fas fa-filter mr-2"></i> Filter/Search
+                            <button type="submit" class="btn btn-indigo-custom">
+                                <i class="fas fa-filter me-2"></i> Filter/Search
                             </button>
                         </div>
                     </form>
                 </div>
 
-                <div class="d-flex align-items-center justify-between pb-3 p-3 rounded-t border bg-white"
+                <div class="d-flex align-items-center justify-content-between p-3 rounded-top border bg-white"
                      style="border-color: #dee2e6;">
-                    <div style="cursor: pointer; margin-right: 8px;" id="optionCustom">
+                    <div style="cursor: pointer;" id="optionCustom" class="tooltip-custom">
                         <i class="fas fa-sliders-h"></i> Customize column display and pagination
                     </div>
                 </div>
 
-               <div id="optionContent" class="px-4 py-3 bg-white border rounded-b mb-4" style="display: none">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="mb-3">
-            <label class="block text-sm font-medium text-gray-700 mb-2 font-bold">Display column information:</label>
-
-            <div class="form-check mb-2">
-                <input class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" type="checkbox" id="info-all" checked>
-                <label class="ml-2 block text-sm text-gray-900" for="info-all">Show all</label>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2"> <%-- 2 cột để hiển thị gọn hơn --%>
-                <c:set var="columnLabels" value="${['ID', 'Name', 'Subject', 'Level', '# Questions', 'Duration (min)', 'Pass Rate (%)', 'Quiz Type', 'Actions']}" />
-                <c:forEach var="label" items="${columnLabels}" varStatus="loop">
-                    <c:set var="key" value="${loop.index}" />
-                    <div class="form-check flex items-center">
-                        <input class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out info-checkbox" type="checkbox" id="info-${key}" value="${key}">
-                        <label class="ml-2 text-sm text-gray-900" for="info-${key}">${label}</label>
+                <div id="optionContent" class="px-4 py-3 bg-white border rounded-bottom mb-4" style="display: none">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold mb-2">Display column information:</label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="info-all" checked>
+                                <label class="form-check-label" for="info-all">Show all</label>
+                            </div>
+                            <div class="row g-2"> <%-- Use Bootstrap row and gap for 2 columns --%>
+                                <c:set var="columnLabels" value="${['ID', 'Name', 'Subject', 'Level', '# Questions', 'Duration (min)', 'Pass Rate (%)', 'Quiz Type', 'Actions']}" />
+                                <c:forEach var="label" items="${columnLabels}" varStatus="loop">
+                                    <div class="col-6"> <%-- Each checkbox in a col-6 for two columns --%>
+                                        <div class="form-check d-flex align-items-center">
+                                            <input class="form-check-input info-checkbox" type="checkbox" id="info-${loop.index}" value="${loop.index}">
+                                            <label class="form-check-label ms-2" for="info-${loop.index}">${label}</label>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 d-flex align-items-center mt-4 mt-md-0">
+                            <label for="rowsPerPage" class="form-label fw-bold me-2 mb-0">Number of rows per page:</label>
+                            <select id="rowsPerPage" class="form-select w-auto">
+                                <option value="5" selected>5</option>
+                                <option value="10" >10</option>
+                                <option value="20">20</option>
+                                <option value="all">All</option>
+                            </select>
+                        </div>
                     </div>
-                </c:forEach>
-            </div>
-
-            <div class="mt-4 flex items-center">
-                <label for="rowsPerPage" class="block text-sm font-medium text-gray-700 mr-2 font-bold">Number of rows per page:</label>
-                <select id="rowsPerPage" class="block w-auto py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="5" selected>5</option>
-                    <option value="10" >10</option>
-                    <option value="20">20</option>
-                    <option value="all">All</option>
-                </select>
-            </div>
-        </div>
-    </div>
-</div>
+                </div>
 
 
-                <div id="quizListContainer" class="bg-white rounded-lg shadow-sm overflow-hidden mt-4">
-                    <%-- HIỂN THỊ DẠNG BẢNG (CHỈ CÒN DẠNG NÀY) --%>
-                    <div id="tableView" class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200" id="quizTable">
-                            <thead class="bg-gray-50">
+                <div id="quizListContainer" class="bg-white-shadow overflow-hidden mt-4">
+                    <%-- TABLE DISPLAY --%>
+                    <div id="tableView" class="table-responsive-custom">
+                        <table class="table table-hover mb-0" id="quizTable"> <%-- Added table-hover and mb-0 (margin-bottom:0) --%>
+                            <thead class="bg-light">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="0">
-                                        ID
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="1">
-                                        Name
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="2">
-                                        Subject
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="3">
-                                        Level
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="4">
-                                        # Questions
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="5">
-                                        Duration (min)
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="6">
-                                        Pass Rate (%)
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="7">
-                                        Quiz Type
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-col-index="8">
-                                        Actions
-                                    </th>
+                                    <th scope="col" data-col-index="0">ID</th>
+                                    <th scope="col" data-col-index="1">Name</th>
+                                    <th scope="col" data-col-index="2">Subject</th>
+                                    <th scope="col" data-col-index="3">Level</th>
+                                    <th scope="col" data-col-index="4"># Questions</th>
+                                    <th scope="col" data-col-index="5">Duration (min)</th>
+                                    <th scope="col" data-col-index="6">Pass Rate (%)</th>
+                                    <th scope="col" data-col-index="7">Quiz Type</th>
+                                    <th scope="col" data-col-index="8">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200" id="quizTableBody">
+                            <tbody id="quizTableBody">
                                 <%
                                     List<Quiz> quizzes = (List<Quiz>) request.getAttribute("quizzes");
                                     if (quizzes != null && !quizzes.isEmpty()) {
                                         for (int rowIndex = 0; rowIndex < quizzes.size(); rowIndex++) {
                                             Quiz quiz = quizzes.get(rowIndex);
                                 %>
-                                <tr data-row-index="<%= rowIndex%>" class="hover:bg-gray-50 quiz-row"> <%-- THÊM CLASS 'quiz-row' --%>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" data-col-index="0">
-                                        <%= quiz.getQuizID()%>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-col-index="1">
-                                        <%= quiz.getQuizName()%>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="2">
-                                        <%= quiz.getSubject()%>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="3">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                                     <%
-                                                         String level = quiz.getLevel();
-                                                         if ("Beginner".equals(level)) {
-                                                             out.print("bg-green-100 text-green-800");
-                                                         } else if ("Intermediate".equals(level)) {
-                                                             out.print("bg-yellow-100 text-yellow-800");
-                                                         } else if ("Advanced".equals(level)) {
-                                                             out.print("bg-red-100 text-red-800");
-                                                         }
-                                                     %>">
+                                <tr data-row-index="<%= rowIndex%>" class="quiz-row">
+                                    <td data-col-index="0"><%= quiz.getQuizID()%></td>
+                                    <td data-col-index="1"><%= quiz.getQuizName()%></td>
+                                    <td data-col-index="2"><%= quiz.getSubject()%></td>
+                                    <td data-col-index="3">
+                                        <span class="badge
+                                              <%
+                                                  String level = quiz.getLevel();
+                                                  if ("Beginner".equals(level)) {
+                                                      out.print("badge-beginner");
+                                                  } else if ("Intermediate".equals(level)) {
+                                                      out.print("badge-intermediate");
+                                                  } else if ("Advanced".equals(level)) {
+                                                      out.print("badge-advanced");
+                                                  }
+                                              %>">
                                             <%= level%>
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="4">
-                                        <%= quiz.getNumQuestions()%>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="5">
-                                        <%= quiz.getDurationMinutes()%> min
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="6">
-                                        <%= String.format("%.2f", quiz.getPassRate())%>%
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-col-index="7">
-                                        <%= quiz.getQuizType()%>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" data-col-index="8">
-                                        <div class="flex space-x-2">
+                                    <td data-col-index="4"><%= quiz.getNumQuestions()%></td>
+                                    <td data-col-index="5"><%= quiz.getDurationMinutes()%> min</td>
+                                    <td data-col-index="6"><%= String.format("%.2f", quiz.getPassRate())%>%</td>
+                                    <td data-col-index="7"><%= quiz.getQuizType()%></td>
+                                    <td data-col-index="8">
+                                        <div class="d-flex gap-2"> <%-- Use Bootstrap gap for spacing --%>
                                             <%
                                                 boolean canEdit = (quiz.getQuestionOrder() == null || quiz.getQuestionOrder() == 0);
                                             %>
                                             <a href="${pageContext.request.contextPath}/quizDetail?id=<%= quiz.getQuizID()%>"
-                                               class="tooltip <%= canEdit ? "text-indigo-600 hover:text-indigo-900" : "text-gray-400 cursor-not-allowed pointer-events-none"%>"
+                                               class="tooltip-custom <%= canEdit ? "text-primary" : "text-secondary disabled-link"%>" <%-- text-primary for Bootstrap blue, text-secondary for gray --%>
                                                <%= canEdit ? "" : "onclick=\"return false;\""%>>
                                                 <i class="fas fa-edit"></i>
                                                 <% if (!canEdit) { %>
@@ -292,18 +472,18 @@
                                                 <% }%>
                                             </a>
                                             <button type="button" onclick="showDeleteModal('<%= quiz.getQuizID()%>')"
-                                                    class="text-red-600 hover:text-red-900">
+                                                    class="btn btn-link text-danger p-0 border-0"> <%-- Use btn-link to make it look like text, remove padding/border --%>
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
                                 <%
-                                        }
-                                    } else {
+                                    }
+                                } else {
                                 %>
                                 <tr>
-                                    <td colspan="9" class="px-6 py-4 text-center text-gray-500 no-quiz-message"> <%-- THÊM CLASS 'no-quiz-message' --%>
+                                    <td colspan="9" class="text-center text-muted no-quiz-message">
                                         Không tìm thấy bài kiểm tra nào.
                                     </td>
                                 </tr>
@@ -313,11 +493,22 @@
                     </div>
                 </div>
 
-                <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                    <div class="flex-1 flex justify-between sm:hidden">
-                        <%-- Nút Previous/Next cho di động --%>
+                <div class="pagination-container mt-4"> <%-- Custom class for pagination container --%>
+                    <div class="d-none d-sm-block"> <%-- hidden sm:flex-1 sm:flex sm:items-center sm:justify-between for mobile hide --%>
+                        <p class="pagination-info">
+                            Hiển thị <span class="font-weight-bold" id="pagination-info-start">0</span> đến <span class="font-weight-bold" id="pagination-info-end">0</span> của <span class="font-weight-bold" id="pagination-info-total">0</span> kết quả
+                        </p>
+                    </div>
+                    <div>
+                        <nav aria-label="Pagination">
+                            <ul class="pagination mb-0" id="pagination-nav"> <%-- Use Bootstrap's pagination classes --%>
+                                <%-- Pagination buttons will be generated by JavaScript --%>
+                            </ul>
+                        </nav>
+                    </div>
+                    <%-- Mobile Previous/Next buttons (Bootstrap's default is a single list, this mimics the Tailwind flex-between) --%>
+                    <div class="d-flex justify-content-between w-100 d-sm-none">
                         <%
-                            // Sử dụng Integer thay vì int cho null check
                             Integer currentPageObj = (Integer) request.getAttribute("currentPage");
                             Integer totalPagesObj = (Integer) request.getAttribute("totalPages");
                             int currentPage = (currentPageObj != null) ? currentPageObj : 1;
@@ -337,74 +528,56 @@
                                 queryParams += "&quizType=" + quizType;
                         %>
                         <a href="<%= (currentPage > 1) ? request.getContextPath() + "/quizzes?page=" + (currentPage - 1) + queryParams : "#"%>"
-                           class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 <%= (currentPage == 1) ? "opacity-50 cursor-not-allowed" : ""%>">
+                           class="btn btn-outline-secondary <%= (currentPage == 1) ? "disabled" : ""%>">
                             Previous
                         </a>
-
                         <a href="<%= (currentPage < totalPages) ? request.getContextPath() + "/quizzes?page=" + (currentPage + 1) + queryParams : "#"%>"
-                           class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 <%= (currentPage == totalPages) ? "opacity-50 cursor-not-allowed" : ""%>">
+                           class="btn btn-outline-secondary <%= (currentPage == totalPages) ? "disabled" : ""%>">
                             Next
                         </a>
-
-                    </div>
-                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-gray-700">
-                                Hiển thị <span class="font-medium" id="pagination-info-start">0</span> đến <span class="font-medium" id="pagination-info-end">0</span> của <span class="font-medium" id="pagination-info-total">0</span> kết quả
-                            </p>
-                        </div>
-                        <div>
-                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination" id="pagination-nav"> <%-- THÊM ID 'pagination-nav' --%>
-                                <%-- Các nút phân trang sẽ được tạo bằng JavaScript --%>
-                            </nav>
-                        </div>
                     </div>
                 </div>
             </main>
         </div>
 
-        <div id="deleteModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <i class="fas fa-exclamation-triangle text-red-600"></i>
-                            </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                    Xóa bài kiểm tra
-                                </h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500">
-                                        Bạn có chắc chắn muốn xóa bài kiểm tra này không? Thao tác này không thể hoàn tác.
-                                    </p>
-                                </div>
-                            </div>
+        <%-- Delete Confirmation Modal --%>
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header d-flex flex-column align-items-center border-0 pb-0">
+                        <div class="modal-icon-wrapper mb-3">
+                            <i class="fas fa-exclamation-triangle modal-icon fa-2x"></i>
                         </div>
+                        <h5 class="modal-title text-center modal-title-text" id="modal-title">Xóa bài kiểm tra</h5>
                     </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <form id="deleteForm" action="${pageContext.request.contextPath}/quizzes" method="POST" style="display:inline;">
+                    <div class="modal-body text-center pt-0">
+                        <p class="modal-description-text">
+                            Bạn có chắc chắn muốn xóa bài kiểm tra này không? Thao tác này không thể hoàn tác.
+                        </p>
+                    </div>
+                    <div class="modal-footer justify-content-end border-0 pt-0">
+                        <form id="deleteForm" action="${pageContext.request.contextPath}/quizzes" method="POST" class="d-inline-block">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="quizId" id="modalQuizId">
-                            <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            <button type="submit" class="btn btn-danger-custom">
                                 Xóa
                             </button>
                         </form>
-                        <button type="button" id="cancelDelete" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        <button type="button" id="cancelDelete" class="btn btn-outline-secondary-custom" data-bs-dismiss="modal">
                             Hủy
                         </button>
                     </div>
                 </div>
             </div>
+
         </div>
 
+        <%-- Bootstrap JavaScript Bundle (includes Popper.js) --%>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <%-- Your custom JavaScript file for quiz list functionality --%>
         <script src="${pageContext.request.contextPath}/assets/js/quizList.js"></script>
-      
+        <%-- Include the footer --%>
+        <%@include file="../includes/foot.jsp"%>
     </body>
-    <%@include file="../includes/foot1.jsp"%>
 </html>

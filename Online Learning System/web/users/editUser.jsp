@@ -39,6 +39,7 @@
             .success-message { color: green; margin-bottom: 10px; }
             .back-link { display: block; margin-top: 15px; text-align: center; }
         </style>
+        <%@include file="../includes/navbar.jsp" %>
     </head>
     <body>
         <h1>Edit User</h1>
