@@ -1,4 +1,4 @@
-﻿CREATE database SWP391DB;
+﻿--CREATE database SWP391DB;
 
 USE SWP391DB;
 

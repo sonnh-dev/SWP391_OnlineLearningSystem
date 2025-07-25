@@ -290,7 +290,7 @@
                         </div>
                         <!-- Write a Review -->
                         <c:choose>
-                            <c:when test="${not empty user}">
+                            <c:when test="${not empty userCourse && userCourse.status == 'SUCCESS'}">
                                 <div class="card shadow-sm mb-4">
                                     <div class="card-header bg-white">
                                         <h5 class="mb-0">Write a Review</h5>
@@ -338,11 +338,16 @@
                                     </div>
                                 </div>
                             </c:when>
+                            <c:when test="${not empty user}">
+                                <div class="text-center mt-5 p-4 bg-light border rounded-3 shadow-sm mb-3">
+                                    <p class="mb-0 fs-5">You need to <strong>enroll</strong> in this course to write a review.</p>
+                                </div>
+                            </c:when>
                             <c:otherwise>
                                 <div class="text-center mt-4">
-                                    <p class="mb-3">You need to <strong>log in</strong> to write a review.</p>
+                                    <p class="mb-3">You need to <strong>enrolled</strong> to write a review.</p>
                                     <a href="login.jsp?redirect=courseDetail?courseID=${course.courseID}" class="btn btn-primary">
-                                        <i class="bi bi-box-arrow-in-right me-2"></i>Login to Write a Review
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>Login here if you have this course!
                                     </a>
                                 </div>
                             </c:otherwise>
